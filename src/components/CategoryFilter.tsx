@@ -12,7 +12,7 @@ export interface Category {
 interface CategoryFilterProps {
   categories: Category[];
   selectedCategory: string | null;
-  onSelectCategory: (categoryId: string | null) => void;
+  onSelectCategory: (categoryId: string) => void;
 }
 
 const CategoryFilter: React.FC<CategoryFilterProps> = ({
@@ -23,17 +23,6 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
   return (
     <div className="w-full overflow-x-auto py-2 no-scrollbar">
       <div className="flex space-x-2 px-2 min-w-max">
-        <button
-          onClick={() => onSelectCategory(null)}
-          className={cn(
-            "rounded-full py-2 px-4 text-sm transition-all whitespace-nowrap",
-            selectedCategory === null 
-              ? "bg-w2d-teal text-white font-medium"
-              : "bg-white text-primary font-normal"
-          )}
-        >
-          ALL
-        </button>
         {categories.map((category) => (
           <button
             key={category.id}

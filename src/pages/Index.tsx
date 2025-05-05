@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
@@ -14,7 +13,7 @@ import InstallPrompt from '@/components/InstallPrompt';
 import SubscribePopup from '@/components/SubscribePopup';
 import { categories, quickFilters, getFilteredActivities } from '@/data/mockData';
 import { useToast } from '@/components/ui/use-toast';
-import { Dice6, Share2, BellPlus } from 'lucide-react';
+import { Dice6, Share2, BellPlus, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const SORT_OPTIONS = [
@@ -29,7 +28,7 @@ const Index = () => {
   const [selectedQuickFilters, setSelectedQuickFilters] = useState<Set<string>>(new Set());
   const [likedActivities, setLikedActivities] = useState<Set<string>>(new Set());
   const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
-  const [viewMode, setViewMode] = useState<'card' | 'grid'>('card');
+  const [viewMode, setViewMode] = useState<'card' | 'grid'>('grid');
   const [sortOption, setSortOption] = useState('latest');
   const [showSubscribe, setShowSubscribe] = useState(false);
   const { toast } = useToast();
@@ -162,7 +161,7 @@ const Index = () => {
             Find Something to do<br />Today or This Weekend
           </h1>
           <p className="text-sm md:text-base text-gray-600">
-            Curated from trusted local communities
+            Curated from trusted local communities for bangaloreans
           </p>
         </div>
 
@@ -178,11 +177,10 @@ const Index = () => {
             <BellPlus className="h-3 w-3" />
             Subscribe for alerts
           </Button>
-          <SortSelector 
-            options={SORT_OPTIONS}
-            selectedOption={sortOption}
-            onSelectOption={setSortOption}
-          />
+          <div className="flex items-center text-xs text-gray-600">
+            <Clock className="h-3 w-3 mr-1" />
+            Last updated: {new Date().toLocaleDateString()}
+          </div>
         </div>
         
         <div className="bg-white rounded-xl p-2 mb-4 shadow-sm">
@@ -197,7 +195,7 @@ const Index = () => {
         <CategoryFilter 
           categories={categories}
           selectedCategory={null}
-          onSelectCategory={(id) => id && handleCategorySelect(id)}
+          onSelectCategory={handleCategorySelect}
         />
         
         <ViewToggle currentView={viewMode} onViewChange={setViewMode} />

@@ -47,7 +47,7 @@ const InstallPrompt: React.FC = () => {
     <div className="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg z-50">
       <div className="flex justify-between items-center">
         <div>
-          <h3 className="font-bold">Install What2Do</h3>
+          <h3 className="font-bold">Install What2Do Bangalore</h3>
           <p className="text-sm text-gray-600">Add to home screen for the best experience</p>
         </div>
         <Button onClick={handleInstallClick}>
