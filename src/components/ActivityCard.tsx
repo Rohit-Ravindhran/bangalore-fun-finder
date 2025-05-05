@@ -1,8 +1,9 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heart, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Heart, ArrowRight, ArrowLeft, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 export interface Activity {
@@ -26,6 +27,7 @@ interface ActivityCardProps {
   onSwipeLeft?: () => void;
   onSwipeRight?: () => void;
   onLike?: (id: string) => void;
+  onShare?: (id: string) => void;
   liked?: boolean;
 }
 
@@ -34,10 +36,12 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   onSwipeLeft, 
   onSwipeRight,
   onLike,
+  onShare,
   liked = false,
 }) => {
   const navigate = useNavigate();
   const [isLeaving, setIsLeaving] = React.useState<string | null>(null);
+  const [touchStart, setTouchStart] = React.useState<number | null>(null);
   
   const handleViewDetails = () => {
     navigate(`/activity/${activity.id}`);
@@ -64,12 +68,43 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
     if (onLike) onLike(activity.id);
   };
 
+  const handleShare = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onShare) onShare(activity.id);
+  };
+
+  // Touch gesture handling
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    
+    const touchEnd = e.targetTouches[0].clientX;
+    const diff = touchStart - touchEnd;
+    
+    // Swipe threshold (50px)
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        // Swipe left
+        handleSwipeLeft();
+      } else {
+        // Swipe right
+        handleSwipeRight();
+      }
+      setTouchStart(null);
+    }
+  };
+
   return (
     <div 
       className={cn(
         "activity-card w-full max-w-sm mx-auto bg-white rounded-2xl overflow-hidden card-shadow transition-all duration-300",
         isLeaving === 'left' ? 'swipe-left' : isLeaving === 'right' ? 'swipe-right' : ''
       )}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
     >
       <div className="relative">
         <img 
@@ -77,7 +112,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           alt={activity.title} 
           className="w-full h-52 object-cover"
         />
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-3 right-3 flex gap-2">
           <Button 
             variant="ghost" 
             size="icon" 
@@ -88,7 +123,27 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           >
             <Heart className={cn("h-5 w-5", liked ? "fill-current" : "")} />
           </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="rounded-full bg-white/80 backdrop-blur-sm text-gray-600"
+            onClick={handleShare}
+          >
+            <Share2 className="h-5 w-5" />
+          </Button>
         </div>
+        
+        {activity.tags.includes('trending') && (
+          <div className="absolute top-3 left-3">
+            <Badge variant="secondary" className="bg-red-500 text-white text-xs">🔥 Trending</Badge>
+          </div>
+        )}
+        
+        {activity.lastUpdated.includes("today") && (
+          <div className="absolute top-3 left-3 ml-24">
+            <Badge variant="secondary" className="bg-green-500 text-white text-xs">🆕 New</Badge>
+          </div>
+        )}
       </div>
       
       <div className="p-4">
@@ -111,7 +166,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         </div>
         
         <div className="text-xs text-gray-500 mb-4">
-          Last updated: {activity.lastUpdated} 🕗
+          Locally sourced gems 🌟 • Last updated: {activity.lastUpdated}
         </div>
         
         <div className="flex justify-between">

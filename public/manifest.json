@@ -2,7 +2,7 @@
 {
   "name": "What2Do Bangalore",
   "short_name": "What2Do",
-  "description": "Discover fun activities in Bangalore",
+  "description": "Discover fun activities in Bangalore - your local city guide",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FEF7E3",
@@ -18,6 +18,22 @@
       "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Discover Activities",
+      "short_name": "Discover",
+      "description": "View the latest activities in Bangalore",
+      "url": "/"
+    },
+    {
+      "name": "Contact Us",
+      "short_name": "Contact",
+      "description": "Get in touch with the What2Do team",
+      "url": "/contact"
     }
   ]
 }
