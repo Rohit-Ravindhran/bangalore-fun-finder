@@ -54,8 +54,8 @@ const Index = () => {
   }, [likedActivities, viewMode]);
 
   const filteredActivities = getFilteredActivities(
-    selectedCategories.size > 0 ? [...selectedCategories] : null,
-    selectedQuickFilters.size > 0 ? [...selectedQuickFilters] : null
+    selectedCategories.size > 0 ? Array.from(selectedCategories) : null,
+    selectedQuickFilters.size > 0 ? Array.from(selectedQuickFilters) : null
   );
   
   const currentActivity = filteredActivities[currentActivityIndex];

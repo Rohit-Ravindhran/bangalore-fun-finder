@@ -116,22 +116,30 @@ export const activities: Activity[] = [
 ];
 
 export const getFilteredActivities = (
-  categoryId: string | null,
-  quickFilterId: string | null
+  categoryIds: string[] | null,
+  quickFilterIds: string[] | null
 ) => {
   let filtered = [...activities];
   
-  if (categoryId) {
-    filtered = filtered.filter(activity => activity.categoryIds.includes(categoryId));
+  if (categoryIds && categoryIds.length > 0) {
+    filtered = filtered.filter(activity => 
+      categoryIds.some(categoryId => activity.categoryIds.includes(categoryId))
+    );
   }
   
-  if (quickFilterId === 'free') {
-    filtered = filtered.filter(activity => activity.priceRange.toLowerCase().includes('free'));
-  } else if (quickFilterId === 'today') {
-    filtered = filtered.filter(activity => 
-      activity.lastUpdated.toLowerCase().includes('today') || 
-      (activity.date && activity.date.toLowerCase().includes('today'))
-    );
+  if (quickFilterIds && quickFilterIds.length > 0) {
+    if (quickFilterIds.includes('free')) {
+      filtered = filtered.filter(activity => activity.priceRange.toLowerCase().includes('free'));
+    }
+    
+    if (quickFilterIds.includes('today')) {
+      filtered = filtered.filter(activity => 
+        activity.lastUpdated.toLowerCase().includes('today') || 
+        (activity.date && activity.date.toLowerCase().includes('today'))
+      );
+    }
+    
+    // Add more quick filter handlers as needed for other filters
   }
   
   return filtered;
