@@ -14,13 +14,13 @@ export const fetchActivities = async (): Promise<Activity[]> => {
   
   // Transform the data to match our Activity type
   return (data || []).map(item => ({
-    id: item.id,
+    id: item.id.toString(), // Convert UUID to string
     title: item.title,
     image: item.image,
     tags: item.tags,
     priceRange: item.price_range,
     location: item.location,
-    lastUpdated: new Date(item.updated_at).toLocaleDateString(),
+    lastUpdated: new Date(item.updated_at || item.created_at).toLocaleDateString(),
     categoryIds: item.category_ids,
     description: item.description,
     date: item.date,
@@ -55,13 +55,13 @@ export const createActivity = async (activity: Omit<Activity, 'id' | 'lastUpdate
   }
   
   return {
-    id: data.id,
+    id: data.id.toString(),
     title: data.title,
     image: data.image,
     tags: data.tags,
     priceRange: data.price_range,
     location: data.location,
-    lastUpdated: new Date(data.updated_at).toLocaleDateString(),
+    lastUpdated: new Date(data.updated_at || data.created_at).toLocaleDateString(),
     categoryIds: data.category_ids,
     description: data.description,
     date: data.date,
@@ -99,13 +99,13 @@ export const updateActivity = async (id: string, activity: Partial<Omit<Activity
   }
   
   return {
-    id: data.id,
+    id: data.id.toString(),
     title: data.title,
     image: data.image,
     tags: data.tags,
     priceRange: data.price_range,
     location: data.location,
-    lastUpdated: new Date(data.updated_at).toLocaleDateString(),
+    lastUpdated: new Date(data.updated_at || data.created_at).toLocaleDateString(),
     categoryIds: data.category_ids,
     description: data.description,
     date: data.date,
@@ -176,25 +176,23 @@ export const getActivityById = async (id: string): Promise<Activity | null> => {
     .from('activities')
     .select('*')
     .eq('id', id)
-    .single();
+    .maybeSingle();
   
   if (error) {
-    if (error.code === 'PGRST116') {
-      // Record not found
-      return null;
-    }
     console.error('Error fetching activity by id:', error);
     throw error;
   }
   
+  if (!data) return null;
+  
   return {
-    id: data.id,
+    id: data.id.toString(),
     title: data.title,
     image: data.image,
     tags: data.tags,
     priceRange: data.price_range,
     location: data.location,
-    lastUpdated: new Date(data.updated_at).toLocaleDateString(),
+    lastUpdated: new Date(data.updated_at || data.created_at).toLocaleDateString(),
     categoryIds: data.category_ids,
     description: data.description,
     date: data.date,

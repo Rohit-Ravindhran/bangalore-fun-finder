@@ -1,17 +1,53 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Clock, Calendar, Share2, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { getActivityById } from '@/data/mockData';
+import { getActivityById } from '@/services/activityService';
 import { useToast } from '@/components/ui/use-toast';
+import { Activity } from '@/components/ActivityCard';
+import { Loader2 } from 'lucide-react';
 
 const ActivityDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [activity, setActivity] = useState<Activity | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   
-  const activity = getActivityById(id || '');
+  useEffect(() => {
+    const fetchActivity = async () => {
+      if (!id) return;
+      
+      try {
+        setIsLoading(true);
+        const fetchedActivity = await getActivityById(id);
+        setActivity(fetchedActivity);
+      } catch (error) {
+        console.error("Error fetching activity:", error);
+        toast({
+          title: "Error loading activity",
+          description: "Could not load the activity details",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchActivity();
+  }, [id, toast]);
+  
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-w2d-cream">
+        <div className="text-center">
+          <Loader2 className="h-10 w-10 animate-spin mx-auto mb-4 text-w2d-teal" />
+          <h2 className="text-xl font-medium">Loading activity details...</h2>
+        </div>
+      </div>
+    );
+  }
   
   if (!activity) {
     return (

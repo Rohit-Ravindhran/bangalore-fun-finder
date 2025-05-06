@@ -18,8 +18,8 @@ const Footer: React.FC = () => {
         </p>
         
         <div className="mb-6 px-4 flex flex-col items-center">
-          <p className="mb-2 text-sm">
-            Have something to add to the list? Feel free to send us
+          <p className="mb-3 text-sm">
+            Have something to add to the list?
           </p>
           
           <Button 

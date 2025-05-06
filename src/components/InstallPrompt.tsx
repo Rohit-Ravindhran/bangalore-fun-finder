@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Download, ExternalLink } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 const InstallPrompt: React.FC = () => {
@@ -67,7 +67,7 @@ const InstallPrompt: React.FC = () => {
         setDeferredPrompt(null);
       });
     } else {
-      // Show alternative instructions for iOS or when the prompt isn't available
+      // Show alternative instructions for browsers that don't support installation
       toast({
         title: "Installation",
         description: "To install this app, open in Chrome browser menu > 'Add to Home screen'",
@@ -82,12 +82,12 @@ const InstallPrompt: React.FC = () => {
   }
 
   // Don't show button if it's not installable
-  if (!isInstallable && !navigator.userAgent.match(/android/i)) {
+  if (!isInstallable) {
     return null;
   }
 
   // Fixed installation button/banner based on installability
-  return isInstallable ? (
+  return (
     <div className="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg z-50">
       <div className="flex justify-between items-center">
         <div>
@@ -99,16 +99,6 @@ const InstallPrompt: React.FC = () => {
           Install
         </Button>
       </div>
-    </div>
-  ) : (
-    <div className="fixed bottom-24 right-6">
-      <Button
-        onClick={handleInstallClick}
-        className="rounded-full h-12 w-12 bg-w2d-teal shadow-lg flex items-center justify-center"
-        title="Install app"
-      >
-        <Download className="h-5 w-5" />
-      </Button>
     </div>
   );
 };

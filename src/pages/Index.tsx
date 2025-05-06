@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
@@ -349,8 +348,10 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Subscribe Section - Moved here as requested */}
-        <SubscribeSection className="mb-8 mt-10" />
+        {/* Subscribe Section - Moved here with proper spacing */}
+        <div className="mb-8 mt-10">
+          <SubscribeSection />
+        </div>
 
         <div className="fixed bottom-24 right-6 z-20">
           <ShuffleButton onShuffle={handleShuffle} />
