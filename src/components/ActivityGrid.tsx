@@ -10,9 +10,10 @@ interface ActivityGridProps {
   activities: Activity[];
   onLike: (id: string) => void;
   likedActivities: Set<string>;
+  onShare?: (id: string) => void;
 }
 
-const ActivityGrid: React.FC<ActivityGridProps> = ({ activities, onLike, likedActivities }) => {
+const ActivityGrid: React.FC<ActivityGridProps> = ({ activities, onLike, likedActivities, onShare }) => {
   const navigate = useNavigate();
 
   const handleCardClick = (activityId: string) => {
@@ -22,6 +23,13 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({ activities, onLike, likedAc
   const handleLike = (e: React.MouseEvent, activityId: string) => {
     e.stopPropagation();
     onLike(activityId);
+  };
+
+  const handleShare = (e: React.MouseEvent, activityId: string) => {
+    e.stopPropagation();
+    if (onShare) {
+      onShare(activityId);
+    }
   };
 
   return (
@@ -38,7 +46,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({ activities, onLike, likedAc
               alt={activity.title} 
               className="w-full h-32 object-cover"
             />
-            <div className="absolute top-2 right-2">
+            <div className="absolute top-2 right-2 flex gap-2">
               <Button
                 variant="ghost"
                 size="icon"
@@ -47,6 +55,17 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({ activities, onLike, likedAc
               >
                 <Heart className={`h-4 w-4 ${likedActivities.has(activity.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
               </Button>
+              
+              {onShare && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="bg-white/80 rounded-full backdrop-blur-sm w-8 h-8"
+                  onClick={(e) => handleShare(e, activity.id)}
+                >
+                  <Share2 className="h-4 w-4 text-gray-600" />
+                </Button>
+              )}
             </div>
             
             {activity.tags.includes('trending') && (

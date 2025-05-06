@@ -117,7 +117,8 @@ export const activities: Activity[] = [
 
 export const getFilteredActivities = (
   categoryIds: string[] | null,
-  quickFilterIds: string[] | null
+  quickFilterIds: string[] | null,
+  searchQuery: string = ''
 ) => {
   let filtered = [...activities];
   
@@ -140,6 +141,16 @@ export const getFilteredActivities = (
     }
     
     // Add more quick filter handlers as needed for other filters
+  }
+  
+  if (searchQuery && searchQuery.trim() !== '') {
+    const query = searchQuery.toLowerCase().trim();
+    filtered = filtered.filter(activity => 
+      activity.title.toLowerCase().includes(query) ||
+      activity.description.toLowerCase().includes(query) ||
+      activity.location.toLowerCase().includes(query) ||
+      activity.tags.some(tag => tag.toLowerCase().includes(query))
+    );
   }
   
   return filtered;

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ActivityGrid from '@/components/ActivityGrid';
-import { getActivities } from '@/data/mockData';
+import { activities } from '@/data/mockData';
 import { useToast } from '@/components/ui/use-toast';
 
 const Favorites: React.FC = () => {
@@ -15,13 +15,17 @@ const Favorites: React.FC = () => {
   useEffect(() => {
     const savedLiked = localStorage.getItem('likedActivities');
     if (savedLiked) {
-      const likedIds = new Set(JSON.parse(savedLiked));
-      setLikedActivities(likedIds);
-      
-      // Filter activities to only show liked ones
-      const allActivities = getActivities();
-      const favorites = allActivities.filter(activity => likedIds.has(activity.id));
-      setFavoriteActivities(favorites);
+      try {
+        const parsedData = JSON.parse(savedLiked);
+        const likedIds = new Set<string>(parsedData);
+        setLikedActivities(likedIds);
+        
+        // Filter activities to only show liked ones
+        const favorites = activities.filter(activity => likedIds.has(activity.id));
+        setFavoriteActivities(favorites);
+      } catch (error) {
+        console.error('Error parsing liked activities:', error);
+      }
     }
   }, []);
   
