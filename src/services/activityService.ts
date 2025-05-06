@@ -2,6 +2,41 @@
 import { supabase } from "@/integrations/supabase/client";
 import { Activity } from '@/components/ActivityCard';
 
+// Type that represents what our database actually has
+type ActivityRow = {
+  id: string | number; // Could be UUID or number
+  title: string;
+  image: string;
+  tags: string[];
+  price_range: string;
+  location: string;
+  description: string;
+  category_ids: string[];
+  date?: string;
+  time?: string;
+  map_link?: string;
+  contact_info?: string;
+  created_at: string;
+  updated_at?: string;
+};
+
+// Helper function to convert database row to our Activity type
+const mapRowToActivity = (row: any): Activity => ({
+  id: row.id.toString(),
+  title: row.title,
+  image: row.image,
+  tags: row.tags || [],
+  priceRange: row.price_range,
+  location: row.location,
+  lastUpdated: new Date(row.updated_at || row.created_at).toLocaleDateString(),
+  categoryIds: row.category_ids || [],
+  description: row.description,
+  date: row.date,
+  time: row.time,
+  mapLink: row.map_link,
+  contactInfo: row.contact_info
+});
+
 export const fetchActivities = async (): Promise<Activity[]> => {
   const { data, error } = await supabase
     .from('activities')
@@ -13,21 +48,7 @@ export const fetchActivities = async (): Promise<Activity[]> => {
   }
   
   // Transform the data to match our Activity type
-  return (data || []).map(item => ({
-    id: item.id.toString(), // Convert UUID to string
-    title: item.title,
-    image: item.image,
-    tags: item.tags,
-    priceRange: item.price_range,
-    location: item.location,
-    lastUpdated: new Date(item.updated_at || item.created_at).toLocaleDateString(),
-    categoryIds: item.category_ids,
-    description: item.description,
-    date: item.date,
-    time: item.time,
-    mapLink: item.map_link,
-    contactInfo: item.contact_info
-  }));
+  return (data || []).map(mapRowToActivity);
 };
 
 export const createActivity = async (activity: Omit<Activity, 'id' | 'lastUpdated'>): Promise<Activity> => {
@@ -54,21 +75,7 @@ export const createActivity = async (activity: Omit<Activity, 'id' | 'lastUpdate
     throw error;
   }
   
-  return {
-    id: data.id.toString(),
-    title: data.title,
-    image: data.image,
-    tags: data.tags,
-    priceRange: data.price_range,
-    location: data.location,
-    lastUpdated: new Date(data.updated_at || data.created_at).toLocaleDateString(),
-    categoryIds: data.category_ids,
-    description: data.description,
-    date: data.date,
-    time: data.time,
-    mapLink: data.map_link,
-    contactInfo: data.contact_info
-  };
+  return mapRowToActivity(data);
 };
 
 export const updateActivity = async (id: string, activity: Partial<Omit<Activity, 'id' | 'lastUpdated'>>): Promise<Activity> => {
@@ -98,21 +105,7 @@ export const updateActivity = async (id: string, activity: Partial<Omit<Activity
     throw error;
   }
   
-  return {
-    id: data.id.toString(),
-    title: data.title,
-    image: data.image,
-    tags: data.tags,
-    priceRange: data.price_range,
-    location: data.location,
-    lastUpdated: new Date(data.updated_at || data.created_at).toLocaleDateString(),
-    categoryIds: data.category_ids,
-    description: data.description,
-    date: data.date,
-    time: data.time,
-    mapLink: data.map_link,
-    contactInfo: data.contact_info
-  };
+  return mapRowToActivity(data);
 };
 
 export const deleteActivity = async (id: string): Promise<void> => {
@@ -185,19 +178,5 @@ export const getActivityById = async (id: string): Promise<Activity | null> => {
   
   if (!data) return null;
   
-  return {
-    id: data.id.toString(),
-    title: data.title,
-    image: data.image,
-    tags: data.tags,
-    priceRange: data.price_range,
-    location: data.location,
-    lastUpdated: new Date(data.updated_at || data.created_at).toLocaleDateString(),
-    categoryIds: data.category_ids,
-    description: data.description,
-    date: data.date,
-    time: data.time,
-    mapLink: data.map_link,
-    contactInfo: data.contact_info
-  };
+  return mapRowToActivity(data);
 };

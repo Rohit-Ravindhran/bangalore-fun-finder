@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
           <Button 
             variant="outline" 
             onClick={handleSuggestionClick}
-            className="text-sm w-auto"
+            className="text-sm w-auto flex items-center"
           >
             Submit an Activity <ExternalLink className="ml-1 h-3 w-3" />
           </Button>
