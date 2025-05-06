@@ -11,16 +11,52 @@ export type Database = {
     Tables: {
       activities: {
         Row: {
+          category_ids: string[] | null
+          contact_info: string | null
           created_at: string
+          date: string | null
+          description: string | null
           id: number
+          image: string | null
+          location: string | null
+          map_link: string | null
+          price_range: string | null
+          tags: string[] | null
+          time: string | null
+          title: string | null
+          updated_at: string | null
         }
         Insert: {
+          category_ids?: string[] | null
+          contact_info?: string | null
           created_at?: string
+          date?: string | null
+          description?: string | null
           id?: number
+          image?: string | null
+          location?: string | null
+          map_link?: string | null
+          price_range?: string | null
+          tags?: string[] | null
+          time?: string | null
+          title?: string | null
+          updated_at?: string | null
         }
         Update: {
+          category_ids?: string[] | null
+          contact_info?: string | null
           created_at?: string
+          date?: string | null
+          description?: string | null
           id?: number
+          image?: string | null
+          location?: string | null
+          map_link?: string | null
+          price_range?: string | null
+          tags?: string[] | null
+          time?: string | null
+          title?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
