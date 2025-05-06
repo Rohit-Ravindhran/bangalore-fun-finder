@@ -36,7 +36,7 @@ const Index = () => {
 
 
 
-  featuredEvents
+  console.log('sthis')
 
 
   useEffect(() => {
