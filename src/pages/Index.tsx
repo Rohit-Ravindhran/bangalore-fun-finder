@@ -34,6 +34,15 @@ const Index = () => {
   const [uniqueExperiences, setUniqueExperiences] = useState<Activity[]>([]);
   const { toast } = useToast();
 
+
+
+  featuredEvents
+
+
+  useEffect(() => {
+ console.log('ss',featuredEvents)
+  }, [featuredEvents]);
+
   useEffect(() => {
     const savedLiked = localStorage.getItem('likedActivities');
     if (savedLiked) {
