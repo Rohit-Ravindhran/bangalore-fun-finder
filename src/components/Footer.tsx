@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { ExternalLink } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const handleSuggestionClick = () => {
@@ -16,13 +17,17 @@ const Footer: React.FC = () => {
           What2Do in Bangalore is your personal city guide to hidden and trending things to do – curated just for you.
         </p>
         
-        <div className="mb-6 px-4">
+        <div className="mb-6 px-4 flex flex-col items-center">
+          <p className="mb-2 text-sm">
+            Have something to add to the list? Feel free to send us
+          </p>
+          
           <Button 
             variant="outline" 
             onClick={handleSuggestionClick}
-            className="text-sm w-full md:w-auto"
+            className="text-sm w-auto"
           >
-            Have something to add to the list? Feel free to send us
+            Submit an Activity <ExternalLink className="ml-1 h-3 w-3" />
           </Button>
         </div>
         

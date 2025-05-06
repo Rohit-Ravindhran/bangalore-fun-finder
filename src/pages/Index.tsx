@@ -11,11 +11,14 @@ import SortSelector from '@/components/SortSelector';
 import Footer from '@/components/Footer';
 import InstallPrompt from '@/components/InstallPrompt';
 import SubscribePopup from '@/components/SubscribePopup';
-import { categories, quickFilters, getFilteredActivities } from '@/data/mockData';
+import SubscribeSection from '@/components/SubscribeSection';
+import { categories, quickFilters } from '@/data/mockData';
+import { getFilteredActivities } from '@/services/activityService';
 import { useToast } from '@/components/ui/use-toast';
-import { Dice6, Share2, BellPlus, Clock, Search } from 'lucide-react';
+import { Dice6, Share2, Search, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Activity } from '@/components/ActivityCard';
 
 const SORT_OPTIONS = [
   { id: 'latest', label: 'Latest' },
@@ -32,16 +35,21 @@ const Index = () => {
   const [viewMode, setViewMode] = useState<'card' | 'grid'>('grid');
   const [sortOption, setSortOption] = useState('latest');
   const [showSubscribe, setShowSubscribe] = useState(false);
-  const [contact, setContact] = useState('');
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
   const { toast } = useToast();
 
   // Load user preferences from localStorage if available
   useEffect(() => {
     const savedLiked = localStorage.getItem('likedActivities');
     if (savedLiked) {
-      setLikedActivities(new Set(JSON.parse(savedLiked)));
+      try {
+        setLikedActivities(new Set(JSON.parse(savedLiked)));
+      } catch (error) {
+        console.error('Error parsing liked activities:', error);
+      }
     }
   }, []);
 
@@ -50,11 +58,32 @@ const Index = () => {
     localStorage.setItem('likedActivities', JSON.stringify([...likedActivities]));
   }, [likedActivities]);
 
-  const filteredActivities = getFilteredActivities(
-    selectedCategories.size > 0 ? Array.from(selectedCategories) : null,
-    selectedQuickFilters.size > 0 ? Array.from(selectedQuickFilters) : null,
-    searchQuery
-  );
+  // Fetch activities based on filters
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getFilteredActivities(
+          selectedCategories.size > 0 ? Array.from(selectedCategories) : null,
+          selectedQuickFilters.size > 0 ? Array.from(selectedQuickFilters) : null,
+          searchQuery
+        );
+        setFilteredActivities(data);
+        setCurrentActivityIndex(0);
+      } catch (error) {
+        console.error('Error fetching activities:', error);
+        toast({
+          title: "Error loading activities",
+          description: "Please try again later",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [selectedCategories, selectedQuickFilters, searchQuery, toast]);
   
   // Split activities into sections
   const featuredEvents = filteredActivities.slice(0, 5);
@@ -72,12 +101,10 @@ const Index = () => {
       }
       return newSet;
     });
-    setCurrentActivityIndex(0);
   };
   
   const handleSelectAllCategories = () => {
     setSelectedCategories(new Set());
-    setCurrentActivityIndex(0);
   };
 
   const handleQuickFilterSelect = (filterId: string) => {
@@ -90,12 +117,10 @@ const Index = () => {
       }
       return newSet;
     });
-    setCurrentActivityIndex(0);
   };
 
   const handleClearFilters = () => {
     setSelectedQuickFilters(new Set());
-    setCurrentActivityIndex(0);
   };
 
   const handleSwipeLeft = () => {
@@ -143,9 +168,11 @@ const Index = () => {
   const handleShare = async (id: string) => {
     try {
       const activityData = filteredActivities.find(activity => activity.id === id);
+      if (!activityData) return;
+      
       const shareData = {
-        title: `Check out ${activityData?.title || 'this activity'} on What2Do Bangalore`,
-        text: activityData?.description || 'Discover fun activities in Bangalore',
+        title: `Check out ${activityData.title || 'this activity'} on What2Do Bangalore`,
+        text: activityData.description || 'Discover fun activities in Bangalore',
         url: window.location.origin + `/activity/${id}`
       };
       
@@ -176,6 +203,8 @@ const Index = () => {
   };
 
   const handleShuffle = () => {
+    if (filteredActivities.length === 0) return;
+    
     const randomIndex = Math.floor(Math.random() * filteredActivities.length);
     setCurrentActivityIndex(randomIndex);
     toast({
@@ -183,18 +212,6 @@ const Index = () => {
       description: "Finding something random for you",
       duration: 1500,
     });
-  };
-
-  const handleContactSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (contact) {
-      toast({
-        title: "Subscribed!",
-        description: "You'll receive weekend plans every Friday",
-        duration: 2000,
-      });
-      setContact('');
-    }
   };
 
   const toggleSearch = () => {
@@ -208,44 +225,50 @@ const Index = () => {
     }
   };
 
+  const renderActivitiesSection = (title: string, activities: Activity[], emptyMessage: string) => {
+    if (isLoading) {
+      return (
+        <div className="flex justify-center items-center py-20">
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        </div>
+      );
+    }
+    
+    if (activities.length > 0) {
+      return viewMode === 'card' && title === "🎬 Featured Activities" ? (
+        currentActivity && (
+          <ActivityCard 
+            activity={currentActivity}
+            onSwipeLeft={handleSwipeLeft}
+            onSwipeRight={handleSwipeRight}
+            onLike={handleLike}
+            onShare={handleShare}
+            liked={likedActivities.has(currentActivity.id)}
+          />
+        )
+      ) : (
+        <ActivityGrid 
+          activities={activities}
+          onLike={handleLike}
+          likedActivities={likedActivities}
+          onShare={handleShare}
+        />
+      );
+    }
+    
+    return (
+      <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
+        <h3 className="text-xl font-bold mb-2">No activities found</h3>
+        <p className="text-gray-600">{emptyMessage}</p>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-w2d-cream overflow-x-hidden pb-6">
       <Header toggleSearch={toggleSearch} />
       
       <main className="container px-4 pt-2 pb-20">
-        {/* Subscription Banner */}
-        <div className="bg-white rounded-xl p-4 mb-6 shadow-sm">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-2">
-            <div className="flex items-center gap-2 text-sm">
-              <BellPlus className="h-4 w-4 text-w2d-teal" />
-              <span>Enter your email or phone to get weekend plans every Friday 🔔</span>
-            </div>
-            
-            <form className="flex gap-2" onSubmit={handleContactSubscribe}>
-              <Input 
-                type="text" 
-                placeholder="Email or phone number" 
-                className="h-8 text-sm"
-                value={contact}
-                onChange={(e) => setContact(e.target.value)}
-                required
-              />
-              <Button 
-                type="submit" 
-                size="sm" 
-                className="h-8 bg-w2d-teal"
-              >
-                Submit
-              </Button>
-            </form>
-          </div>
-          
-          <div className="flex justify-end text-xs text-gray-600">
-            <Clock className="h-3 w-3 mr-1" />
-            Last updated: {new Date().toLocaleDateString()}
-          </div>
-        </div>
-        
         {/* Page Title */}
         <div className="text-center mb-6">
           <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">
@@ -298,32 +321,7 @@ const Index = () => {
         <div className="mt-6 mb-8">
           <h2 className="text-2xl font-bold mb-4">🎬 Featured Activities</h2>
           
-          {featuredEvents.length > 0 ? (
-            viewMode === 'card' ? (
-              currentActivity && (
-                <ActivityCard 
-                  activity={currentActivity}
-                  onSwipeLeft={handleSwipeLeft}
-                  onSwipeRight={handleSwipeRight}
-                  onLike={handleLike}
-                  onShare={handleShare}
-                  liked={likedActivities.has(currentActivity.id)}
-                />
-              )
-            ) : (
-              <ActivityGrid 
-                activities={featuredEvents}
-                onLike={handleLike}
-                likedActivities={likedActivities}
-                onShare={handleShare}
-              />
-            )
-          ) : (
-            <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
-              <h3 className="text-xl font-bold mb-2">No activities found</h3>
-              <p className="text-gray-600">Try a different filter</p>
-            </div>
-          )}
+          {renderActivitiesSection("🎬 Featured Activities", featuredEvents, "Try a different filter")}
           
           <div className="text-center text-sm text-gray-600 italic mt-4">
             More dropping next week!... Stay tuned.
@@ -334,25 +332,13 @@ const Index = () => {
         <div className="mt-6 mb-8">
           <h2 className="text-2xl font-bold mb-4">🎨 Unique Experiences</h2>
           
-          {uniqueExperiences.length > 0 ? (
-            <ActivityGrid 
-              activities={uniqueExperiences}
-              onLike={handleLike}
-              likedActivities={likedActivities}
-              onShare={handleShare}
-            />
-          ) : (
-            <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
-              <h3 className="text-xl font-bold mb-2">No unique experiences found</h3>
-              <p className="text-gray-600">Try a different filter</p>
-            </div>
-          )}
+          {renderActivitiesSection("🎨 Unique Experiences", uniqueExperiences, "Try a different filter")}
           
           <div className="text-center text-sm text-gray-600 italic mt-4">
             More dropping next week!... Stay tuned.
           </div>
         </div>
-        
+
         {/* Date Ideas Section */}
         <div className="mt-6 mb-8">
           <h2 className="text-2xl font-bold mb-4">❤️ Date Ideas</h2>
@@ -362,6 +348,9 @@ const Index = () => {
             <p className="text-gray-600">Sign up to get updates!</p>
           </div>
         </div>
+
+        {/* Subscribe Section - Moved here as requested */}
+        <SubscribeSection className="mb-8 mt-10" />
 
         <div className="fixed bottom-24 right-6 z-20">
           <ShuffleButton onShuffle={handleShuffle} />
