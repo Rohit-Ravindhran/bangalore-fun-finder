@@ -189,6 +189,7 @@ export async function getFilteredActivitiesBySection(sectionType: string): Promi
     .eq("section_type", sectionType)
     .order("date", { ascending: true });
 
+    console.log('data',data);
   if (error) throw error;
   return (data || []).map(mapRowToActivity);
 }
