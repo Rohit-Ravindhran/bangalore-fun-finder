@@ -1,14 +1,31 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const Footer: React.FC = () => {
+  const handleSuggestionClick = () => {
+    // In a real app, this would link to a Google Form or internal form
+    window.open("https://forms.gle/yourFormLink", "_blank");
+  };
+
   return (
     <footer className="bg-white p-6 mt-6 border-t">
       <div className="max-w-md mx-auto text-center">
         <p className="text-gray-600 mb-4 text-sm">
           What2Do in Bangalore is your personal city guide to hidden and trending things to do – curated just for you.
         </p>
+        
+        <div className="mb-6">
+          <Button 
+            variant="outline" 
+            onClick={handleSuggestionClick}
+            className="text-sm"
+          >
+            Have something to add to the list? Feel free to send us
+          </Button>
+        </div>
+        
         <div className="flex justify-center space-x-4 text-xs text-w2d-teal">
           <Link to="/about" className="hover:underline">About</Link>
           <Link to="/contact" className="hover:underline">Contact</Link>

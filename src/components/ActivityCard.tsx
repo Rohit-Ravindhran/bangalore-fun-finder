@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, ArrowRight, ArrowLeft, Share2 } from 'lucide-react';
@@ -68,9 +67,28 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
     if (onLike) onLike(activity.id);
   };
 
-  const handleShare = (e: React.MouseEvent) => {
+  const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (onShare) onShare(activity.id);
+    
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: activity.title,
+          text: `Check out this activity in Bangalore: ${activity.title}`,
+          url: window.location.origin + `/activity/${activity.id}`,
+        });
+      } else {
+        // Fallback for browsers that don't support Web Share API
+        const url = window.location.origin + `/activity/${activity.id}`;
+        navigator.clipboard.writeText(url);
+        
+        // If onShare callback exists, call it
+        if (onShare) onShare(activity.id);
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+      if (onShare) onShare(activity.id);
+    }
   };
 
   // Touch gesture handling

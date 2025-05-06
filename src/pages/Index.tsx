@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
@@ -15,6 +16,7 @@ import { categories, quickFilters, getFilteredActivities } from '@/data/mockData
 import { useToast } from '@/components/ui/use-toast';
 import { Dice6, Share2, BellPlus, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const SORT_OPTIONS = [
   { id: 'latest', label: 'Latest' },
@@ -31,6 +33,7 @@ const Index = () => {
   const [viewMode, setViewMode] = useState<'card' | 'grid'>('grid');
   const [sortOption, setSortOption] = useState('latest');
   const [showSubscribe, setShowSubscribe] = useState(false);
+  const [email, setEmail] = useState('');
   const { toast } = useToast();
 
   // Load user preferences from localStorage if available
@@ -39,23 +42,21 @@ const Index = () => {
     if (savedLiked) {
       setLikedActivities(new Set(JSON.parse(savedLiked)));
     }
-    
-    const savedViewMode = localStorage.getItem('viewMode');
-    if (savedViewMode) {
-      setViewMode(savedViewMode as 'card' | 'grid');
-    }
   }, []);
 
   // Save preferences to localStorage when they change
   useEffect(() => {
     localStorage.setItem('likedActivities', JSON.stringify([...likedActivities]));
-    localStorage.setItem('viewMode', viewMode);
-  }, [likedActivities, viewMode]);
+  }, [likedActivities]);
 
   const filteredActivities = getFilteredActivities(
     selectedCategories.size > 0 ? Array.from(selectedCategories) : null,
     selectedQuickFilters.size > 0 ? Array.from(selectedQuickFilters) : null
   );
+  
+  // Split activities into sections
+  const featuredEvents = filteredActivities.slice(0, 5);
+  const uniqueExperiences = filteredActivities.slice(5, 7);
   
   const currentActivity = filteredActivities[currentActivityIndex];
 
@@ -133,10 +134,9 @@ const Index = () => {
   };
 
   const handleShare = (id: string) => {
-    // In a real app, we would implement sharing functionality
     toast({
-      title: "Share feature",
-      description: "Sharing functionality would open here",
+      title: "Link copied!",
+      description: "Share it with your friends",
       duration: 1500,
     });
   };
@@ -151,37 +151,65 @@ const Index = () => {
     });
   };
 
+  const handleEmailSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) {
+      toast({
+        title: "Subscribed!",
+        description: "You'll receive weekend plans every Friday",
+        duration: 2000,
+      });
+      setEmail('');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-w2d-cream overflow-x-hidden pb-6">
       <Header />
       
       <main className="container px-4 pt-2 pb-20">
-        <div className="text-center mb-6">
+        <div className="text-center mb-4">
           <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">
-            Find Something to do<br />Today or This Weekend
+            🏙️ Your Weekend in Bangalore, Sorted. 🎉
           </h1>
           <p className="text-sm md:text-base text-gray-600">
-            Curated from trusted local communities for bangaloreans
+            Curated from trusted local communities
           </p>
         </div>
 
-        <SmileyRow />
-        
-        <div className="flex items-center justify-between mb-2">
-          <Button 
-            size="sm" 
-            variant="outline" 
-            className="bg-white rounded-full text-xs flex items-center gap-1 h-8"
-            onClick={() => setShowSubscribe(true)}
-          >
-            <BellPlus className="h-3 w-3" />
-            Subscribe for alerts
-          </Button>
-          <div className="flex items-center text-xs text-gray-600">
+        <div className="bg-white rounded-xl p-4 mb-6 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-2">
+            <div className="flex items-center gap-2 text-sm">
+              <BellPlus className="h-4 w-4 text-w2d-teal" />
+              <span>Get handpicked weekend plans every Friday 🔔 – Join the list</span>
+            </div>
+            
+            <form className="flex gap-2" onSubmit={handleEmailSubscribe}>
+              <Input 
+                type="email" 
+                placeholder="Your email" 
+                className="h-8 text-sm"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <Button 
+                type="submit" 
+                size="sm" 
+                className="h-8 bg-w2d-teal"
+              >
+                Submit
+              </Button>
+            </form>
+          </div>
+          
+          <div className="flex justify-end text-xs text-gray-600">
             <Clock className="h-3 w-3 mr-1" />
             Last updated: {new Date().toLocaleDateString()}
           </div>
         </div>
+        
+        <SmileyRow />
         
         <div className="bg-white rounded-xl p-2 mb-4 shadow-sm">
           <QuickFilter 
@@ -194,14 +222,17 @@ const Index = () => {
         
         <CategoryFilter 
           categories={categories}
-          selectedCategory={null}
+          selectedCategories={selectedCategories}
           onSelectCategory={handleCategorySelect}
         />
         
         <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
         
-        <div className="mt-4">
-          {filteredActivities.length > 0 ? (
+        {/* Featured Events Section */}
+        <div className="mt-6 mb-8">
+          <h2 className="text-2xl font-bold mb-4">🎬 Featured Events</h2>
+          
+          {featuredEvents.length > 0 ? (
             viewMode === 'card' ? (
               currentActivity && (
                 <ActivityCard 
@@ -215,7 +246,7 @@ const Index = () => {
               )
             ) : (
               <ActivityGrid 
-                activities={filteredActivities}
+                activities={featuredEvents}
                 onLike={handleLike}
                 likedActivities={likedActivities}
               />
@@ -226,6 +257,42 @@ const Index = () => {
               <p className="text-gray-600">Try a different filter</p>
             </div>
           )}
+          
+          <div className="text-center text-sm text-gray-600 italic mt-4">
+            More dropping next week!... Stay tuned.
+          </div>
+        </div>
+        
+        {/* Unique Experiences Section */}
+        <div className="mt-6 mb-8">
+          <h2 className="text-2xl font-bold mb-4">🎨 Unique Experiences</h2>
+          
+          {uniqueExperiences.length > 0 ? (
+            <ActivityGrid 
+              activities={uniqueExperiences}
+              onLike={handleLike}
+              likedActivities={likedActivities}
+            />
+          ) : (
+            <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
+              <h3 className="text-xl font-bold mb-2">No unique experiences found</h3>
+              <p className="text-gray-600">Try a different filter</p>
+            </div>
+          )}
+          
+          <div className="text-center text-sm text-gray-600 italic mt-4">
+            More dropping next week!... Stay tuned.
+          </div>
+        </div>
+        
+        {/* Date Ideas Section */}
+        <div className="mt-6 mb-8">
+          <h2 className="text-2xl font-bold mb-4">❤️ Date Ideas</h2>
+          
+          <div className="bg-white rounded-2xl p-8 text-center shadow-sm border-dashed border-2 border-gray-300">
+            <h3 className="text-xl font-bold mb-2">Coming Soon</h3>
+            <p className="text-gray-600">Sign up to get updates!</p>
+          </div>
         </div>
 
         <div className="fixed bottom-24 right-6 flex flex-col gap-3 z-20">

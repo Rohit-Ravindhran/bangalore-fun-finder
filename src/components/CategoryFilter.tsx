@@ -11,13 +11,13 @@ export interface Category {
 
 interface CategoryFilterProps {
   categories: Category[];
-  selectedCategory: string | null;
+  selectedCategories: Set<string>;
   onSelectCategory: (categoryId: string) => void;
 }
 
 const CategoryFilter: React.FC<CategoryFilterProps> = ({
   categories,
-  selectedCategory,
+  selectedCategories,
   onSelectCategory,
 }) => {
   return (
@@ -29,7 +29,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
             onClick={() => onSelectCategory(category.id)}
             className={cn(
               "rounded-full py-2 px-4 text-sm transition-all whitespace-nowrap flex items-center gap-1",
-              selectedCategory === category.id 
+              selectedCategories.has(category.id) 
                 ? "bg-w2d-teal text-white font-medium"
                 : "bg-white text-primary font-normal"
             )}
