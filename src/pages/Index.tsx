@@ -8,13 +8,12 @@ import ActivityGrid from '@/components/ActivityGrid';
 import ShuffleButton from '@/components/ShuffleButton';
 import ViewToggle from '@/components/ViewToggle';
 import SortSelector from '@/components/SortSelector';
-import SmileyRow from '@/components/SmileyRow';
 import Footer from '@/components/Footer';
 import InstallPrompt from '@/components/InstallPrompt';
 import SubscribePopup from '@/components/SubscribePopup';
 import { categories, quickFilters, getFilteredActivities } from '@/data/mockData';
 import { useToast } from '@/components/ui/use-toast';
-import { Dice6, Share2, BellPlus, Clock } from 'lucide-react';
+import { Dice6, Share2, BellPlus, Clock, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -33,7 +32,9 @@ const Index = () => {
   const [viewMode, setViewMode] = useState<'card' | 'grid'>('grid');
   const [sortOption, setSortOption] = useState('latest');
   const [showSubscribe, setShowSubscribe] = useState(false);
-  const [email, setEmail] = useState('');
+  const [contact, setContact] = useState('');
+  const [searchVisible, setSearchVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const { toast } = useToast();
 
   // Load user preferences from localStorage if available
@@ -51,7 +52,8 @@ const Index = () => {
 
   const filteredActivities = getFilteredActivities(
     selectedCategories.size > 0 ? Array.from(selectedCategories) : null,
-    selectedQuickFilters.size > 0 ? Array.from(selectedQuickFilters) : null
+    selectedQuickFilters.size > 0 ? Array.from(selectedQuickFilters) : null,
+    searchQuery
   );
   
   // Split activities into sections
@@ -70,6 +72,11 @@ const Index = () => {
       }
       return newSet;
     });
+    setCurrentActivityIndex(0);
+  };
+  
+  const handleSelectAllCategories = () => {
+    setSelectedCategories(new Set());
     setCurrentActivityIndex(0);
   };
 
@@ -133,12 +140,39 @@ const Index = () => {
     });
   };
 
-  const handleShare = (id: string) => {
-    toast({
-      title: "Link copied!",
-      description: "Share it with your friends",
-      duration: 1500,
-    });
+  const handleShare = async (id: string) => {
+    try {
+      const activityData = filteredActivities.find(activity => activity.id === id);
+      const shareData = {
+        title: `Check out ${activityData?.title || 'this activity'} on What2Do Bangalore`,
+        text: activityData?.description || 'Discover fun activities in Bangalore',
+        url: window.location.origin + `/activity/${id}`
+      };
+      
+      if (navigator.share && navigator.canShare(shareData)) {
+        await navigator.share(shareData);
+        toast({
+          title: "Shared successfully!",
+          duration: 1500,
+        });
+      } else {
+        // Fallback for browsers that don't support Web Share API
+        navigator.clipboard.writeText(shareData.url);
+        toast({
+          title: "Link copied!",
+          description: "Share it with your friends",
+          duration: 1500,
+        });
+      }
+    } catch (error) {
+      console.error("Error sharing:", error);
+      toast({
+        title: "Sharing failed",
+        description: "Please try again later",
+        variant: "destructive",
+        duration: 1500,
+      });
+    }
   };
 
   const handleShuffle = () => {
@@ -151,46 +185,49 @@ const Index = () => {
     });
   };
 
-  const handleEmailSubscribe = (e: React.FormEvent) => {
+  const handleContactSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
+    if (contact) {
       toast({
         title: "Subscribed!",
         description: "You'll receive weekend plans every Friday",
         duration: 2000,
       });
-      setEmail('');
+      setContact('');
+    }
+  };
+
+  const toggleSearch = () => {
+    setSearchVisible(!searchVisible);
+    if (!searchVisible) {
+      setTimeout(() => {
+        document.getElementById('search-input')?.focus();
+      }, 100);
+    } else {
+      setSearchQuery('');
     }
   };
 
   return (
     <div className="min-h-screen bg-w2d-cream overflow-x-hidden pb-6">
-      <Header />
+      <Header toggleSearch={toggleSearch} />
       
       <main className="container px-4 pt-2 pb-20">
-        <div className="text-center mb-4">
-          <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">
-            🏙️ Your Weekend in Bangalore, Sorted. 🎉
-          </h1>
-          <p className="text-sm md:text-base text-gray-600">
-            Curated from trusted local communities
-          </p>
-        </div>
-
+        {/* Subscription Banner */}
         <div className="bg-white rounded-xl p-4 mb-6 shadow-sm">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-2">
             <div className="flex items-center gap-2 text-sm">
               <BellPlus className="h-4 w-4 text-w2d-teal" />
-              <span>Get handpicked weekend plans every Friday 🔔 – Join the list</span>
+              <span>Enter your email or phone to get weekend plans every Friday 🔔</span>
             </div>
             
-            <form className="flex gap-2" onSubmit={handleEmailSubscribe}>
+            <form className="flex gap-2" onSubmit={handleContactSubscribe}>
               <Input 
-                type="email" 
-                placeholder="Your email" 
+                type="text" 
+                placeholder="Email or phone number" 
                 className="h-8 text-sm"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
                 required
               />
               <Button 
@@ -209,8 +246,34 @@ const Index = () => {
           </div>
         </div>
         
-        <SmileyRow />
+        {/* Page Title */}
+        <div className="text-center mb-6">
+          <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">
+            🏙️ Your Weekend in Bangalore, Sorted. 🎉
+          </h1>
+          <p className="text-sm md:text-base text-gray-600">
+            Curated from trusted local communities
+          </p>
+        </div>
         
+        {/* Search Bar */}
+        {searchVisible && (
+          <div className="bg-white rounded-xl p-2 mb-4 shadow-sm">
+            <div className="flex items-center gap-2">
+              <Search className="h-4 w-4 text-gray-400" />
+              <Input 
+                id="search-input"
+                type="text" 
+                placeholder="Search activities..." 
+                className="border-0 focus-visible:ring-0"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </div>
+        )}
+        
+        {/* Quick Filters */}
         <div className="bg-white rounded-xl p-2 mb-4 shadow-sm">
           <QuickFilter 
             filters={quickFilters}
@@ -220,17 +283,20 @@ const Index = () => {
           />
         </div>
         
+        {/* Category Filters */}
         <CategoryFilter 
           categories={categories}
           selectedCategories={selectedCategories}
           onSelectCategory={handleCategorySelect}
+          onSelectAll={handleSelectAllCategories}
         />
         
+        {/* View Toggle */}
         <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
         
-        {/* Featured Events Section */}
+        {/* Featured Activities Section */}
         <div className="mt-6 mb-8">
-          <h2 className="text-2xl font-bold mb-4">🎬 Featured Events</h2>
+          <h2 className="text-2xl font-bold mb-4">🎬 Featured Activities</h2>
           
           {featuredEvents.length > 0 ? (
             viewMode === 'card' ? (
@@ -249,6 +315,7 @@ const Index = () => {
                 activities={featuredEvents}
                 onLike={handleLike}
                 likedActivities={likedActivities}
+                onShare={handleShare}
               />
             )
           ) : (
@@ -272,6 +339,7 @@ const Index = () => {
               activities={uniqueExperiences}
               onLike={handleLike}
               likedActivities={likedActivities}
+              onShare={handleShare}
             />
           ) : (
             <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
@@ -295,17 +363,11 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="fixed bottom-24 right-6 flex flex-col gap-3 z-20">
-          <Button 
-            onClick={() => handleShuffle()}
-            className="rounded-full h-12 w-12 bg-w2d-teal shadow-lg flex items-center justify-center"
-          >
-            <Dice6 className="h-5 w-5" />
-          </Button>
+        <div className="fixed bottom-24 right-6 z-20">
+          <ShuffleButton onShuffle={handleShuffle} />
         </div>
       </main>
       
-      <ShuffleButton onShuffle={handleShuffle} />
       <InstallPrompt />
       <Footer />
       <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />

@@ -6,18 +6,14 @@ import SideMenu from './SideMenu';
 
 interface HeaderProps {
   toggleMenu?: () => void;
+  toggleSearch?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC<HeaderProps> = ({ toggleSearch }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
 
-  const toggleMenu = () => {
+  const handleToggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-  };
-
-  const toggleSearch = () => {
-    setShowSearch(!showSearch);
   };
 
   return (
@@ -38,24 +34,13 @@ const Header: React.FC<HeaderProps> = () => {
           <Button 
             variant="ghost" 
             size="icon" 
-            onClick={toggleMenu} 
+            onClick={handleToggleMenu} 
             className="text-primary"
           >
             <Menu className="h-6 w-6" />
           </Button>
         </div>
       </header>
-      
-      {showSearch && (
-        <div className="px-4 py-2 bg-white shadow-md">
-          <input 
-            type="text" 
-            placeholder="Search activities..." 
-            className="w-full p-2 border rounded-lg"
-            autoFocus
-          />
-        </div>
-      )}
 
       <SideMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </>

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast } from "@/components/ui/use-toast";
 
 interface SubscribePopupProps {
   isOpen: boolean;
@@ -9,15 +10,32 @@ interface SubscribePopupProps {
 }
 
 const SubscribePopup: React.FC<SubscribePopupProps> = ({ isOpen, onClose }) => {
-  const [email, setEmail] = useState('');
-  const [whatsapp, setWhatsapp] = useState('');
-  const [subscribeType, setSubscribeType] = useState<'email' | 'whatsapp'>('email');
+  const [contact, setContact] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   
   if (!isOpen) return null;
 
+  const validateContact = (value: string) => {
+    // Simple email regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Simple phone regex (at least 10 digits)
+    const phoneRegex = /^\+?[0-9]{10,15}$/;
+    
+    return emailRegex.test(value) || phoneRegex.test(value);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateContact(contact)) {
+      toast({
+        title: "Invalid format",
+        description: "Please enter a valid email or phone number",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     // In a real app, we would send this to an API
     setIsSubmitted(true);
     setTimeout(() => {
@@ -46,45 +64,17 @@ const SubscribePopup: React.FC<SubscribePopupProps> = ({ isOpen, onClose }) => {
             <h3 className="text-xl font-bold mb-2">Never Miss a Fun Activity!</h3>
             <p className="text-gray-600 mb-4">Subscribe to our weekly updates for the best things happening in Bangalore.</p>
             
-            <div className="flex mb-4">
-              <button 
-                className={`flex-1 py-2 text-center ${subscribeType === 'email' ? 'bg-w2d-teal text-white font-medium' : 'bg-gray-100'}`}
-                onClick={() => setSubscribeType('email')}
-              >
-                Email
-              </button>
-              <button 
-                className={`flex-1 py-2 text-center ${subscribeType === 'whatsapp' ? 'bg-w2d-teal text-white font-medium' : 'bg-gray-100'}`}
-                onClick={() => setSubscribeType('whatsapp')}
-              >
-                WhatsApp
-              </button>
-            </div>
-            
             <form onSubmit={handleSubmit}>
-              {subscribeType === 'email' ? (
-                <div className="mb-4">
-                  <input 
-                    type="email" 
-                    placeholder="Your email" 
-                    className="w-full p-3 border rounded-lg"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-              ) : (
-                <div className="mb-4">
-                  <input 
-                    type="tel" 
-                    placeholder="WhatsApp number" 
-                    className="w-full p-3 border rounded-lg"
-                    value={whatsapp}
-                    onChange={(e) => setWhatsapp(e.target.value)}
-                    required
-                  />
-                </div>
-              )}
+              <div className="mb-4">
+                <input 
+                  type="text" 
+                  placeholder="Enter your email or phone number" 
+                  className="w-full p-3 border rounded-lg"
+                  value={contact}
+                  onChange={(e) => setContact(e.target.value)}
+                  required
+                />
+              </div>
               
               <Button type="submit" className="w-full">Subscribe Now</Button>
             </form>

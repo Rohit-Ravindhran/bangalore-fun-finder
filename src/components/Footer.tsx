@@ -16,11 +16,11 @@ const Footer: React.FC = () => {
           What2Do in Bangalore is your personal city guide to hidden and trending things to do – curated just for you.
         </p>
         
-        <div className="mb-6">
+        <div className="mb-6 px-4">
           <Button 
             variant="outline" 
             onClick={handleSuggestionClick}
-            className="text-sm"
+            className="text-sm w-full md:w-auto"
           >
             Have something to add to the list? Feel free to send us
           </Button>
@@ -31,6 +31,7 @@ const Footer: React.FC = () => {
           <Link to="/contact" className="hover:underline">Contact</Link>
           <Link to="/privacy" className="hover:underline">Privacy</Link>
           <Link to="/terms" className="hover:underline">Terms</Link>
+          <Link to="/favorites" className="hover:underline">Favorites</Link>
         </div>
         <p className="text-xs text-gray-500 mt-4">
           © {new Date().getFullYear()} What2Do Bangalore

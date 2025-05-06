@@ -2,10 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
 
 const InstallPrompt: React.FC = () => {
   const [showPrompt, setShowPrompt] = useState(false);
   const [installPromptEvent, setInstallPromptEvent] = useState<any>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -23,6 +25,11 @@ const InstallPrompt: React.FC = () => {
 
   const handleInstallClick = () => {
     if (!installPromptEvent) {
+      toast({
+        title: "Installation not available",
+        description: "Your browser doesn't support app installation or the app is already installed.",
+        duration: 3000,
+      });
       return;
     }
 
@@ -31,6 +38,11 @@ const InstallPrompt: React.FC = () => {
     installPromptEvent.userChoice.then((choiceResult: { outcome: string }) => {
       if (choiceResult.outcome === 'accepted') {
         console.log('User accepted the install prompt');
+        toast({
+          title: "Installation started",
+          description: "Thanks for installing our app!",
+          duration: 3000,
+        });
       } else {
         console.log('User dismissed the install prompt');
       }
@@ -40,7 +52,17 @@ const InstallPrompt: React.FC = () => {
   };
 
   if (!showPrompt) {
-    return null;
+    return (
+      <div className="fixed bottom-24 right-6">
+        <Button
+          onClick={handleInstallClick}
+          className="rounded-full h-12 w-12 bg-w2d-teal shadow-lg flex items-center justify-center"
+          title="Install app"
+        >
+          <Download className="h-5 w-5" />
+        </Button>
+      </div>
+    );
   }
 
   return (

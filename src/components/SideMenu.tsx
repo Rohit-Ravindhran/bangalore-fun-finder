@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { X } from 'lucide-react';
+import { X, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface SideMenuProps {
@@ -34,6 +34,16 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
                 onClick={onClose}
               >
                 Home
+              </Link>
+            </li>
+            <li>
+              <Link 
+                to="/favorites" 
+                className="block py-2 text-primary hover:text-w2d-teal transition-colors flex items-center gap-2"
+                onClick={onClose}
+              >
+                <Heart className="h-4 w-4" />
+                Favorites
               </Link>
             </li>
             <li>
