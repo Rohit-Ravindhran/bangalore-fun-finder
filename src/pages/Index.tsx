@@ -12,19 +12,12 @@ import InstallPrompt from '@/components/InstallPrompt';
 import SubscribePopup from '@/components/SubscribePopup';
 import SubscribeSection from '@/components/SubscribeSection';
 import { categories, quickFilters } from '@/data/mockData';
-import { getFilteredActivities } from '@/services/activityService';
+import { getFilteredActivitiesBySection, getFilteredActivities } from '@/services/activityService';
 import { useToast } from '@/components/ui/use-toast';
 import { Dice6, Share2, Search, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Activity } from '@/components/ActivityCard';
-
-const SORT_OPTIONS = [
-  { id: 'latest', label: 'Latest' },
-  { id: 'budget-low', label: 'Budget (Low to High)' },
-  { id: 'popularity', label: 'Popularity' },
-  { id: 'editors-picks', label: 'Editor\'s Picks' },
-];
 
 const Index = () => {
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
@@ -37,10 +30,10 @@ const Index = () => {
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
+  const [featuredEvents, setFeaturedEvents] = useState<Activity[]>([]);
+  const [uniqueExperiences, setUniqueExperiences] = useState<Activity[]>([]);
   const { toast } = useToast();
 
-  // Load user preferences from localStorage if available
   useEffect(() => {
     const savedLiked = localStorage.getItem('likedActivities');
     if (savedLiked) {
@@ -52,43 +45,35 @@ const Index = () => {
     }
   }, []);
 
-  // Save preferences to localStorage when they change
   useEffect(() => {
     localStorage.setItem('likedActivities', JSON.stringify([...likedActivities]));
   }, [likedActivities]);
 
-  // Fetch activities based on filters
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchSectionActivities = async () => {
       setIsLoading(true);
       try {
-        const data = await getFilteredActivities(
-          selectedCategories.size > 0 ? Array.from(selectedCategories) : null,
-          selectedQuickFilters.size > 0 ? Array.from(selectedQuickFilters) : null,
-          searchQuery
-        );
-        setFilteredActivities(data);
-        setCurrentActivityIndex(0);
+        const [featured, unique] = await Promise.all([
+          getFilteredActivitiesBySection('featured'),
+          getFilteredActivitiesBySection('unique')
+        ]);
+        setFeaturedEvents(featured);
+        setUniqueExperiences(unique);
       } catch (error) {
-        console.error('Error fetching activities:', error);
+        console.error('Error loading sections:', error);
         toast({
-          title: "Error loading activities",
-          description: "Please try again later",
-          variant: "destructive",
+          title: 'Error loading sections',
+          description: 'Please try again later',
+          variant: 'destructive',
         });
       } finally {
         setIsLoading(false);
       }
     };
+    fetchSectionActivities();
+  }, [toast]);
 
-    fetchData();
-  }, [selectedCategories, selectedQuickFilters, searchQuery, toast]);
-  
-  // Split activities into sections
-  const featuredEvents = filteredActivities.slice(0, 5);
-  const uniqueExperiences = filteredActivities.slice(5, 7);
-  
-  const currentActivity = filteredActivities[currentActivityIndex];
+  const currentActivity = featuredEvents[currentActivityIndex];
 
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategories(prev => {
@@ -101,7 +86,7 @@ const Index = () => {
       return newSet;
     });
   };
-  
+
   const handleSelectAllCategories = () => {
     setSelectedCategories(new Set());
   };
@@ -123,13 +108,13 @@ const Index = () => {
   };
 
   const handleSwipeLeft = () => {
-    if (currentActivityIndex < filteredActivities.length - 1) {
+    if (currentActivityIndex < featuredEvents.length - 1) {
       setCurrentActivityIndex(currentActivityIndex + 1);
     } else {
       setCurrentActivityIndex(0);
       toast({
         title: "You've seen all activities",
-        description: "Circling back to the beginning",
+        description: 'Circling back to the beginning',
         duration: 2000,
       });
     }
@@ -139,7 +124,7 @@ const Index = () => {
     if (currentActivityIndex > 0) {
       setCurrentActivityIndex(currentActivityIndex - 1);
     } else {
-      setCurrentActivityIndex(filteredActivities.length - 1);
+      setCurrentActivityIndex(featuredEvents.length - 1);
     }
   };
 
@@ -148,15 +133,12 @@ const Index = () => {
       const newLiked = new Set(prevLiked);
       if (newLiked.has(id)) {
         newLiked.delete(id);
-        toast({
-          title: "Removed from favorites",
-          duration: 1500,
-        });
+        toast({ title: 'Removed from favorites', duration: 1500 });
       } else {
         newLiked.add(id);
         toast({
-          title: "Added to favorites",
-          description: "You can find this in your saved collection",
+          title: 'Added to favorites',
+          description: 'You can find this in your saved collection',
           duration: 1500,
         });
       }
@@ -166,51 +148,33 @@ const Index = () => {
 
   const handleShare = async (id: string) => {
     try {
-      const activityData = filteredActivities.find(activity => activity.id === id);
+      const activityData = featuredEvents.find(activity => activity.id === id);
       if (!activityData) return;
-      
+
       const shareData = {
         title: `Check out ${activityData.title || 'this activity'} on What2Do Bangalore`,
         text: activityData.description || 'Discover fun activities in Bangalore',
-        url: window.location.origin + `/activity/${id}`
+        url: window.location.origin + `/activity/${id}`,
       };
-      
+
       if (navigator.share && navigator.canShare(shareData)) {
         await navigator.share(shareData);
-        toast({
-          title: "Shared successfully!",
-          duration: 1500,
-        });
+        toast({ title: 'Shared successfully!', duration: 1500 });
       } else {
-        // Fallback for browsers that don't support Web Share API
         navigator.clipboard.writeText(shareData.url);
-        toast({
-          title: "Link copied!",
-          description: "Share it with your friends",
-          duration: 1500,
-        });
+        toast({ title: 'Link copied!', description: 'Share it with your friends', duration: 1500 });
       }
     } catch (error) {
-      console.error("Error sharing:", error);
-      toast({
-        title: "Sharing failed",
-        description: "Please try again later",
-        variant: "destructive",
-        duration: 1500,
-      });
+      console.error('Error sharing:', error);
+      toast({ title: 'Sharing failed', description: 'Please try again later', variant: 'destructive', duration: 1500 });
     }
   };
 
   const handleShuffle = () => {
-    if (filteredActivities.length === 0) return;
-    
-    const randomIndex = Math.floor(Math.random() * filteredActivities.length);
+    if (featuredEvents.length === 0) return;
+    const randomIndex = Math.floor(Math.random() * featuredEvents.length);
     setCurrentActivityIndex(randomIndex);
-    toast({
-      title: "Shuffled activities",
-      description: "Finding something random for you",
-      duration: 1500,
-    });
+    toast({ title: 'Shuffled activities', description: 'Finding something random for you', duration: 1500 });
   };
 
   const toggleSearch = () => {
@@ -232,9 +196,9 @@ const Index = () => {
         </div>
       );
     }
-    
+
     if (activities.length > 0) {
-      return viewMode === 'card' && title === "🎬 Featured Activities" ? (
+      return viewMode === 'card' && title === '🎬 Featured Activities' ? (
         currentActivity && (
           <ActivityCard 
             activity={currentActivity}
@@ -254,7 +218,7 @@ const Index = () => {
         />
       );
     }
-    
+
     return (
       <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
         <h3 className="text-xl font-bold mb-2">No activities found</h3>
@@ -266,9 +230,8 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-w2d-cream overflow-x-hidden pb-6">
       <Header toggleSearch={toggleSearch} />
-      
+
       <main className="container px-4 pt-2 pb-20">
-        {/* Page Title */}
         <div className="text-center mb-6">
           <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">
             🏙️ Your Weekend in Bangalore, Sorted. 🎉
@@ -277,8 +240,7 @@ const Index = () => {
             Curated from trusted local communities
           </p>
         </div>
-        
-        {/* Search Bar */}
+
         {searchVisible && (
           <div className="bg-white rounded-xl p-2 mb-4 shadow-sm">
             <div className="flex items-center gap-2">
@@ -294,8 +256,7 @@ const Index = () => {
             </div>
           </div>
         )}
-        
-        {/* Quick Filters */}
+
         <div className="bg-white rounded-xl p-2 mb-4 shadow-sm">
           <QuickFilter 
             filters={quickFilters}
@@ -304,51 +265,40 @@ const Index = () => {
             onClearFilters={handleClearFilters}
           />
         </div>
-        
-        {/* Category Filters */}
+
         <CategoryFilter 
           categories={categories}
           selectedCategories={selectedCategories}
           onSelectCategory={handleCategorySelect}
           onSelectAll={handleSelectAllCategories}
         />
-        
-        {/* View Toggle */}
+
         <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
-        
-        {/* Featured Activities Section */}
+
         <div className="mt-6 mb-8">
           <h2 className="text-2xl font-bold mb-4">🎬 Featured Activities</h2>
-          
-          {renderActivitiesSection("🎬 Featured Activities", featuredEvents, "Try a different filter")}
-          
-          <div className="text-center text-sm text-gray-600 italic mt-4">
-            More dropping next week!... Stay tuned.
-          </div>
-        </div>
-        
-        {/* Unique Experiences Section */}
-        <div className="mt-6 mb-8">
-          <h2 className="text-2xl font-bold mb-4">🎨 Unique Experiences</h2>
-          
-          {renderActivitiesSection("🎨 Unique Experiences", uniqueExperiences, "Try a different filter")}
-          
+          {renderActivitiesSection('🎬 Featured Activities', featuredEvents, 'Try a different filter')}
           <div className="text-center text-sm text-gray-600 italic mt-4">
             More dropping next week!... Stay tuned.
           </div>
         </div>
 
-        {/* Date Ideas Section */}
+        <div className="mt-6 mb-8">
+          <h2 className="text-2xl font-bold mb-4">🎨 Unique Experiences</h2>
+          {renderActivitiesSection('🎨 Unique Experiences', uniqueExperiences, 'Try a different filter')}
+          <div className="text-center text-sm text-gray-600 italic mt-4">
+            More dropping next week!... Stay tuned.
+          </div>
+        </div>
+
         <div className="mt-6 mb-8">
           <h2 className="text-2xl font-bold mb-4">❤️ Date Ideas</h2>
-          
           <div className="bg-white rounded-2xl p-8 text-center shadow-sm border-dashed border-2 border-gray-300">
             <h3 className="text-xl font-bold mb-2">Coming Soon</h3>
             <p className="text-gray-600">Sign up to get updates!</p>
           </div>
         </div>
 
-        {/* Subscribe Section - Moved here with proper spacing */}
         <div className="mb-8 mt-10">
           <SubscribeSection />
         </div>
@@ -357,7 +307,7 @@ const Index = () => {
           <ShuffleButton onShuffle={handleShuffle} />
         </div>
       </main>
-      
+
       <InstallPrompt />
       <Footer />
       <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
