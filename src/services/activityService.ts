@@ -180,3 +180,15 @@ export const getActivityById = async (id: string): Promise<Activity | null> => {
   
   return mapRowToActivity(data as ActivityRow);
 };
+
+
+export async function getFilteredActivitiesBySection(sectionType: string): Promise<Activity[]> {
+  const { data, error } = await supabase
+    .from("activities")
+    .select("*")
+    .eq("section_type", sectionType)
+    .order("date", { ascending: true });
+
+  if (error) throw error;
+  return (data || []).map(mapRowToActivity);
+}
