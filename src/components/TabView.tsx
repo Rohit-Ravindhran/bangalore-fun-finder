@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 
 interface TabViewProps {
   tabs: {
@@ -56,18 +55,18 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId }) => {
   
   return (
     <div className="w-full">
-      <div className="relative">
+      <div className="sticky top-0 z-30 bg-w2d-cream pt-2 pb-3 shadow-sm">
         <ScrollArea className="pb-2">
-          <div className="flex space-x-1 border-b overflow-x-auto no-scrollbar">
+          <div className="flex space-x-2 border-b overflow-x-auto no-scrollbar px-1">
             {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTabId(tab.id)}
                 className={cn(
-                  "px-4 py-2 text-center whitespace-nowrap font-medium text-sm transition-colors relative",
+                  "px-5 py-3 text-center whitespace-nowrap font-medium text-base transition-colors relative",
                   activeTabId === tab.id 
                     ? "text-w2d-teal border-b-2 border-w2d-teal" 
-                    : "text-gray-600 hover:text-gray-900"
+                    : "text-gray-500 hover:text-gray-700"
                 )}
               >
                 {tab.title}
@@ -78,37 +77,13 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId }) => {
       </div>
 
       <div 
-        className="mt-4"
+        className="mt-6 pb-4"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
         {activeTab && (
-          <div className="space-y-4">
-            {activeTab.count && (
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs text-gray-500">
-                  <span>Showing {activeTab.count.loaded} of {activeTab.count.total} activities</span>
-                  {activeTab.count.loaded < activeTab.count.total && activeTab.onLoadMore && (
-                    <Button 
-                      variant="link" 
-                      size="sm" 
-                      onClick={activeTab.onLoadMore}
-                      className="text-w2d-teal p-0 h-auto"
-                      disabled={activeTab.isLoading}
-                    >
-                      {activeTab.isLoading ? 'Loading...' : 'Load More'}
-                    </Button>
-                  )}
-                </div>
-                
-                <Progress 
-                  value={(activeTab.count.loaded / activeTab.count.total) * 100} 
-                  className="h-1" 
-                />
-              </div>
-            )}
-            
+          <div className="space-y-4">            
             <div className="min-h-[300px]">
               {activeTab.content}
             </div>

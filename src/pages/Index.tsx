@@ -337,7 +337,7 @@ const Index = () => {
     if (isLoading) {
       return (
         <div className="flex justify-center items-center py-20">
-          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+          <Loader2 className="h-10 w-10 animate-spin text-w2d-teal" />
         </div>
       );
     }
@@ -400,7 +400,7 @@ const Index = () => {
     },
     {
       id: 'date-ideas',
-      title: '❤️ Date Ideas',
+      title: '💑 Date Ideas',
       content: dateIdeas.length > 0 
         ? renderTabContent(dateIdeas, 'Date Ideas')
         : (
@@ -424,12 +424,12 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-w2d-cream overflow-x-hidden pb-6">
+    <div className="min-h-screen bg-w2d-cream overflow-x-hidden">
       <Header toggleSearch={toggleSearch} />
 
-      <main className="container px-4 pt-2 pb-20">
-        <div className="text-center mb-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">
+      <main className="container px-4 pt-4 pb-32">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">
             🏙️ Your Weekend in Bangalore, Sorted. 🎉
           </h1>
           <p className="text-sm md:text-base text-gray-600">
@@ -438,9 +438,9 @@ const Index = () => {
         </div>
 
         {searchVisible && (
-          <div className="bg-white rounded-xl p-2 mb-4 shadow-sm">
+          <div className="bg-white rounded-xl p-3 mb-6 shadow-sm">
             <div className="flex items-center gap-2">
-              <Search className="h-4 w-4 text-gray-400" />
+              <Search className="h-5 w-5 text-gray-400" />
               <Input 
                 id="search-input"
                 type="text" 
@@ -453,7 +453,7 @@ const Index = () => {
           </div>
         )}
 
-        <div className="bg-white rounded-xl p-2 mb-4 shadow-sm">
+        <div className="bg-white rounded-xl p-4 mb-6 shadow-sm">
           <QuickFilter 
             filters={quickFilters}
             selectedFilters={selectedQuickFilters}
@@ -462,31 +462,31 @@ const Index = () => {
           />
         </div>
 
-        <CategoryFilter 
-          categories={categories}
-          selectedCategories={selectedCategories}
-          onSelectCategory={handleCategorySelect}
-          onSelectAll={handleSelectAllCategories}
-        />
+        <div className="mb-8">
+          <CategoryFilter 
+            categories={categories}
+            selectedCategories={selectedCategories}
+            onSelectCategory={handleCategorySelect}
+            onSelectAll={handleSelectAllCategories}
+          />
+        </div>
 
         <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
 
-        <div className="mt-6 mb-8">
+        <div className="mb-10">
           <TabView 
             tabs={tabs} 
             defaultTabId="great-picks" 
           />
         </div>
 
-        <div className="fixed bottom-24 right-6 z-20">
+        <div className="fixed bottom-32 right-6 z-20">
           <ShuffleButton onShuffle={handleShuffle} />
         </div>
       </main>
 
-      <div className="mb-8 mt-10">
-        <SubscribeSection />
-      </div>
-
+      <SubscribeSection className="z-10" />
+      
       <InstallPrompt />
       <Footer />
       <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
