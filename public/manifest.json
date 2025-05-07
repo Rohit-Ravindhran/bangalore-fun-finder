@@ -5,8 +5,8 @@
   "description": "Discover fun activities in Bangalore - your local city guide",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FEF7E3",
-  "theme_color": "#234E52",
+  "background_color": "#1a6c6c",
+  "theme_color": "#1a6c6c",
   "orientation": "portrait",
   "icons": [
     {
