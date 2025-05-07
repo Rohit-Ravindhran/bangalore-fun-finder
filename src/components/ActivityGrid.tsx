@@ -1,19 +1,29 @@
 
 import React from 'react';
-import { Heart, Share2 } from 'lucide-react';
+import { Heart, Share2, Clock, MapPin, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Activity } from '@/components/ActivityCard';
 import { useNavigate } from 'react-router-dom';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface ActivityGridProps {
   activities: Activity[];
   onLike: (id: string) => void;
   likedActivities: Set<string>;
   onShare?: (id: string) => void;
+  columns?: number;
+  sectionType?: string;
 }
 
-const ActivityGrid: React.FC<ActivityGridProps> = ({ activities, onLike, likedActivities, onShare }) => {
+const ActivityGrid: React.FC<ActivityGridProps> = ({ 
+  activities, 
+  onLike, 
+  likedActivities, 
+  onShare, 
+  columns = 2,
+  sectionType 
+}) => {
   const navigate = useNavigate();
 
   const handleCardClick = (activityId: string) => {
@@ -32,19 +42,25 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({ activities, onLike, likedAc
     }
   };
 
+  // Function to truncate text
+  const truncateText = (text: string, maxLength: number) => {
+    if (!text) return '';
+    return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+  };
+
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className={`grid grid-cols-${columns} gap-4`}>
       {activities.map((activity) => (
-        <div 
+        <Card 
           key={activity.id}
-          className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+          className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
           onClick={() => handleCardClick(activity.id)}
         >
           <div className="relative">
             <img 
-              src={activity.image} 
+              src={activity.image || '/placeholder.svg'} 
               alt={activity.title} 
-              className="w-full h-32 object-cover"
+              className="w-full h-40 object-cover"
             />
             <div className="absolute top-2 right-2 flex gap-2">
               <Button
@@ -68,37 +84,66 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({ activities, onLike, likedAc
               )}
             </div>
             
-            {activity.tags.includes('trending') && (
-              <div className="absolute top-2 left-2">
+            <div className="absolute top-2 left-2 flex flex-col gap-1">
+              {activity.tags.includes('trending') && (
                 <Badge variant="secondary" className="bg-red-500 text-white text-xs">🔥 Trending</Badge>
-              </div>
-            )}
-            
-            {activity.lastUpdated.includes("today") && (
-              <div className="absolute top-2 left-2">
+              )}
+              
+              {activity.lastUpdated.includes("today") && (
                 <Badge variant="secondary" className="bg-green-500 text-white text-xs">🆕 New</Badge>
-              </div>
-            )}
+              )}
+              
+              {sectionType === 'Great Picks' && activity.tags.includes('ourpick') && (
+                <Badge variant="secondary" className="bg-w2d-yellow text-primary text-xs">✨ Our Pick</Badge>
+              )}
+            </div>
           </div>
           
-          <div className="p-3">
-            <h3 className="font-bold text-sm mb-1 line-clamp-2">{activity.title}</h3>
-            <div className="flex flex-wrap gap-1 mb-1">
+          <CardContent className="p-4">
+            <h3 className="font-bold text-base mb-2 line-clamp-2">{activity.title}</h3>
+            
+            {activity.description && (
+              <p className="text-xs text-gray-600 mb-3 line-clamp-2">
+                {truncateText(activity.description, 80)}
+              </p>
+            )}
+            
+            <div className="flex flex-wrap gap-2 mb-3">
               {activity.tags.slice(0, 2).map((tag, idx) => (
                 <span 
                   key={idx} 
-                  className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-1.5 py-0.5"
+                  className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2 py-1"
                 >
                   {tag}
                 </span>
               ))}
             </div>
-            <div className="flex justify-between items-center text-xs text-gray-600">
-              <span>{activity.priceRange}</span>
-              <span>{activity.location}</span>
+            
+            <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 mb-2">
+              <div className="flex items-center gap-1">
+                <MapPin className="h-3 w-3" />
+                <span>{activity.location}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span>{activity.priceRange}</span>
+              </div>
+              
+              {activity.date && (
+                <div className="flex items-center gap-1">
+                  <Calendar className="h-3 w-3" />
+                  <span>{activity.date}</span>
+                </div>
+              )}
+              
+              {activity.time && (
+                <div className="flex items-center gap-1">
+                  <Clock className="h-3 w-3" />
+                  <span>{activity.time}</span>
+                </div>
+              )}
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       ))}
     </div>
   );

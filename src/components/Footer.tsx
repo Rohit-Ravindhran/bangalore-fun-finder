@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-white p-6 mt-6 border-t">
+    <footer className="bg-white p-6 border-t">
       <div className="max-w-md mx-auto text-center">
         <p className="text-gray-600 mb-4 text-sm">
           What2Do in Bangalore is your personal city guide to hidden and trending things to do – curated just for you.
