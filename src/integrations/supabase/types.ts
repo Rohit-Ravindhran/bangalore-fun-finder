@@ -21,10 +21,12 @@ export type Database = {
           location: string | null
           map_link: string | null
           price_range: string | null
+          section_type: string | null
           tags: string[] | null
           time: string | null
           title: string | null
           updated_at: string | null
+          url: string | null
         }
         Insert: {
           category_ids?: string[] | null
@@ -37,10 +39,12 @@ export type Database = {
           location?: string | null
           map_link?: string | null
           price_range?: string | null
+          section_type?: string | null
           tags?: string[] | null
           time?: string | null
           title?: string | null
           updated_at?: string | null
+          url?: string | null
         }
         Update: {
           category_ids?: string[] | null
@@ -53,10 +57,63 @@ export type Database = {
           location?: string | null
           map_link?: string | null
           price_range?: string | null
+          section_type?: string | null
           tags?: string[] | null
           time?: string | null
           title?: string | null
           updated_at?: string | null
+          url?: string | null
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id?: number
+          name: string
+        }
+        Update: {
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      tags: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id?: number
+          name: string
+        }
+        Update: {
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      users: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: number
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: number
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: number
+          phone?: string | null
         }
         Relationships: []
       }

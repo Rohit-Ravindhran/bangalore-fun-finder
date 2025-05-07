@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
@@ -11,13 +12,14 @@ import Footer from '@/components/Footer';
 import InstallPrompt from '@/components/InstallPrompt';
 import SubscribePopup from '@/components/SubscribePopup';
 import SubscribeSection from '@/components/SubscribeSection';
-import { categories, quickFilters } from '@/data/mockData';
-import { getFilteredActivitiesBySection, getFilteredActivities } from '@/services/activityService';
+import { quickFilters } from '@/data/mockData';
+import { getFilteredActivitiesBySection, getFilteredActivities, fetchCategories } from '@/services/activityService';
 import { useToast } from '@/components/ui/use-toast';
 import { Dice6, Share2, Search, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Activity } from '@/components/ActivityCard';
+import { Category } from '@/components/CategoryFilter';
 
 const Index = () => {
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
@@ -32,16 +34,26 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [featuredEvents, setFeaturedEvents] = useState<Activity[]>([]);
   const [uniqueExperiences, setUniqueExperiences] = useState<Activity[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const { toast } = useToast();
 
-
-
-  console.log('sthis')
-
-
   useEffect(() => {
- console.log('ss',featuredEvents)
-  }, [featuredEvents]);
+    const loadCategories = async () => {
+      try {
+        const fetchedCategories = await fetchCategories();
+        setCategories(fetchedCategories);
+      } catch (error) {
+        console.error('Error loading categories:', error);
+        toast({
+          title: 'Error loading categories',
+          description: 'Please try again later',
+          variant: 'destructive',
+        });
+      }
+    };
+    
+    loadCategories();
+  }, [toast]);
 
   useEffect(() => {
     const savedLiked = localStorage.getItem('likedActivities');
@@ -66,6 +78,8 @@ const Index = () => {
           getFilteredActivitiesBySection('featured'),
           getFilteredActivitiesBySection('unique')
         ]);
+        console.log('Featured events:', featured);
+        console.log('Unique experiences:', unique);
         setFeaturedEvents(featured);
         setUniqueExperiences(unique);
       } catch (error) {
@@ -308,14 +322,14 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="mb-8 mt-10">
-          <SubscribeSection />
-        </div>
-
         <div className="fixed bottom-24 right-6 z-20">
           <ShuffleButton onShuffle={handleShuffle} />
         </div>
       </main>
+
+      <div className="mb-8 mt-10">
+        <SubscribeSection />
+      </div>
 
       <InstallPrompt />
       <Footer />

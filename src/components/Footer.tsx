@@ -6,8 +6,7 @@ import { ExternalLink } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const handleSuggestionClick = () => {
-    // In a real app, this would link to a Google Form or internal form
-    window.open("https://forms.gle/yourFormLink", "_blank");
+    window.open("https://docs.google.com/forms/d/e/1FAIpQLSfwejAJIbXP5oC3UdZUOoYM0AQLf4ZqjuPm4nRBKAsB_FdcBg/viewform?usp=header", "_blank");
   };
 
   return (
