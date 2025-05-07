@@ -12,14 +12,21 @@ import Footer from '@/components/Footer';
 import InstallPrompt from '@/components/InstallPrompt';
 import SubscribePopup from '@/components/SubscribePopup';
 import SubscribeSection from '@/components/SubscribeSection';
+import TabView from '@/components/TabView';
 import { quickFilters } from '@/data/mockData';
-import { getFilteredActivitiesBySection, getFilteredActivities, fetchCategories } from '@/services/activityService';
+import { 
+  getFilteredActivitiesBySection, 
+  getFilteredActivities, 
+  fetchCategories 
+} from '@/services/activityService';
 import { useToast } from '@/components/ui/use-toast';
 import { Dice6, Share2, Search, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Activity } from '@/components/ActivityCard';
 import { Category } from '@/components/CategoryFilter';
+
+const ITEMS_PER_PAGE = 6;
 
 const Index = () => {
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
@@ -32,8 +39,22 @@ const Index = () => {
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [featuredEvents, setFeaturedEvents] = useState<Activity[]>([]);
+  
+  // Tab-related states
+  const [greatPicksActivities, setGreatPicksActivities] = useState<Activity[]>([]);
   const [uniqueExperiences, setUniqueExperiences] = useState<Activity[]>([]);
+  const [dateIdeas, setDateIdeas] = useState<Activity[]>([]);
+  const [currentTab, setCurrentTab] = useState('great-picks');
+  
+  // Pagination states
+  const [greatPicksTotal, setGreatPicksTotal] = useState(0);
+  const [uniqueExperiencesTotal, setUniqueExperiencesTotal] = useState(0);
+  const [dateIdeasTotal, setDateIdeasTotal] = useState(0);
+  const [greatPicksPage, setGreatPicksPage] = useState(1);
+  const [uniqueExperiencesPage, setUniqueExperiencesPage] = useState(1);
+  const [dateIdeasPage, setDateIdeasPage] = useState(1);
+  const [loadingMore, setLoadingMore] = useState(false);
+  
   const [categories, setCategories] = useState<Category[]>([]);
   const { toast } = useToast();
 
@@ -74,14 +95,19 @@ const Index = () => {
     const fetchSectionActivities = async () => {
       setIsLoading(true);
       try {
-        const [featured, unique] = await Promise.all([
+        const [greatPicks, unique, dateIdeasData] = await Promise.all([
           getFilteredActivitiesBySection('featured'),
-          getFilteredActivitiesBySection('unique')
+          getFilteredActivitiesBySection('unique'),
+          getFilteredActivitiesBySection('date')
         ]);
-        console.log('Featured events:', featured);
-        console.log('Unique experiences:', unique);
-        setFeaturedEvents(featured);
-        setUniqueExperiences(unique);
+        
+        setGreatPicksActivities(greatPicks.slice(0, ITEMS_PER_PAGE));
+        setUniqueExperiences(unique.slice(0, ITEMS_PER_PAGE));
+        setDateIdeas(dateIdeasData.slice(0, ITEMS_PER_PAGE));
+        
+        setGreatPicksTotal(greatPicks.length);
+        setUniqueExperiencesTotal(unique.length);
+        setDateIdeasTotal(dateIdeasData.length);
       } catch (error) {
         console.error('Error loading sections:', error);
         toast({
@@ -96,7 +122,7 @@ const Index = () => {
     fetchSectionActivities();
   }, [toast]);
 
-  const currentActivity = featuredEvents[currentActivityIndex];
+  const currentActivity = greatPicksActivities[currentActivityIndex];
 
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategories(prev => {
@@ -131,7 +157,7 @@ const Index = () => {
   };
 
   const handleSwipeLeft = () => {
-    if (currentActivityIndex < featuredEvents.length - 1) {
+    if (currentActivityIndex < greatPicksActivities.length - 1) {
       setCurrentActivityIndex(currentActivityIndex + 1);
     } else {
       setCurrentActivityIndex(0);
@@ -147,7 +173,7 @@ const Index = () => {
     if (currentActivityIndex > 0) {
       setCurrentActivityIndex(currentActivityIndex - 1);
     } else {
-      setCurrentActivityIndex(featuredEvents.length - 1);
+      setCurrentActivityIndex(greatPicksActivities.length - 1);
     }
   };
 
@@ -171,7 +197,16 @@ const Index = () => {
 
   const handleShare = async (id: string) => {
     try {
-      const activityData = featuredEvents.find(activity => activity.id === id);
+      let activityData;
+      
+      if (currentTab === 'great-picks') {
+        activityData = greatPicksActivities.find(activity => activity.id === id);
+      } else if (currentTab === 'unique-experiences') {
+        activityData = uniqueExperiences.find(activity => activity.id === id);
+      } else {
+        activityData = dateIdeas.find(activity => activity.id === id);
+      }
+      
       if (!activityData) return;
 
       const shareData = {
@@ -194,9 +229,24 @@ const Index = () => {
   };
 
   const handleShuffle = () => {
-    if (featuredEvents.length === 0) return;
-    const randomIndex = Math.floor(Math.random() * featuredEvents.length);
-    setCurrentActivityIndex(randomIndex);
+    let activities: Activity[] = [];
+    
+    if (currentTab === 'great-picks') {
+      activities = greatPicksActivities;
+    } else if (currentTab === 'unique-experiences') {
+      activities = uniqueExperiences;
+    } else {
+      activities = dateIdeas;
+    }
+    
+    if (activities.length === 0) return;
+    
+    const randomIndex = Math.floor(Math.random() * activities.length);
+    
+    if (currentTab === 'great-picks') {
+      setCurrentActivityIndex(randomIndex);
+    }
+    
     toast({ title: 'Shuffled activities', description: 'Finding something random for you', duration: 1500 });
   };
 
@@ -210,8 +260,80 @@ const Index = () => {
       setSearchQuery('');
     }
   };
+  
+  const loadMoreGreatPicks = async () => {
+    setLoadingMore(true);
+    try {
+      const nextPage = greatPicksPage + 1;
+      const moreActivities = await getFilteredActivitiesBySection('featured');
+      const startIndex = greatPicksPage * ITEMS_PER_PAGE;
+      const newItems = moreActivities.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+      
+      if (newItems.length > 0) {
+        setGreatPicksActivities(prev => [...prev, ...newItems]);
+        setGreatPicksPage(nextPage);
+      }
+    } catch (error) {
+      console.error('Error loading more activities:', error);
+      toast({
+        title: 'Error loading more activities',
+        description: 'Please try again later',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+  
+  const loadMoreUniqueExperiences = async () => {
+    setLoadingMore(true);
+    try {
+      const nextPage = uniqueExperiencesPage + 1;
+      const moreActivities = await getFilteredActivitiesBySection('unique');
+      const startIndex = uniqueExperiencesPage * ITEMS_PER_PAGE;
+      const newItems = moreActivities.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+      
+      if (newItems.length > 0) {
+        setUniqueExperiences(prev => [...prev, ...newItems]);
+        setUniqueExperiencesPage(nextPage);
+      }
+    } catch (error) {
+      console.error('Error loading more activities:', error);
+      toast({
+        title: 'Error loading more activities',
+        description: 'Please try again later',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+  
+  const loadMoreDateIdeas = async () => {
+    setLoadingMore(true);
+    try {
+      const nextPage = dateIdeasPage + 1;
+      const moreActivities = await getFilteredActivitiesBySection('date');
+      const startIndex = dateIdeasPage * ITEMS_PER_PAGE;
+      const newItems = moreActivities.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+      
+      if (newItems.length > 0) {
+        setDateIdeas(prev => [...prev, ...newItems]);
+        setDateIdeasPage(nextPage);
+      }
+    } catch (error) {
+      console.error('Error loading more activities:', error);
+      toast({
+        title: 'Error loading more activities',
+        description: 'Please try again later',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
-  const renderActivitiesSection = (title: string, activities: Activity[], emptyMessage: string) => {
+  const renderTabContent = (activities: Activity[], sectionType: string) => {
     if (isLoading) {
       return (
         <div className="flex justify-center items-center py-20">
@@ -220,34 +342,85 @@ const Index = () => {
       );
     }
 
-    if (activities.length > 0) {
-      return viewMode === 'card' && title === '🎬 Featured Activities' ? (
-        currentActivity && (
-          <ActivityCard 
-            activity={currentActivity}
-            onSwipeLeft={handleSwipeLeft}
-            onSwipeRight={handleSwipeRight}
-            onLike={handleLike}
-            onShare={handleShare}
-            liked={likedActivities.has(currentActivity.id)}
-          />
-        )
-      ) : (
-        <ActivityGrid 
-          activities={activities}
-          onLike={handleLike}
-          likedActivities={likedActivities}
-          onShare={handleShare}
-        />
+    if (activities.length === 0) {
+      return (
+        <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
+          <h3 className="text-xl font-bold mb-2">No activities found</h3>
+          <p className="text-gray-600">Try a different filter</p>
+        </div>
       );
     }
 
-    return (
-      <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
-        <h3 className="text-xl font-bold mb-2">No activities found</h3>
-        <p className="text-gray-600">{emptyMessage}</p>
-      </div>
+    return viewMode === 'card' && sectionType === 'Great Picks' ? (
+      currentActivity && (
+        <ActivityCard 
+          activity={currentActivity}
+          onSwipeLeft={handleSwipeLeft}
+          onSwipeRight={handleSwipeRight}
+          onLike={handleLike}
+          onShare={handleShare}
+          liked={likedActivities.has(currentActivity.id)}
+        />
+      )
+    ) : (
+      <ActivityGrid 
+        activities={activities}
+        onLike={handleLike}
+        likedActivities={likedActivities}
+        onShare={handleShare}
+        columns={1}
+        sectionType={sectionType}
+      />
     );
+  };
+
+  // Prepare tab configuration
+  const tabs = [
+    {
+      id: 'great-picks',
+      title: '✨ Great Picks',
+      content: renderTabContent(greatPicksActivities, 'Great Picks'),
+      count: {
+        loaded: greatPicksActivities.length,
+        total: greatPicksTotal
+      },
+      onLoadMore: loadMoreGreatPicks,
+      isLoading: loadingMore && currentTab === 'great-picks'
+    },
+    {
+      id: 'unique-experiences',
+      title: '🎨 Unique Experiences',
+      content: renderTabContent(uniqueExperiences, 'Unique Experiences'),
+      count: {
+        loaded: uniqueExperiences.length,
+        total: uniqueExperiencesTotal
+      },
+      onLoadMore: loadMoreUniqueExperiences,
+      isLoading: loadingMore && currentTab === 'unique-experiences'
+    },
+    {
+      id: 'date-ideas',
+      title: '❤️ Date Ideas',
+      content: dateIdeas.length > 0 
+        ? renderTabContent(dateIdeas, 'Date Ideas')
+        : (
+          <div className="bg-white rounded-2xl p-8 text-center shadow-sm border-dashed border-2 border-gray-300">
+            <h3 className="text-xl font-bold mb-2">Coming Soon</h3>
+            <p className="text-gray-600">Sign up to get updates!</p>
+          </div>
+        ),
+      count: dateIdeas.length > 0 ? {
+        loaded: dateIdeas.length,
+        total: dateIdeasTotal
+      } : undefined,
+      onLoadMore: loadMoreDateIdeas,
+      isLoading: loadingMore && currentTab === 'date-ideas'
+    }
+  ];
+
+  // Handle tab change
+  const handleTabChange = (tabId: string) => {
+    setCurrentTab(tabId);
   };
 
   return (
@@ -299,27 +472,10 @@ const Index = () => {
         <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
 
         <div className="mt-6 mb-8">
-          <h2 className="text-2xl font-bold mb-4">🎬 Featured Activities</h2>
-          {renderActivitiesSection('🎬 Featured Activities', featuredEvents, 'Try a different filter')}
-          <div className="text-center text-sm text-gray-600 italic mt-4">
-            More dropping next week!... Stay tuned.
-          </div>
-        </div>
-
-        <div className="mt-6 mb-8">
-          <h2 className="text-2xl font-bold mb-4">🎨 Unique Experiences</h2>
-          {renderActivitiesSection('🎨 Unique Experiences', uniqueExperiences, 'Try a different filter')}
-          <div className="text-center text-sm text-gray-600 italic mt-4">
-            More dropping next week!... Stay tuned.
-          </div>
-        </div>
-
-        <div className="mt-6 mb-8">
-          <h2 className="text-2xl font-bold mb-4">❤️ Date Ideas</h2>
-          <div className="bg-white rounded-2xl p-8 text-center shadow-sm border-dashed border-2 border-gray-300">
-            <h3 className="text-xl font-bold mb-2">Coming Soon</h3>
-            <p className="text-gray-600">Sign up to get updates!</p>
-          </div>
+          <TabView 
+            tabs={tabs} 
+            defaultTabId="great-picks" 
+          />
         </div>
 
         <div className="fixed bottom-24 right-6 z-20">
