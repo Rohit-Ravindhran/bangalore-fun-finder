@@ -474,6 +474,9 @@ const Index = () => {
 
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
 
+        <div className="sticky top-[300px] z-40 bg-w2d-cream shadow-sm">
+
+
         {searchVisible && (
           <div className="bg-white rounded-xl p-3 mb-6 shadow-sm">
             <div className="flex items-center gap-2">
@@ -516,7 +519,7 @@ const Index = () => {
             onSelectAll={handleSelectAllCategories}
           />
         </div>
-
+        </div>
         <div className="mb-10">
           <TabView 
             tabs={tabs} 
