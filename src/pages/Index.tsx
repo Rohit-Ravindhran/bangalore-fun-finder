@@ -472,10 +472,7 @@ const Index = () => {
           <span>Activities last updated: {new Date().toLocaleDateString()}</span>
         </div>
 
-        <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
-
-        <div className="sticky top-[300px] z-40 bg-w2d-cream shadow-sm">
-
+              <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
 
         {searchVisible && (
           <div className="bg-white rounded-xl p-3 mb-6 shadow-sm">
@@ -519,7 +516,7 @@ const Index = () => {
             onSelectAll={handleSelectAllCategories}
           />
         </div>
-        </div>
+
         <div className="mb-10">
           <TabView 
             tabs={tabs} 
