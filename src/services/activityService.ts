@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { Activity } from '@/components/ActivityCard';
 
@@ -38,10 +37,27 @@ const mapRowToActivity = (row: ActivityRow): Activity => ({
   contactInfo: row.contact_info || undefined
 });
 
-export const fetchActivities = async (): Promise<Activity[]> => {
-  const { data, error } = await supabase
-    .from('activities')
-    .select('*');
+export const fetchActivities = async (sortOption = 'popular'): Promise<Activity[]> => {
+  let query = supabase.from('activities').select('*');
+
+  // Apply sorting
+  switch (sortOption) {
+    case 'price_low_high':
+      query = query.order('price_range', { ascending: true });
+      break;
+    case 'price_high_low':
+      query = query.order('price_range', { ascending: false });
+      break;
+    case 'newest':
+      query = query.order('created_at', { ascending: false });
+      break;
+    case 'popular':
+    default:
+      // For popular, we first get featured items then the rest
+      break;
+  }
+  
+  const { data, error } = await query;
   
   if (error) {
     console.error('Error fetching activities:', error);
@@ -49,7 +65,18 @@ export const fetchActivities = async (): Promise<Activity[]> => {
   }
   
   // Transform the data to match our Activity type
-  return (data as ActivityRow[] || []).map(mapRowToActivity);
+  let activities = (data as ActivityRow[] || []).map(mapRowToActivity);
+  
+  // If sorting by popular, manually sort to put featured items first
+  if (sortOption === 'popular') {
+    activities.sort((a, b) => {
+      const aIsFeatured = a.tags.includes('featured') ? 1 : 0;
+      const bIsFeatured = b.tags.includes('featured') ? 1 : 0;
+      return bIsFeatured - aIsFeatured;
+    });
+  }
+  
+  return activities;
 };
 
 export const createActivity = async (activity: Omit<Activity, 'id' | 'lastUpdated'>): Promise<Activity> => {
@@ -124,10 +151,11 @@ export const deleteActivity = async (id: string): Promise<void> => {
 export const getFilteredActivities = async (
   categoryIds: string[] | null,
   quickFilterIds: string[] | null,
-  searchQuery: string = ''
+  searchQuery: string = '',
+  sortOption: string = 'popular'
 ): Promise<Activity[]> => {
-  // First get all activities
-  const activities = await fetchActivities();
+  // First get all activities with the specified sort option
+  const activities = await fetchActivities(sortOption);
   
   let filtered = [...activities];
   
@@ -182,13 +210,34 @@ export const getActivityById = async (id: string): Promise<Activity | null> => {
   return mapRowToActivity(data as ActivityRow);
 };
 
-export async function getFilteredActivitiesBySection(sectionType: string): Promise<Activity[]> {
+export async function getFilteredActivitiesBySection(sectionType: string, sortOption: string = 'popular'): Promise<Activity[]> {
   console.log('Fetching activities for section:', sectionType);
   
-  const { data, error } = await supabase
-    .from("activities")
-    .select("*")
-    .eq("section_type", sectionType);
+  let query = supabase.from("activities").select("*");
+  
+  // For "all" section, don't filter by section type
+  if (sectionType !== 'all') {
+    query = query.eq("section_type", sectionType);
+  }
+  
+  // Apply sorting
+  switch (sortOption) {
+    case 'price_low_high':
+      query = query.order('price_range', { ascending: true });
+      break;
+    case 'price_high_low':
+      query = query.order('price_range', { ascending: false });
+      break;
+    case 'newest':
+      query = query.order('created_at', { ascending: false });
+      break;
+    case 'popular':
+    default:
+      // For popular, keeping default order or we could add a specific sort here
+      break;
+  }
+
+  const { data, error } = await query;
 
   console.log('Response data:', data);
 
