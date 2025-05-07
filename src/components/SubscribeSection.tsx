@@ -53,10 +53,7 @@ const SubscribeSection: React.FC<SubscribeSectionProps> = ({ className = '' }) =
           </form>
         </div>
         
-        <div className="flex justify-end text-xs text-white/70">
-          <Clock className="h-3 w-3 mr-1" />
-          <span>Last updated: {new Date().toLocaleDateString()}</span>
-        </div>
+     
       </div>
     </div>
   );
