@@ -471,6 +471,9 @@ const Index = () => {
           <Clock className="h-3 w-3 mr-1" />
           <span>Activities last updated: {new Date().toLocaleDateString()}</span>
         </div>
+
+        <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
+
         {searchVisible && (
           <div className="bg-white rounded-xl p-3 mb-6 shadow-sm">
             <div className="flex items-center gap-2">
@@ -530,7 +533,6 @@ const Index = () => {
       
       <InstallPrompt />
       <Footer />
-      <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
     </div>
   );
 };
