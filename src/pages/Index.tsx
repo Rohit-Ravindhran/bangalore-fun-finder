@@ -25,6 +25,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Activity } from '@/components/ActivityCard';
 import { Category } from '@/components/CategoryFilter';
+import { Clock } from 'lucide-react';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -118,9 +119,9 @@ const Index = () => {
           );
         }
         
-        setAllActivities(filteredAll.slice(0, ITEMS_PER_PAGE));
-        setUniqueExperiences(filteredUnique.slice(0, ITEMS_PER_PAGE));
-        setDateIdeas(filteredDateIdeas.slice(0, ITEMS_PER_PAGE));
+        setAllActivities(filteredAll);
+        setUniqueExperiences(filteredUnique);
+        setDateIdeas(filteredDateIdeas);
         
         setAllActivitiesTotal(filteredAll.length);
         setUniqueExperiencesTotal(filteredUnique.length);
@@ -466,7 +467,10 @@ const Index = () => {
             Curated from trusted local communities
           </p>
         </div>
-
+        <div className="flex justify-end text-xs text-white/70">
+          <Clock className="h-3 w-3 mr-1" />
+          <span>Activities last updated: {new Date().toLocaleDateString()}</span>
+        </div>
         {searchVisible && (
           <div className="bg-white rounded-xl p-3 mb-6 shadow-sm">
             <div className="flex items-center gap-2">
