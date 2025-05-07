@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Clock, Calendar, Share2, Phone } from 'lucide-react';
+import { ArrowLeft, MapPin, Clock, Calendar, Share2, Phone, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getActivityById } from '@/services/activityService';
 import { useToast } from '@/components/ui/use-toast';
@@ -21,6 +22,7 @@ const ActivityDetail = () => {
       try {
         setIsLoading(true);
         const fetchedActivity = await getActivityById(id);
+        console.log("Fetched activity:", fetchedActivity);
         setActivity(fetchedActivity);
       } catch (error) {
         console.error("Error fetching activity:", error);
@@ -85,6 +87,16 @@ const ActivityDetail = () => {
   const goToMap = () => {
     if (activity.mapLink) {
       window.open(activity.mapLink, '_blank');
+    }
+  };
+
+  const goToKnowMore = () => {
+    if (activity.mapLink) {
+      window.open(activity.mapLink, '_blank');
+    } else {
+      // If no map link, search for the activity on Google
+      const searchQuery = encodeURIComponent(`${activity.title} ${activity.location}`);
+      window.open(`https://www.google.com/search?q=${searchQuery}`, '_blank');
     }
   };
   
@@ -155,6 +167,15 @@ const ActivityDetail = () => {
               onClick={goToMap}
             >
               View on Map
+            </Button>
+
+            <Button 
+              variant="outline" 
+              className="w-full"
+              onClick={goToKnowMore}
+            >
+              <ExternalLink className="h-4 w-4 mr-2" />
+              Know More
             </Button>
             
             {activity.contactInfo && (

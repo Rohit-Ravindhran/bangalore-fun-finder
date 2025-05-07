@@ -18,6 +18,7 @@ type ActivityRow = {
   contact_info: string | null;
   created_at: string;
   updated_at: string | null;
+  section_type: string | null;
 };
 
 // Helper function to convert database row to our Activity type
@@ -28,7 +29,7 @@ const mapRowToActivity = (row: ActivityRow): Activity => ({
   tags: row.tags || [],
   priceRange: row.price_range || 'Free',
   location: row.location || 'Bangalore',
-  lastUpdated: new Date(row.updated_at || row.created_at).toLocaleDateString(),
+  lastUpdated: row.updated_at ? new Date(row.updated_at).toLocaleDateString() : new Date(row.created_at).toLocaleDateString(),
   categoryIds: row.category_ids || [],
   description: row.description || '',
   date: row.date || undefined,
@@ -48,7 +49,7 @@ export const fetchActivities = async (): Promise<Activity[]> => {
   }
   
   // Transform the data to match our Activity type
-  return (data || []).map(mapRowToActivity);
+  return (data as ActivityRow[] || []).map(mapRowToActivity);
 };
 
 export const createActivity = async (activity: Omit<Activity, 'id' | 'lastUpdated'>): Promise<Activity> => {
@@ -96,7 +97,7 @@ export const updateActivity = async (id: string, activity: Partial<Omit<Activity
   const { data, error } = await supabase
     .from('activities')
     .update(updateData)
-    .eq('id', parseInt(id))
+    .eq('id', parseInt(id, 10))
     .select()
     .single();
   
@@ -112,7 +113,7 @@ export const deleteActivity = async (id: string): Promise<void> => {
   const { error } = await supabase
     .from('activities')
     .delete()
-    .eq('id', parseInt(id));
+    .eq('id', parseInt(id, 10));
   
   if (error) {
     console.error('Error deleting activity:', error);
@@ -168,7 +169,7 @@ export const getActivityById = async (id: string): Promise<Activity | null> => {
   const { data, error } = await supabase
     .from('activities')
     .select('*')
-    .eq('id', parseInt(id))
+    .eq('id', parseInt(id, 10))
     .maybeSingle();
   
   if (error) {
@@ -181,15 +182,38 @@ export const getActivityById = async (id: string): Promise<Activity | null> => {
   return mapRowToActivity(data as ActivityRow);
 };
 
-
 export async function getFilteredActivitiesBySection(sectionType: string): Promise<Activity[]> {
+  console.log('Fetching activities for section:', sectionType);
+  
   const { data, error } = await supabase
     .from("activities")
     .select("*")
-    .eq("section_type", sectionType)
-    .order("date", { ascending: true });
+    .eq("section_type", sectionType);
 
-    console.log('data',data);
-  if (error) throw error;
-  return (data || []).map(mapRowToActivity);
+  console.log('Response data:', data);
+
+  if (error) {
+    console.error('Error fetching section activities:', error);
+    throw error;
+  }
+  
+  return (data as ActivityRow[] || []).map(mapRowToActivity);
+}
+
+export async function fetchCategories() {
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*');
+  
+  if (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
+  
+  return data.map(category => ({
+    id: category.id.toString(),
+    name: category.name,
+    emoji: '🔍', // Default emoji since database might not have this
+    color: undefined // Default color
+  }));
 }

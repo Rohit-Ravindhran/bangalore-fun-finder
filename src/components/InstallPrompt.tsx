@@ -22,6 +22,7 @@ const InstallPrompt: React.FC = () => {
     checkStandalone();
 
     const handler = (e: Event) => {
+      console.log('beforeinstallprompt event triggered');
       // Prevent Chrome 67+ from automatically showing the prompt
       e.preventDefault();
       // Stash the event so it can be triggered later
@@ -67,6 +68,7 @@ const InstallPrompt: React.FC = () => {
         setDeferredPrompt(null);
       });
     } else {
+      console.log('No install prompt available');
       // Show alternative instructions for browsers that don't support installation
       toast({
         title: "Installation",
@@ -76,31 +78,36 @@ const InstallPrompt: React.FC = () => {
     }
   };
 
+  // For debugging
+  useEffect(() => {
+    console.log('Is installable:', isInstallable);
+    console.log('Is standalone:', isStandalone);
+  }, [isInstallable, isStandalone]);
+
   // Don't show anything if already installed in standalone mode
   if (isStandalone) {
     return null;
   }
 
-  // Don't show button if it's not installable
-  if (!isInstallable) {
-    return null;
+  // Show button if it's installable
+  if (isInstallable) {
+    return (
+      <div className="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg z-50">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="font-bold">Install What2Do Bangalore</h3>
+            <p className="text-sm text-gray-600">Add to home screen for the best experience</p>
+          </div>
+          <Button onClick={handleInstallClick}>
+            <Download className="h-4 w-4 mr-2" />
+            Install
+          </Button>
+        </div>
+      </div>
+    );
   }
 
-  // Fixed installation button/banner based on installability
-  return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg z-50">
-      <div className="flex justify-between items-center">
-        <div>
-          <h3 className="font-bold">Install What2Do Bangalore</h3>
-          <p className="text-sm text-gray-600">Add to home screen for the best experience</p>
-        </div>
-        <Button onClick={handleInstallClick}>
-          <Download className="h-4 w-4 mr-2" />
-          Install
-        </Button>
-      </div>
-    </div>
-  );
+  return null;
 };
 
 export default InstallPrompt;
