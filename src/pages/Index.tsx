@@ -34,23 +34,23 @@ const Index = () => {
   const [likedActivities, setLikedActivities] = useState<Set<string>>(new Set());
   const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
   const [viewMode, setViewMode] = useState<'card' | 'grid'>('grid');
-  const [sortOption, setSortOption] = useState('latest');
+  const [sortOption, setSortOption] = useState('popular');
   const [showSubscribe, setShowSubscribe] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   
   // Tab-related states
-  const [greatPicksActivities, setGreatPicksActivities] = useState<Activity[]>([]);
+  const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [uniqueExperiences, setUniqueExperiences] = useState<Activity[]>([]);
   const [dateIdeas, setDateIdeas] = useState<Activity[]>([]);
-  const [currentTab, setCurrentTab] = useState('great-picks');
+  const [currentTab, setCurrentTab] = useState('all');
   
   // Pagination states
-  const [greatPicksTotal, setGreatPicksTotal] = useState(0);
+  const [allActivitiesTotal, setAllActivitiesTotal] = useState(0);
   const [uniqueExperiencesTotal, setUniqueExperiencesTotal] = useState(0);
   const [dateIdeasTotal, setDateIdeasTotal] = useState(0);
-  const [greatPicksPage, setGreatPicksPage] = useState(1);
+  const [allActivitiesPage, setAllActivitiesPage] = useState(1);
   const [uniqueExperiencesPage, setUniqueExperiencesPage] = useState(1);
   const [dateIdeasPage, setDateIdeasPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -95,19 +95,36 @@ const Index = () => {
     const fetchSectionActivities = async () => {
       setIsLoading(true);
       try {
-        const [greatPicks, unique, dateIdeasData] = await Promise.all([
-          getFilteredActivitiesBySection('featured'),
-          getFilteredActivitiesBySection('unique'),
-          getFilteredActivitiesBySection('date')
-        ]);
+        // Fetch all activities and filter by section type
+        const allActivitiesData = await getFilteredActivitiesBySection('all', sortOption);
+        const unique = await getFilteredActivitiesBySection('unique', sortOption);
+        const dateIdeasData = await getFilteredActivitiesBySection('date', sortOption);
         
-        setGreatPicksActivities(greatPicks.slice(0, ITEMS_PER_PAGE));
-        setUniqueExperiences(unique.slice(0, ITEMS_PER_PAGE));
-        setDateIdeas(dateIdeasData.slice(0, ITEMS_PER_PAGE));
+        // Filter by category if selected
+        let filteredAll = [...allActivitiesData];
+        let filteredUnique = [...unique];
+        let filteredDateIdeas = [...dateIdeasData];
         
-        setGreatPicksTotal(greatPicks.length);
-        setUniqueExperiencesTotal(unique.length);
-        setDateIdeasTotal(dateIdeasData.length);
+        if (selectedCategories.size > 0) {
+          const categoryIds = Array.from(selectedCategories);
+          filteredAll = filteredAll.filter(activity => 
+            categoryIds.some(id => activity.categoryIds.includes(id))
+          );
+          filteredUnique = filteredUnique.filter(activity => 
+            categoryIds.some(id => activity.categoryIds.includes(id))
+          );
+          filteredDateIdeas = filteredDateIdeas.filter(activity => 
+            categoryIds.some(id => activity.categoryIds.includes(id))
+          );
+        }
+        
+        setAllActivities(filteredAll.slice(0, ITEMS_PER_PAGE));
+        setUniqueExperiences(filteredUnique.slice(0, ITEMS_PER_PAGE));
+        setDateIdeas(filteredDateIdeas.slice(0, ITEMS_PER_PAGE));
+        
+        setAllActivitiesTotal(filteredAll.length);
+        setUniqueExperiencesTotal(filteredUnique.length);
+        setDateIdeasTotal(filteredDateIdeas.length);
       } catch (error) {
         console.error('Error loading sections:', error);
         toast({
@@ -120,9 +137,9 @@ const Index = () => {
       }
     };
     fetchSectionActivities();
-  }, [toast]);
+  }, [toast, sortOption, selectedCategories]);
 
-  const currentActivity = greatPicksActivities[currentActivityIndex];
+  const currentActivity = allActivities[currentActivityIndex];
 
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategories(prev => {
@@ -157,7 +174,7 @@ const Index = () => {
   };
 
   const handleSwipeLeft = () => {
-    if (currentActivityIndex < greatPicksActivities.length - 1) {
+    if (currentActivityIndex < allActivities.length - 1) {
       setCurrentActivityIndex(currentActivityIndex + 1);
     } else {
       setCurrentActivityIndex(0);
@@ -173,7 +190,7 @@ const Index = () => {
     if (currentActivityIndex > 0) {
       setCurrentActivityIndex(currentActivityIndex - 1);
     } else {
-      setCurrentActivityIndex(greatPicksActivities.length - 1);
+      setCurrentActivityIndex(allActivities.length - 1);
     }
   };
 
@@ -199,8 +216,8 @@ const Index = () => {
     try {
       let activityData;
       
-      if (currentTab === 'great-picks') {
-        activityData = greatPicksActivities.find(activity => activity.id === id);
+      if (currentTab === 'all') {
+        activityData = allActivities.find(activity => activity.id === id);
       } else if (currentTab === 'unique-experiences') {
         activityData = uniqueExperiences.find(activity => activity.id === id);
       } else {
@@ -231,8 +248,8 @@ const Index = () => {
   const handleShuffle = () => {
     let activities: Activity[] = [];
     
-    if (currentTab === 'great-picks') {
-      activities = greatPicksActivities;
+    if (currentTab === 'all') {
+      activities = allActivities;
     } else if (currentTab === 'unique-experiences') {
       activities = uniqueExperiences;
     } else {
@@ -243,7 +260,7 @@ const Index = () => {
     
     const randomIndex = Math.floor(Math.random() * activities.length);
     
-    if (currentTab === 'great-picks') {
+    if (currentTab === 'all') {
       setCurrentActivityIndex(randomIndex);
     }
     
@@ -261,17 +278,22 @@ const Index = () => {
     }
   };
   
-  const loadMoreGreatPicks = async () => {
+  const handleSortChange = (option: string) => {
+    setSortOption(option);
+    // Activities will be re-fetched with the new sort option via the useEffect
+  };
+  
+  const loadMoreAll = async () => {
     setLoadingMore(true);
     try {
-      const nextPage = greatPicksPage + 1;
-      const moreActivities = await getFilteredActivitiesBySection('featured');
-      const startIndex = greatPicksPage * ITEMS_PER_PAGE;
+      const nextPage = allActivitiesPage + 1;
+      const moreActivities = await getFilteredActivitiesBySection('all', sortOption);
+      const startIndex = allActivitiesPage * ITEMS_PER_PAGE;
       const newItems = moreActivities.slice(startIndex, startIndex + ITEMS_PER_PAGE);
       
       if (newItems.length > 0) {
-        setGreatPicksActivities(prev => [...prev, ...newItems]);
-        setGreatPicksPage(nextPage);
+        setAllActivities(prev => [...prev, ...newItems]);
+        setAllActivitiesPage(nextPage);
       }
     } catch (error) {
       console.error('Error loading more activities:', error);
@@ -289,7 +311,7 @@ const Index = () => {
     setLoadingMore(true);
     try {
       const nextPage = uniqueExperiencesPage + 1;
-      const moreActivities = await getFilteredActivitiesBySection('unique');
+      const moreActivities = await getFilteredActivitiesBySection('unique', sortOption);
       const startIndex = uniqueExperiencesPage * ITEMS_PER_PAGE;
       const newItems = moreActivities.slice(startIndex, startIndex + ITEMS_PER_PAGE);
       
@@ -313,7 +335,7 @@ const Index = () => {
     setLoadingMore(true);
     try {
       const nextPage = dateIdeasPage + 1;
-      const moreActivities = await getFilteredActivitiesBySection('date');
+      const moreActivities = await getFilteredActivitiesBySection('date', sortOption);
       const startIndex = dateIdeasPage * ITEMS_PER_PAGE;
       const newItems = moreActivities.slice(startIndex, startIndex + ITEMS_PER_PAGE);
       
@@ -351,7 +373,7 @@ const Index = () => {
       );
     }
 
-    return viewMode === 'card' && sectionType === 'Great Picks' ? (
+    return viewMode === 'card' && sectionType === 'All' ? (
       currentActivity && (
         <ActivityCard 
           activity={currentActivity}
@@ -374,18 +396,26 @@ const Index = () => {
     );
   };
 
+  // Define sort options
+  const sortOptions = [
+    { id: 'popular', label: '🔥 Popular' },
+    { id: 'price_low_high', label: '💸 Budget low to high' },
+    { id: 'price_high_low', label: '💸 Budget high to low' },
+    { id: 'newest', label: '🆕 New' }
+  ];
+
   // Prepare tab configuration
   const tabs = [
     {
-      id: 'great-picks',
-      title: '✨ Great Picks',
-      content: renderTabContent(greatPicksActivities, 'Great Picks'),
+      id: 'all',
+      title: '✨ All',
+      content: renderTabContent(allActivities, 'All'),
       count: {
-        loaded: greatPicksActivities.length,
-        total: greatPicksTotal
+        loaded: allActivities.length,
+        total: allActivitiesTotal
       },
-      onLoadMore: loadMoreGreatPicks,
-      isLoading: loadingMore && currentTab === 'great-picks'
+      onLoadMore: loadMoreAll,
+      isLoading: loadingMore && currentTab === 'all'
     },
     {
       id: 'unique-experiences',
@@ -453,6 +483,15 @@ const Index = () => {
           </div>
         )}
 
+        <div className="flex justify-between items-center mb-4">
+          <SortSelector 
+            options={sortOptions}
+            selectedOption={sortOption}
+            onSelectOption={handleSortChange}
+          />
+          <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
+        </div>
+
         <div className="bg-white rounded-xl p-4 mb-6 shadow-sm">
           <QuickFilter 
             filters={quickFilters}
@@ -471,12 +510,10 @@ const Index = () => {
           />
         </div>
 
-        <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
-
         <div className="mb-10">
           <TabView 
             tabs={tabs} 
-            defaultTabId="great-picks" 
+            defaultTabId="all" 
           />
         </div>
 

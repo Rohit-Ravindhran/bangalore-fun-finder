@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Clock, Calendar, Share2, Phone, ExternalLink } from 'lucide-react';
+import { ArrowLeft, MapPin, Clock, Calendar, Share2, Phone, ExternalLink, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getActivityById } from '@/services/activityService';
 import { useToast } from '@/components/ui/use-toast';
@@ -14,6 +14,7 @@ const ActivityDetail = () => {
   const { toast } = useToast();
   const [activity, setActivity] = useState<Activity | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [liked, setLiked] = useState(false);
   
   useEffect(() => {
     const fetchActivity = async () => {
@@ -24,6 +25,17 @@ const ActivityDetail = () => {
         const fetchedActivity = await getActivityById(id);
         console.log("Fetched activity:", fetchedActivity);
         setActivity(fetchedActivity);
+        
+        // Check if this activity is in liked items
+        const savedLiked = localStorage.getItem('likedActivities');
+        if (savedLiked && id) {
+          try {
+            const likedActivities = JSON.parse(savedLiked);
+            setLiked(likedActivities.includes(id));
+          } catch (error) {
+            console.error('Error parsing liked activities:', error);
+          }
+        }
       } catch (error) {
         console.error("Error fetching activity:", error);
         toast({
@@ -38,6 +50,39 @@ const ActivityDetail = () => {
     
     fetchActivity();
   }, [id, toast]);
+  
+  const toggleLike = () => {
+    if (!id) return;
+    
+    setLiked(prev => {
+      const newLiked = !prev;
+      
+      // Update localStorage
+      const savedLiked = localStorage.getItem('likedActivities');
+      let likedActivities: string[] = [];
+      
+      if (savedLiked) {
+        try {
+          likedActivities = JSON.parse(savedLiked);
+        } catch (error) {
+          console.error('Error parsing liked activities:', error);
+        }
+      }
+      
+      if (newLiked) {
+        if (!likedActivities.includes(id)) {
+          likedActivities.push(id);
+        }
+        toast({ title: 'Added to favorites', duration: 1500 });
+      } else {
+        likedActivities = likedActivities.filter(item => item !== id);
+        toast({ title: 'Removed from favorites', duration: 1500 });
+      }
+      
+      localStorage.setItem('likedActivities', JSON.stringify(likedActivities));
+      return newLiked;
+    });
+  };
   
   if (isLoading) {
     return (
@@ -115,6 +160,15 @@ const ActivityDetail = () => {
           onClick={() => navigate('/')}
         >
           <ArrowLeft className="h-5 w-5" />
+        </Button>
+        
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-4 right-4 rounded-full bg-white/80 backdrop-blur-sm"
+          onClick={toggleLike}
+        >
+          <Heart className={`h-5 w-5 ${liked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
         </Button>
       </div>
       

@@ -1,13 +1,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Download } from 'lucide-react';
+import { Download, X } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 const InstallPrompt: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
+  const [dismissedPrompt, setDismissedPrompt] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -78,29 +79,41 @@ const InstallPrompt: React.FC = () => {
     }
   };
 
+  const handleDismiss = () => {
+    setDismissedPrompt(true);
+  };
+
   // For debugging
   useEffect(() => {
     console.log('Is installable:', isInstallable);
     console.log('Is standalone:', isStandalone);
   }, [isInstallable, isStandalone]);
 
-  // Don't show anything if already installed in standalone mode
-  if (isStandalone) {
+  // Don't show anything if already installed in standalone mode or if dismissed
+  if (isStandalone || dismissedPrompt) {
     return null;
   }
 
-  // Show button if it's installable
+  // Show floating button if it's installable
   if (isInstallable) {
     return (
-      <div className="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg z-50">
-        <div className="flex justify-between items-center">
-          <div>
-            <h3 className="font-bold">Install What2Do Bangalore</h3>
-            <p className="text-sm text-gray-600">Add to home screen for the best experience</p>
-          </div>
-          <Button onClick={handleInstallClick}>
-            <Download className="h-4 w-4 mr-2" />
-            Install
+      <div className="fixed bottom-20 right-6 z-50">
+        <div className="bg-white rounded-full shadow-lg p-1 flex items-center">
+          <Button 
+            onClick={handleInstallClick}
+            className="rounded-full bg-w2d-teal hover:bg-w2d-teal/90 text-white flex gap-1 items-center px-4 py-2"
+            size="sm"
+          >
+            <Download className="h-4 w-4" />
+            <span>📲 Add to Home</span>
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="h-8 w-8 p-0 ml-1 rounded-full"
+            onClick={handleDismiss}
+          >
+            <X className="h-4 w-4" />
           </Button>
         </div>
       </div>
