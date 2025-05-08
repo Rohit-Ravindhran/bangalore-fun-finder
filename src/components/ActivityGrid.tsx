@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Activity } from '@/components/ActivityCard';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 interface ActivityGridProps {
   activities: Activity[];
@@ -53,7 +54,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       {activities.map((activity) => (
         <Card 
           key={activity.id}
-          className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer border-0 shadow-sm"
+          className="overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer border-0 shadow-sm rounded-xl transform hover:-translate-y-1"
           onClick={() => handleCardClick(activity.id)}
         >
           <div className="relative">
@@ -61,46 +62,52 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
               src={activity.image || '/placeholder.svg'} 
               alt={activity.title} 
               className="w-full h-40 object-cover"
+              loading="lazy"
             />
             <div className="absolute top-2 right-2 flex gap-1.5">
               <Button
                 variant="ghost"
                 size="icon"
-                className="bg-white/80 rounded-full backdrop-blur-sm w-7 h-7"
+                className={cn(
+                  "rounded-full backdrop-blur-sm w-8 h-8 transition-all",
+                  likedActivities.has(activity.id) 
+                    ? "bg-red-500/90 text-white" 
+                    : "bg-white/80 text-gray-600 hover:bg-white/90"
+                )}
                 onClick={(e) => handleLike(e, activity.id)}
               >
-                <Heart className={`h-4 w-4 ${likedActivities.has(activity.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
+                <Heart className={`h-4 w-4 ${likedActivities.has(activity.id) ? 'fill-white' : ''}`} />
               </Button>
               
               {onShare && (
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="bg-white/80 rounded-full backdrop-blur-sm w-7 h-7"
+                  className="bg-white/80 rounded-full backdrop-blur-sm w-8 h-8 text-gray-600 hover:bg-white/90 transition-all"
                   onClick={(e) => handleShare(e, activity.id)}
                 >
-                  <Share2 className="h-4 w-4 text-gray-600" />
+                  <Share2 className="h-4 w-4" />
                 </Button>
               )}
             </div>
             
             <div className="absolute top-2 left-2 flex flex-col gap-1">
               {activity.tags.includes('trending') && (
-                <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0">🔥 Trending</Badge>
+                <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-sm">🔥 Trending</Badge>
               )}
               
               {activity.lastUpdated.includes("today") && (
-                <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0">🆕 New</Badge>
+                <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0 shadow-sm">🆕 New</Badge>
               )}
               
-              {sectionType === 'Great Picks' && activity.tags.includes('ourpick') && (
-                <Badge variant="secondary" className="bg-w2d-yellow text-primary text-xs py-0">✨ Our Pick</Badge>
+              {sectionType === 'All' && activity.tags.includes('ourpick') && (
+                <Badge variant="secondary" className="bg-w2d-yellow text-primary text-xs py-0 shadow-sm">✨ Our Pick</Badge>
               )}
             </div>
           </div>
           
-          <CardContent className="p-3">
-            <h3 className="font-bold text-base mb-1 line-clamp-2">{activity.title}</h3>
+          <CardContent className="p-4">
+            <h3 className="font-bold text-base mb-1.5 line-clamp-2">{activity.title}</h3>
             
             {activity.description && (
               <p className="text-xs text-gray-600 mb-2 line-clamp-2">
@@ -108,19 +115,19 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
               </p>
             )}
             
-            <div className="flex flex-wrap gap-1 mb-3">
+            <div className="flex flex-wrap gap-1.5 mb-3">
               {activity.tags.slice(0, 3).map((tag, idx) => (
                 <span 
                   key={idx} 
-                  className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2 py-0.5"
+                  className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2.5 py-0.5"
                 >
                   {tag}
                 </span>
               ))}
             </div>
             
-            <div className="grid grid-cols-2 gap-2 text-xs text-gray-500">
-              <div className="flex items-center gap-1">
+            <div className="grid grid-cols-2 gap-2.5 text-xs text-gray-500">
+              <div className="flex items-center gap-1.5">
                 <MapPin className="h-3 w-3 text-w2d-teal" />
                 <span>{activity.location}</span>
               </div>
@@ -129,14 +136,14 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
               </div>
               
               {activity.date && (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <Calendar className="h-3 w-3 text-w2d-teal" />
                   <span>{activity.date}</span>
                 </div>
               )}
               
               {activity.time && (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <Clock className="h-3 w-3 text-w2d-teal" />
                   <span>{activity.time}</span>
                 </div>

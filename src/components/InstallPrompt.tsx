@@ -1,8 +1,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Download, X } from 'lucide-react';
+import { Download, X, HelpCircle } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger 
+} from '@/components/ui/tooltip';
 
 const InstallPrompt: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -21,6 +27,12 @@ const InstallPrompt: React.FC = () => {
     };
     
     checkStandalone();
+
+    // Check if installation was previously dismissed
+    const wasDismissed = localStorage.getItem('dismissedInstall');
+    if (wasDismissed) {
+      setDismissedPrompt(true);
+    }
 
     const handler = (e: Event) => {
       console.log('beforeinstallprompt event triggered');
@@ -81,13 +93,8 @@ const InstallPrompt: React.FC = () => {
 
   const handleDismiss = () => {
     setDismissedPrompt(true);
+    localStorage.setItem('dismissedInstall', 'true');
   };
-
-  // For debugging
-  useEffect(() => {
-    console.log('Is installable:', isInstallable);
-    console.log('Is standalone:', isStandalone);
-  }, [isInstallable, isStandalone]);
 
   // Don't show anything if already installed in standalone mode or if dismissed
   if (isStandalone || dismissedPrompt) {
@@ -98,15 +105,25 @@ const InstallPrompt: React.FC = () => {
   if (isInstallable) {
     return (
       <div className="fixed bottom-20 right-6 z-50">
-        <div className="bg-white rounded-full shadow-lg p-1 flex items-center">
-          <Button 
-            onClick={handleInstallClick}
-            className="rounded-full bg-w2d-teal hover:bg-w2d-teal/90 text-white flex gap-1 items-center px-4 py-2"
-            size="sm"
-          >
-            <Download className="h-4 w-4" />
-            <span>📲 Add to Home</span>
-          </Button>
+        <div className="bg-white rounded-full shadow-lg p-1 flex items-center animate-pulse-glow">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  onClick={handleInstallClick}
+                  className="rounded-full bg-gradient-to-r from-w2d-yellow to-w2d-peach hover:from-w2d-yellow hover:to-w2d-peach/90 text-primary flex gap-1 items-center px-4 py-2 shadow-md"
+                  size="sm"
+                >
+                  <Download className="h-4 w-4" />
+                  <span>📲 Add to Home</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                <p className="text-xs max-w-52">Install this app on your device for faster access and offline use</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          
           <Button 
             variant="ghost" 
             size="sm" 

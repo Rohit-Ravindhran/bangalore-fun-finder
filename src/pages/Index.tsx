@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
@@ -24,6 +25,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Activity } from '@/components/ActivityCard';
 import { Category } from '@/components/CategoryFilter';
+import { Separator } from '@/components/ui/separator';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -462,16 +464,26 @@ const Index = () => {
     <div className="min-h-screen bg-w2d-cream overflow-x-hidden">
       <Header toggleSearch={toggleSearch} />
 
-      <main className="container px-4 pt-4 pb-32">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">
-            🏙️ Your Weekend in Bangalore, Sorted. 🎉
-          </h1>
-          <p className="text-sm md:text-base text-gray-600">
-            Curated from trusted local communities
+      <main className="container px-4 pt-6 pb-32">
+        <div className="text-center mb-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex justify-center opacity-5 pointer-events-none">
+              <img 
+                src="/placeholder.svg" 
+                alt="Bangalore Skyline" 
+                className="h-24 object-contain"
+              />
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3 relative">
+              🏙️ Your Weekend in Bangalore, Sorted. 🎉
+            </h1>
+          </div>
+          <p className="text-sm md:text-base text-gray-600 italic">
+            Lovingly curated just for Bangaloreans 💛
           </p>
         </div>
-        <div className="flex justify-end text-xs text-gray-500">
+
+        <div className="flex justify-end text-xs text-gray-500 mb-3 items-center">
           <Clock className="h-3 w-3 mr-1" />
           <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
         </div>
@@ -494,7 +506,7 @@ const Index = () => {
           </div>
         )}
 
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-4 gap-3">
           <SortSelector 
             options={sortOptions}
             selectedOption={sortOption}
@@ -503,7 +515,7 @@ const Index = () => {
           <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
         </div>
 
-        <div className="bg-white rounded-xl p-3 mb-5 shadow-sm">
+        <div className="bg-white rounded-xl p-3 mb-4 shadow-sm">
           <QuickFilter 
             filters={quickFilters}
             selectedFilters={selectedQuickFilters}
@@ -511,6 +523,8 @@ const Index = () => {
             onClearFilters={handleClearFilters}
           />
         </div>
+
+        <Separator className="my-4 bg-gray-200" />
 
         <div className="mb-5">
           <CategoryFilter 

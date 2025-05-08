@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
-import { Menu, Search, Moon } from 'lucide-react';
+import { Menu, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import SideMenu from './SideMenu';
 
 interface HeaderProps {
@@ -18,27 +19,46 @@ const Header: React.FC<HeaderProps> = ({ toggleSearch }) => {
 
   return (
     <>
-      <header className="flex items-center justify-between py-4 px-4 bg-w2d-cream sticky top-0 z-10 shadow-sm">
+      <header className="flex items-center justify-between py-5 px-5 bg-w2d-cream sticky top-0 z-40 shadow-sm">
         <div className="text-2xl font-nunito font-bold text-primary">
           What2Do <span className="text-w2d-teal">Bangalore</span>
         </div>
-        <div className="flex items-center gap-2">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={toggleSearch}
-            className="text-primary"
-          >
-            <Search className="h-5 w-5" />
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={handleToggleMenu} 
-            className="text-primary"
-          >
-            <Menu className="h-6 w-6" />
-          </Button>
+        <div className="flex items-center gap-3">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  onClick={toggleSearch}
+                  className="h-10 w-10 rounded-full bg-white border-none shadow-sm hover:bg-w2d-light-blue hover:shadow-md transition-all"
+                >
+                  <Search className="h-5 w-5 text-primary" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Search activities</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  onClick={handleToggleMenu} 
+                  className="h-10 w-10 rounded-full bg-white border-none shadow-sm hover:bg-w2d-light-blue hover:shadow-md transition-all"
+                >
+                  <Menu className="h-5 w-5 text-primary" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Open menu</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </header>
 
