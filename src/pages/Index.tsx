@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
@@ -119,6 +118,80 @@ const Index = () => {
           );
         }
         
+        // Apply quick filters
+        if (selectedQuickFilters.size > 0) {
+          // Filter for "FREE" activities
+          if (selectedQuickFilters.has('free')) {
+            filteredAll = filteredAll.filter(activity => 
+              activity.priceRange.toLowerCase().includes('free')
+            );
+            filteredUnique = filteredUnique.filter(activity => 
+              activity.priceRange.toLowerCase().includes('free')
+            );
+            filteredDateIdeas = filteredDateIdeas.filter(activity => 
+              activity.priceRange.toLowerCase().includes('free')
+            );
+          }
+          
+          // Filter for "TODAY" activities
+          if (selectedQuickFilters.has('today')) {
+            filteredAll = filteredAll.filter(activity => 
+              activity.date?.toLowerCase().includes('today') || 
+              activity.tags.some(tag => tag.toLowerCase().includes('today'))
+            );
+            filteredUnique = filteredUnique.filter(activity => 
+              activity.date?.toLowerCase().includes('today') || 
+              activity.tags.some(tag => tag.toLowerCase().includes('today'))
+            );
+            filteredDateIdeas = filteredDateIdeas.filter(activity => 
+              activity.date?.toLowerCase().includes('today') || 
+              activity.tags.some(tag => tag.toLowerCase().includes('today'))
+            );
+          }
+          
+          // Filter for "CREATIVE" activities
+          if (selectedQuickFilters.has('creative')) {
+            filteredAll = filteredAll.filter(activity => 
+              activity.tags.some(tag => 
+                ['creative', 'art', 'craft', 'workshop'].includes(tag.toLowerCase())
+              )
+            );
+            filteredUnique = filteredUnique.filter(activity => 
+              activity.tags.some(tag => 
+                ['creative', 'art', 'craft', 'workshop'].includes(tag.toLowerCase())
+              )
+            );
+            filteredDateIdeas = filteredDateIdeas.filter(activity => 
+              activity.tags.some(tag => 
+                ['creative', 'art', 'craft', 'workshop'].includes(tag.toLowerCase())
+              )
+            );
+          }
+        }
+        
+        // Apply search filter if there's a search query
+        if (searchQuery.trim()) {
+          const query = searchQuery.toLowerCase().trim();
+          filteredAll = filteredAll.filter(activity => 
+            activity.title.toLowerCase().includes(query) ||
+            activity.description.toLowerCase().includes(query) ||
+            activity.location.toLowerCase().includes(query) ||
+            activity.tags.some(tag => tag.toLowerCase().includes(query))
+          );
+          filteredUnique = filteredUnique.filter(activity => 
+            activity.title.toLowerCase().includes(query) ||
+            activity.description.toLowerCase().includes(query) ||
+            activity.location.toLowerCase().includes(query) ||
+            activity.tags.some(tag => tag.toLowerCase().includes(query))
+          );
+          filteredDateIdeas = filteredDateIdeas.filter(activity => 
+            activity.title.toLowerCase().includes(query) ||
+            activity.description.toLowerCase().includes(query) ||
+            activity.location.toLowerCase().includes(query) ||
+            activity.tags.some(tag => tag.toLowerCase().includes(query))
+          );
+        }
+        
         setAllActivities(filteredAll);
         setUniqueExperiences(filteredUnique);
         setDateIdeas(filteredDateIdeas);
@@ -138,7 +211,7 @@ const Index = () => {
       }
     };
     fetchSectionActivities();
-  }, [toast, sortOption, selectedCategories]);
+  }, [toast, sortOption, selectedCategories, selectedQuickFilters, searchQuery]);
 
   const currentActivity = allActivities[currentActivityIndex];
 
@@ -455,10 +528,22 @@ const Index = () => {
   };
 
   // Get yesterday's date for the "last updated" timestamp
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  const lastUpdatedTime = yesterday.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  const lastUpdatedDate = yesterday.toLocaleDateString();
+  const getYesterdayTimestamp = () => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    // Set a random time between 12pm and 8pm
+    const randomHour = Math.floor(Math.random() * 9) + 12; // 12 to 20
+    const randomMinute = Math.floor(Math.random() * 60);
+    yesterday.setHours(randomHour, randomMinute);
+    
+    return {
+      time: yesterday.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      date: yesterday.toLocaleDateString()
+    };
+  };
+  
+  const { time: lastUpdatedTime, date: lastUpdatedDate } = getYesterdayTimestamp();
 
   return (
     <div className="min-h-screen bg-w2d-cream overflow-x-hidden">
@@ -469,7 +554,7 @@ const Index = () => {
           <div className="relative">
             <div className="absolute inset-0 flex justify-center opacity-5 pointer-events-none">
               <img 
-                src="/placeholder.svg" 
+                src="/lovable-uploads/0276b4ab-89de-4d32-bac7-8b68d005bdf6.png" 
                 alt="Bangalore Skyline" 
                 className="h-24 object-contain"
               />
@@ -515,7 +600,7 @@ const Index = () => {
           <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
         </div>
 
-        <div className="bg-white rounded-xl p-3 mb-4 shadow-sm">
+        <div className="bg-white rounded-xl p-2 mb-4 shadow-sm">
           <QuickFilter 
             filters={quickFilters}
             selectedFilters={selectedQuickFilters}
