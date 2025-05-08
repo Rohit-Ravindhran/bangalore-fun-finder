@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
@@ -20,12 +19,11 @@ import {
   fetchCategories 
 } from '@/services/activityService';
 import { useToast } from '@/components/ui/use-toast';
-import { Dice6, Share2, Search, Loader2 } from 'lucide-react';
+import { Dice6, Share2, Search, Loader2, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Activity } from '@/components/ActivityCard';
 import { Category } from '@/components/CategoryFilter';
-import { Clock } from 'lucide-react';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -454,6 +452,12 @@ const Index = () => {
     setCurrentTab(tabId);
   };
 
+  // Get yesterday's date for the "last updated" timestamp
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const lastUpdatedTime = yesterday.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const lastUpdatedDate = yesterday.toLocaleDateString();
+
   return (
     <div className="min-h-screen bg-w2d-cream overflow-x-hidden">
       <Header toggleSearch={toggleSearch} />
@@ -467,12 +471,12 @@ const Index = () => {
             Curated from trusted local communities
           </p>
         </div>
-        <div className="flex justify-end text-xs text-white/70">
+        <div className="flex justify-end text-xs text-gray-500">
           <Clock className="h-3 w-3 mr-1" />
-          <span>Activities last updated: {new Date().toLocaleDateString()}</span>
+          <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
         </div>
 
-              <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
+        <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
 
         {searchVisible && (
           <div className="bg-white rounded-xl p-3 mb-6 shadow-sm">
@@ -499,7 +503,7 @@ const Index = () => {
           <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
         </div>
 
-        <div className="bg-white rounded-xl p-4 mb-6 shadow-sm">
+        <div className="bg-white rounded-xl p-3 mb-5 shadow-sm">
           <QuickFilter 
             filters={quickFilters}
             selectedFilters={selectedQuickFilters}
@@ -508,7 +512,7 @@ const Index = () => {
           />
         </div>
 
-        <div className="mb-8">
+        <div className="mb-5">
           <CategoryFilter 
             categories={categories}
             selectedCategories={selectedCategories}
