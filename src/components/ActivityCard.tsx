@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, ArrowRight, ArrowLeft, Share2 } from 'lucide-react';
@@ -118,7 +119,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   return (
     <div 
       className={cn(
-        "activity-card w-full max-w-sm mx-auto bg-white rounded-2xl overflow-hidden card-shadow transition-all duration-300",
+        "activity-card w-full max-w-sm mx-auto bg-white rounded-lg overflow-hidden shadow-sm transition-all duration-300",
         isLeaving === 'left' ? 'swipe-left' : isLeaving === 'right' ? 'swipe-right' : ''
       )}
       onTouchStart={handleTouchStart}
@@ -128,90 +129,85 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         <img 
           src={activity.image} 
           alt={activity.title} 
-          className="w-full h-52 object-cover"
+          className="w-full h-48 object-cover"
         />
-        <div className="absolute top-3 right-3 flex gap-2">
+        <div className="absolute top-2 right-2 flex gap-1.5">
           <Button 
             variant="ghost" 
             size="icon" 
-            className={cn("rounded-full bg-white/80 backdrop-blur-sm", 
+            className={cn("rounded-full bg-white/80 backdrop-blur-sm w-7 h-7", 
               liked ? "text-red-500" : "text-gray-600"
             )}
             onClick={handleLike}
           >
-            <Heart className={cn("h-5 w-5", liked ? "fill-current" : "")} />
+            <Heart className={cn("h-4 w-4", liked ? "fill-current" : "")} />
           </Button>
           <Button 
             variant="ghost" 
             size="icon" 
-            className="rounded-full bg-white/80 backdrop-blur-sm text-gray-600"
+            className="rounded-full bg-white/80 backdrop-blur-sm text-gray-600 w-7 h-7"
             onClick={handleShare}
           >
-            <Share2 className="h-5 w-5" />
+            <Share2 className="h-4 w-4" />
           </Button>
         </div>
         
-        {activity.tags.includes('trending') && (
-          <div className="absolute top-3 left-3">
-            <Badge variant="secondary" className="bg-red-500 text-white text-xs">🔥 Trending</Badge>
-          </div>
-        )}
-        
-        {activity.lastUpdated.includes("today") && (
-          <div className="absolute top-3 left-3 ml-24">
-            <Badge variant="secondary" className="bg-green-500 text-white text-xs">🆕 New</Badge>
-          </div>
-        )}
+        <div className="absolute top-2 left-2 flex flex-col gap-1.5">
+          {activity.tags.includes('trending') && (
+            <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0">🔥 Trending</Badge>
+          )}
+          
+          {activity.lastUpdated.includes("today") && (
+            <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0">🆕 New</Badge>
+          )}
+        </div>
       </div>
       
-      <div className="p-4">
-        <h3 className="text-xl font-bold mb-2">{activity.title}</h3>
+      <div className="p-3">
+        <h3 className="text-base font-bold mb-1">{activity.title}</h3>
         
         <div className="flex flex-wrap gap-1 mb-2">
-          {activity.tags.map((tag, index) => (
+          {activity.tags.slice(0, 3).map((tag, index) => (
             <span 
               key={index} 
-              className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2 py-1"
+              className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2 py-0.5"
             >
               {tag}
             </span>
           ))}
         </div>
         
-        <div className="flex justify-between text-sm text-gray-600 mb-4">
+        <div className="flex justify-between text-xs text-gray-600 mb-3">
           <span>{activity.priceRange}</span>
           <span>{activity.location}</span>
         </div>
         
-        <div className="text-xs text-gray-500 mb-4">
-          Locally sourced gems 🌟 • Last updated: {activity.lastUpdated}
-        </div>
-        
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <Button 
             variant="outline" 
-            className="rounded-full text-sm"
+            size="sm" 
+            className="rounded-full text-xs px-3 py-1 h-7"
             onClick={handleViewDetails}
           >
             Show me more
           </Button>
           
-          <div className="flex gap-2">
+          <div className="flex gap-1">
             <Button 
               variant="ghost" 
               size="icon" 
-              className="rounded-full bg-gray-100" 
+              className="rounded-full bg-gray-100 w-7 h-7" 
               onClick={handleSwipeLeft}
             >
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeft className="h-3 w-3" />
             </Button>
             <Button 
               variant="ghost" 
               size="icon" 
-              className="rounded-full bg-gray-100" 
+              className="rounded-full bg-gray-100 w-7 h-7" 
               onClick={handleSwipeRight}
             >
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-3 w-3" />
             </Button>
           </div>
         </div>
