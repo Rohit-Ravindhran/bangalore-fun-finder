@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heart, ArrowRight, ArrowLeft, Share2 } from 'lucide-react';
+import { Heart, ArrowRight, ArrowLeft, Share2, MapPin, Calendar, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -119,7 +119,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   return (
     <div 
       className={cn(
-        "activity-card w-full max-w-sm mx-auto bg-white rounded-lg overflow-hidden shadow-sm transition-all duration-300",
+        "activity-card w-full max-w-sm mx-auto bg-white rounded-xl overflow-hidden shadow-sm transition-all duration-300",
         isLeaving === 'left' ? 'swipe-left' : isLeaving === 'right' ? 'swipe-right' : ''
       )}
       onTouchStart={handleTouchStart}
@@ -129,23 +129,25 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         <img 
           src={activity.image} 
           alt={activity.title} 
-          className="w-full h-48 object-cover"
+          className="w-full h-52 object-cover"
+          loading="lazy"
         />
         <div className="absolute top-2 right-2 flex gap-1.5">
           <Button 
             variant="ghost" 
             size="icon" 
-            className={cn("rounded-full bg-white/80 backdrop-blur-sm w-7 h-7", 
-              liked ? "text-red-500" : "text-gray-600"
+            className={cn(
+              "rounded-full backdrop-blur-sm w-8 h-8 transition-all",
+              liked ? "bg-red-500/90 text-white" : "bg-white/80 text-gray-600 hover:bg-white/90"
             )}
             onClick={handleLike}
           >
-            <Heart className={cn("h-4 w-4", liked ? "fill-current" : "")} />
+            <Heart className={cn("h-4 w-4", liked ? "fill-white" : "")} />
           </Button>
           <Button 
             variant="ghost" 
             size="icon" 
-            className="rounded-full bg-white/80 backdrop-blur-sm text-gray-600 w-7 h-7"
+            className="rounded-full bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-white/90 w-8 h-8 transition-all"
             onClick={handleShare}
           >
             <Share2 className="h-4 w-4" />
@@ -154,60 +156,79 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         
         <div className="absolute top-2 left-2 flex flex-col gap-1.5">
           {activity.tags.includes('trending') && (
-            <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0">🔥 Trending</Badge>
+            <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-sm">🔥 Trending</Badge>
           )}
           
           {activity.lastUpdated.includes("today") && (
-            <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0">🆕 New</Badge>
+            <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0 shadow-sm">🆕 New</Badge>
           )}
         </div>
       </div>
       
-      <div className="p-3">
-        <h3 className="text-base font-bold mb-1">{activity.title}</h3>
+      <div className="p-4">
+        <h3 className="text-lg font-bold mb-1.5">{activity.title}</h3>
         
-        <div className="flex flex-wrap gap-1 mb-2">
+        <div className="flex flex-wrap gap-1.5 mb-3">
           {activity.tags.slice(0, 3).map((tag, index) => (
             <span 
               key={index} 
-              className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2 py-0.5"
+              className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2.5 py-0.5"
             >
               {tag}
             </span>
           ))}
         </div>
         
-        <div className="flex justify-between text-xs text-gray-600 mb-3">
-          <span>{activity.priceRange}</span>
-          <span>{activity.location}</span>
+        <div className="grid grid-cols-2 gap-2.5 text-sm text-gray-600 mb-4">
+          <div className="flex items-center gap-1.5">
+            <MapPin className="h-4 w-4 text-w2d-teal" />
+            <span>{activity.location}</span>
+          </div>
+          <div className="flex items-center font-medium">
+            <span>{activity.priceRange}</span>
+          </div>
+          
+          {activity.date && (
+            <div className="flex items-center gap-1.5">
+              <Calendar className="h-4 w-4 text-w2d-teal" />
+              <span>{activity.date}</span>
+            </div>
+          )}
+          
+          {activity.time && (
+            <div className="flex items-center gap-1.5">
+              <Clock className="h-4 w-4 text-w2d-teal" />
+              <span>{activity.time}</span>
+            </div>
+          )}
         </div>
         
         <div className="flex justify-between items-center">
           <Button 
             variant="outline" 
             size="sm" 
-            className="rounded-full text-xs px-3 py-1 h-7"
+            className="rounded-full text-xs px-3.5 py-1.5 h-8 hover:bg-w2d-teal hover:text-white border-w2d-teal text-w2d-teal transition-all"
             onClick={handleViewDetails}
           >
             Show me more
           </Button>
           
-          <div className="flex gap-1">
+          <div className="flex gap-1.5">
             <Button 
               variant="ghost" 
               size="icon" 
-              className="rounded-full bg-gray-100 w-7 h-7" 
+              className="rounded-full bg-gray-100 w-8 h-8 hover:bg-gray-200 transition-all" 
               onClick={handleSwipeLeft}
             >
-              <ArrowLeft className="h-3 w-3" />
+              <ArrowLeft className="h-3.5 w-3.5" />
             </Button>
             <Button 
               variant="ghost" 
               size="icon" 
-              className="rounded-full bg-gray-100 w-7 h-7" 
+              className="rounded-full bg-gray-100 w-8 h-8 hover:bg-gray-200 transition-all" 
               onClick={handleSwipeRight}
             >
-              <ArrowRight className="h-3 w-3" />
+              <ArrowRight className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>

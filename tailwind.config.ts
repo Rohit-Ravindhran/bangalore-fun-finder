@@ -67,7 +67,7 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Custom color palette for What2Do
+				// Enhanced pastel color palette for What2Do
 				w2d: {
 					'cream': '#FEF7E3',
 					'blue': '#9CCFD8',
@@ -75,6 +75,9 @@ export default {
 					'mint': '#C3E6D7',
 					'yellow': '#FEF1A7',
 					'teal': '#234E52',
+					'light-blue': '#E5F3F7',
+					'light-peach': '#FEE9DC',
+					'light-mint': '#E8F7F0',
 				},
 			},
 			borderRadius: {
@@ -110,6 +113,18 @@ export default {
 				'card-flip': {
 					'0%': { transform: 'rotateY(0deg)' },
 					'100%': { transform: 'rotateY(180deg)' }
+				},
+				'pulse-glow': {
+					'0%, 100%': { 
+						boxShadow: '0 0 12px rgba(254, 241, 167, 0.7)'
+					},
+					'50%': { 
+						boxShadow: '0 0 20px rgba(254, 241, 167, 0.9)'
+					}
+				},
+				'bounce-subtle': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-5px)' }
 				}
 			},
 			animation: {
@@ -117,7 +132,9 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'slide-in-right': 'slide-in-right 0.3s ease-out',
 				'slide-out-left': 'slide-out-left 0.3s ease-out',
-				'card-flip': 'card-flip 0.5s ease-out'
+				'card-flip': 'card-flip 0.5s ease-out',
+				'pulse-glow': 'pulse-glow 2s infinite ease-in-out',
+				'bounce-subtle': 'bounce-subtle 2s infinite ease-in-out'
 			}
 		}
 	},
