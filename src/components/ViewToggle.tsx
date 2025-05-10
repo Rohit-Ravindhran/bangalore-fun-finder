@@ -22,26 +22,26 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange }) =>
           value="card" 
           aria-label="Toggle card view" 
           className={cn(
-            "rounded-full px-3 py-1.5 transition-all", 
+            "rounded-full px-3 py-1 transition-all", 
             "data-[state=on]:bg-w2d-teal data-[state=on]:text-white",
             "data-[state=off]:bg-transparent data-[state=off]:text-gray-500",
             "data-[state=off]:hover:bg-gray-50 text-xs"
           )}
         >
-          <Layers className="h-3 w-3 mr-1" />
+          <Layers className="h-2 w-3 mr-1" />
           <span>Swipe Cards</span>
         </ToggleGroupItem>
         <ToggleGroupItem 
           value="grid" 
           aria-label="Toggle grid view" 
           className={cn(
-            "rounded-full px-3 py-1.5 transition-all",
+            "rounded-full px-3 py-1 transition-all",
             "data-[state=on]:bg-w2d-teal data-[state=on]:text-white",
             "data-[state=off]:bg-transparent data-[state=off]:text-gray-500",
             "data-[state=off]:hover:bg-gray-50 text-xs"
           )}
         >
-          <LayoutGrid className="h-3 w-3 mr-1" />
+          <LayoutGrid className="h-2 w-3 mr-1" />
           <span>Browse Board</span>
         </ToggleGroupItem>
       </ToggleGroup>
