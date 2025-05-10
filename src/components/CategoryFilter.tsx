@@ -27,7 +27,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
   
   return (
     <div className="relative">
-      <ScrollArea className="w-full py-2 pb-4 no-scrollbar">
+      <ScrollArea className="w-full py-2 pb-4 no-scrollbar max-w-[90vw]  overflow-x-auto">
         <div className="flex space-x-2.5 px-3 min-w-max">
           <button
             onClick={onSelectAll}
