@@ -594,7 +594,7 @@ useEffect(() => {
 
         <Separator className="my-4 bg-gray-200" />
 
-        <div className="mb-5 overflow-x-auto max-w-[90vw]">
+        <div className="mb-5 overflow-x-auto max-w-[300px]">
           <CategoryFilter 
             categories={categories}
             selectedCategories={selectedCategories}

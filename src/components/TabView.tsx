@@ -58,7 +58,7 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId }) => {
     <div className="w-full">
       <div className="sticky top-[72px] z-30 bg-w2d-cream pt-2 pb-3 shadow-sm">
         <ScrollArea className="pb-2 overflow-x-auto whitespace-nowrap max-w-[300px]  overflow-x-auto">
-          <div className="flex space-x-4 border-b px-2 min-w-max max-w-[90vw]  overflow-x-auto">
+          <div className="flex space-x-4 border-b px-2 min-w-max max-w-[300px]  overflow-x-auto">
             {tabs.map(tab => (
               <button
                 key={tab.id}
