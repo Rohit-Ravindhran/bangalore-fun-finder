@@ -26,6 +26,12 @@ const getValidImageUrl = (imageUrl: string | null): string => {
   
   // Check if the URL is valid
   try {
+    // Check if it's a Facebook URL which often causes CORS issues
+    if (imageUrl.includes('facebook.com') || imageUrl.includes('fbcdn.net')) {
+      console.warn('Facebook image URLs may not load due to restrictions:', imageUrl);
+      return '/placeholder.svg';
+    }
+    
     new URL(imageUrl);
     return imageUrl;
   } catch (e) {
@@ -94,6 +100,7 @@ export const fetchActivities = async (sortOption = 'popular'): Promise<Activity[
 };
 
 export const createActivity = async (activity: Omit<Activity, 'id' | 'lastUpdated'>): Promise<Activity> => {
+  // Remove the id property from the activity object to let Supabase generate one
   const { data, error } = await supabase
     .from('activities')
     .insert({
@@ -308,6 +315,33 @@ export async function fetchCategories() {
   }));
 }
 
+export async function fetchCategoriesFromTable() {
+  const { data, error } = await supabase
+    .from('categories')
+    .select('id, name')
+    .order('name');
+  
+  if (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
+  
+  return data;
+}
+
+export async function fetchTagsFromTable() {
+  const { data, error } = await supabase
+    .from('tags')
+    .select('id, name')
+    .order('name');
+  
+  if (error) {
+    console.error('Error fetching tags:', error);
+    throw error;
+  }
+  
+  return data;
+}
 
 export const subscribeUser = async (contact: string): Promise<void> => {
   let email: string | null = null;
