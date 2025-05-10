@@ -15,8 +15,26 @@ import {
 } from '@/components/ui/table';
 import { useToast } from '@/components/ui/use-toast';
 import { Activity } from '@/components/ActivityCard';
-import { Plus, Edit, Trash, Loader2 } from 'lucide-react';
-import { createActivity, deleteActivity, fetchActivities, updateActivity } from '@/services/activityService';
+import { Plus, Edit, Trash, Loader2, Check } from 'lucide-react';
+import { createActivity, deleteActivity, fetchActivities, updateActivity, fetchCategoriesFromTable, fetchTagsFromTable } from '@/services/activityService';
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from '@/components/ui/select';
+import { Checkbox } from "@/components/ui/checkbox";
+
+type CategoryItem = {
+  id: number;
+  name: string;
+};
+
+type TagItem = {
+  id: number;
+  name: string;
+};
 
 const Admin = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -24,10 +42,15 @@ const Admin = () => {
   const [currentActivity, setCurrentActivity] = useState<Partial<Activity>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
+  const [tags, setTags] = useState<TagItem[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
     loadActivities();
+    loadCategoriesAndTags();
   }, []);
 
   const loadActivities = async () => {
@@ -44,6 +67,22 @@ const Admin = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const loadCategoriesAndTags = async () => {
+    try {
+      const categoriesData = await fetchCategoriesFromTable();
+      const tagsData = await fetchTagsFromTable();
+      setCategories(categoriesData);
+      setTags(tagsData);
+    } catch (error) {
+      console.error('Failed to load categories or tags:', error);
+      toast({
+        title: "Error loading categories or tags",
+        description: "Please check your connection and try again",
+        variant: "destructive",
+      });
     }
   };
 
@@ -69,6 +108,58 @@ const Admin = () => {
     });
   };
 
+  const updateCategoryIds = () => {
+    const categoryIds = selectedCategories.map(id => id.toString());
+    setCurrentActivity({
+      ...currentActivity,
+      categoryIds
+    });
+    return categoryIds;
+  };
+
+  const updateTagIds = () => {
+    const tagIds = selectedTags.map(id => id.toString());
+    setCurrentActivity({
+      ...currentActivity,
+      tags: tagIds
+    });
+    return tagIds;
+  };
+
+  const handleCategorySelect = (categoryId: number) => {
+    setSelectedCategories(prevSelected => {
+      const isSelected = prevSelected.includes(categoryId);
+      const newSelected = isSelected
+        ? prevSelected.filter(id => id !== categoryId)
+        : [...prevSelected, categoryId];
+      
+      // Update the currentActivity.categoryIds
+      setCurrentActivity(prev => ({
+        ...prev,
+        categoryIds: newSelected.map(id => id.toString())
+      }));
+      
+      return newSelected;
+    });
+  };
+
+  const handleTagSelect = (tagId: number) => {
+    setSelectedTags(prevSelected => {
+      const isSelected = prevSelected.includes(tagId);
+      const newSelected = isSelected
+        ? prevSelected.filter(id => id !== tagId)
+        : [...prevSelected, tagId];
+      
+      // Update the currentActivity.tags
+      setCurrentActivity(prev => ({
+        ...prev,
+        tags: newSelected.map(id => id.toString())
+      }));
+      
+      return newSelected;
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -84,11 +175,22 @@ const Admin = () => {
     setIsSaving(true);
     
     try {
+      let activityToSave = { ...currentActivity };
+      
+      // Make sure categoryIds and tags are set properly
+      if (!activityToSave.categoryIds || activityToSave.categoryIds.length === 0) {
+        activityToSave.categoryIds = selectedCategories.map(id => id.toString());
+      }
+      
+      if (!activityToSave.tags || activityToSave.tags.length === 0) {
+        activityToSave.tags = selectedTags.map(id => id.toString());
+      }
+
       if (currentActivity.id) {
         // Update existing activity
         const updated = await updateActivity(
           currentActivity.id, 
-          currentActivity as Omit<Activity, 'id' | 'lastUpdated'>
+          activityToSave as Omit<Activity, 'id' | 'lastUpdated'>
         );
         setActivities(activities.map(activity => 
           activity.id === currentActivity.id ? updated : activity
@@ -100,7 +202,7 @@ const Admin = () => {
       } else {
         // Add new activity
         const created = await createActivity(
-          currentActivity as Omit<Activity, 'id' | 'lastUpdated'>
+          activityToSave as Omit<Activity, 'id' | 'lastUpdated'>
         );
         setActivities([created, ...activities]);
         toast({
@@ -113,7 +215,7 @@ const Admin = () => {
       console.error('Error saving activity:', error);
       toast({
         title: "Error saving activity",
-        description: "An error occurred while saving. Please try again.",
+        description: error instanceof Error ? error.message : "An error occurred while saving. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -122,6 +224,13 @@ const Admin = () => {
   };
 
   const handleEdit = (activity: Activity) => {
+    // Convert string IDs to numbers for the selects
+    const categoryIds = activity.categoryIds || [];
+    const tagIds = activity.tags || [];
+    
+    setSelectedCategories(categoryIds.map(id => Number(id)).filter(id => !isNaN(id)));
+    setSelectedTags(tagIds.map(id => Number(id)).filter(id => !isNaN(id)));
+    
     setCurrentActivity(activity);
     setIsEditing(true);
     window.scrollTo(0, 0);
@@ -147,6 +256,8 @@ const Admin = () => {
 
   const resetForm = () => {
     setCurrentActivity({});
+    setSelectedCategories([]);
+    setSelectedTags([]);
     setIsEditing(false);
   };
 
@@ -184,7 +295,12 @@ const Admin = () => {
                   value={currentActivity.image || ''}
                   onChange={handleInputChange}
                   required
+                  placeholder="Use https:// URLs only (avoid Facebook URLs which may be blocked)"
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Note: Some image hosts (like Facebook) may block loading images directly.
+                  Consider uploading to a different service if images don't appear.
+                </p>
               </div>
               
               <div>
@@ -242,23 +358,67 @@ const Admin = () => {
               </div>
               
               <div>
-                <label className="block mb-1 text-sm font-medium">Tags (comma-separated)</label>
-                <Input
-                  name="tags"
-                  value={currentActivity.tags?.join(', ') || ''}
-                  onChange={handleTagsChange}
-                  placeholder="outdoor, family-friendly, weekend"
-                />
+                <label className="block mb-1 text-sm font-medium">Categories</label>
+                <div className="bg-white p-3 border rounded-md max-h-40 overflow-y-auto">
+                  <div className="space-y-2">
+                    {categories.map((category) => (
+                      <div key={category.id} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={`category-${category.id}`} 
+                          checked={selectedCategories.includes(category.id)}
+                          onCheckedChange={() => handleCategorySelect(category.id)}
+                        />
+                        <label 
+                          htmlFor={`category-${category.id}`}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {category.name}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <label className="block mb-1 text-xs text-gray-500">Selected Category IDs:</label>
+                  <Input
+                    name="categoryIds"
+                    value={(currentActivity.categoryIds || []).join(', ')}
+                    onChange={handleCategoryChange}
+                    readOnly
+                  />
+                </div>
               </div>
               
               <div>
-                <label className="block mb-1 text-sm font-medium">Category IDs (comma-separated)</label>
-                <Input
-                  name="categoryIds"
-                  value={currentActivity.categoryIds?.join(', ') || ''}
-                  onChange={handleCategoryChange}
-                  placeholder="cat1, cat2, cat3"
-                />
+                <label className="block mb-1 text-sm font-medium">Tags</label>
+                <div className="bg-white p-3 border rounded-md max-h-40 overflow-y-auto">
+                  <div className="space-y-2">
+                    {tags.map((tag) => (
+                      <div key={tag.id} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={`tag-${tag.id}`} 
+                          checked={selectedTags.includes(tag.id)}
+                          onCheckedChange={() => handleTagSelect(tag.id)}
+                        />
+                        <label 
+                          htmlFor={`tag-${tag.id}`}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {tag.name} (ID: {tag.id})
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <label className="block mb-1 text-xs text-gray-500">Selected Tag IDs:</label>
+                  <Input
+                    name="tags"
+                    value={(currentActivity.tags || []).join(', ')}
+                    onChange={handleTagsChange}
+                    readOnly
+                  />
+                </div>
               </div>
               
               <div>

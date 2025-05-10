@@ -19,6 +19,7 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = '/placeholder.svg';
+    console.log('Image failed to load, using placeholder instead');
   };
 
   return (
