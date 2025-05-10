@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { Activity } from '@/components/ActivityCard';
 
@@ -166,14 +167,15 @@ export const getFilteredActivities = async (
   }
   
   if (quickFilterIds && quickFilterIds.length > 0) {
+    const today = new Date().toLocaleDateString();
+    
     if (quickFilterIds.includes('free')) {
       filtered = filtered.filter(activity => activity.priceRange.toLowerCase().includes('free'));
     }
     
     if (quickFilterIds.includes('today')) {
       filtered = filtered.filter(activity => 
-        activity.lastUpdated.toLowerCase().includes('today') || 
-        (activity.date && activity.date.toLowerCase().includes('today'))
+        activity.date === today || (activity.date && activity.date.toLowerCase().includes('today'))
       );
     }
     

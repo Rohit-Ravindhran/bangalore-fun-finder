@@ -119,6 +119,63 @@ const Index = () => {
           );
         }
         
+        // Apply quick filters
+        if (selectedQuickFilters.size > 0) {
+          const today = new Date().toLocaleDateString();
+          
+          if (selectedQuickFilters.has('free')) {
+            filteredAll = filteredAll.filter(activity => 
+              activity.priceRange.toLowerCase().includes('free')
+            );
+            filteredUnique = filteredUnique.filter(activity => 
+              activity.priceRange.toLowerCase().includes('free')
+            );
+            filteredDateIdeas = filteredDateIdeas.filter(activity => 
+              activity.priceRange.toLowerCase().includes('free')
+            );
+          }
+          
+          if (selectedQuickFilters.has('today')) {
+            filteredAll = filteredAll.filter(activity => 
+              activity.date === today || (activity.date && activity.date.toLowerCase().includes('today'))
+            );
+            filteredUnique = filteredUnique.filter(activity => 
+              activity.date === today || (activity.date && activity.date.toLowerCase().includes('today'))
+            );
+            filteredDateIdeas = filteredDateIdeas.filter(activity => 
+              activity.date === today || (activity.date && activity.date.toLowerCase().includes('today'))
+            );
+          }
+          
+          // Add more quick filter implementations as needed
+        }
+        
+        // Apply search query
+        if (searchQuery && searchQuery.trim() !== '') {
+          const query = searchQuery.toLowerCase().trim();
+          
+          filteredAll = filteredAll.filter(activity => 
+            activity.title.toLowerCase().includes(query) || 
+            (activity.description && activity.description.toLowerCase().includes(query)) ||
+            (activity.location && activity.location.toLowerCase().includes(query)) ||
+            (activity.tags && activity.tags.some(tag => tag.toLowerCase().includes(query)))
+          );
+          
+          filteredUnique = filteredUnique.filter(activity => 
+            activity.title.toLowerCase().includes(query) || 
+            (activity.description && activity.description.toLowerCase().includes(query)) ||
+            (activity.location && activity.location.toLowerCase().includes(query)) ||
+            (activity.tags && activity.tags.some(tag => tag.toLowerCase().includes(query)))
+          );
+          
+          filteredDateIdeas = filteredDateIdeas.filter(activity => 
+            activity.title.toLowerCase().includes(query) || 
+            (activity.description && activity.description.toLowerCase().includes(query)) ||
+            (activity.location && activity.location.toLowerCase().includes(query)) ||
+            (activity.tags && activity.tags.some(tag => tag.toLowerCase().includes(query)))
+          );
+        }
+        
         setAllActivities(filteredAll);
         setUniqueExperiences(filteredUnique);
         setDateIdeas(filteredDateIdeas);
@@ -138,7 +195,7 @@ const Index = () => {
       }
     };
     fetchSectionActivities();
-  }, [toast, sortOption, selectedCategories]);
+  }, [toast, sortOption, selectedCategories, selectedQuickFilters, searchQuery]);
 
   const currentActivity = allActivities[currentActivityIndex];
 
@@ -487,6 +544,8 @@ const Index = () => {
           <Clock className="h-3 w-3 mr-1" />
           <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
         </div>
+        
+        <SubscribeSection className="z-10 mb-6" />
 
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
 
@@ -546,8 +605,6 @@ const Index = () => {
           <ShuffleButton onShuffle={handleShuffle} />
         </div>
       </main>
-
-      <SubscribeSection className="z-10" />
       
       <InstallPrompt />
       <Footer />
