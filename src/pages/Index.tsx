@@ -601,7 +601,8 @@ useEffect(() => {
             onSelectAll={handleSelectAllCategories}
           />
         </div>
- <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
+
+        <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
         <div className="mb-10">
           <TabView 
             tabs={tabs} 
