@@ -545,7 +545,7 @@ useEffect(() => {
             </h1>
           </div>
           <p className="text-sm md:text-base text-gray-600 italic">
-            Lovingly curated just for Bangaloreans 💛
+            lovely curated from various trusted communities for Bangaloreans 💛
           </p>
         </div>
 
