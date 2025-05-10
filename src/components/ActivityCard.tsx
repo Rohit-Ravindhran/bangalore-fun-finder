@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, ArrowRight, ArrowLeft, Share2, MapPin, Calendar, Clock } from 'lucide-react';
@@ -92,6 +91,11 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
     }
   };
 
+  // Handle image loading errors
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = '/placeholder.svg';
+  };
+
   // Touch gesture handling
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
@@ -131,6 +135,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           alt={activity.title} 
           className="w-full h-52 object-cover"
           loading="lazy"
+          onError={handleImageError}
         />
         <div className="absolute top-2 right-2 flex gap-1.5">
           <Button 

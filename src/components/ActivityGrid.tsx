@@ -43,6 +43,11 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
     }
   };
 
+  // Function to handle image loading error
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = '/placeholder.svg';
+  };
+
   // Function to truncate text
   const truncateText = (text: string, maxLength: number) => {
     if (!text) return '';
@@ -63,6 +68,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
               alt={activity.title} 
               className="w-full h-40 object-cover"
               loading="lazy"
+              onError={handleImageError}
             />
             <div className="absolute top-2 right-2 flex gap-1.5">
               <Button

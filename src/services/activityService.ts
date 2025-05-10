@@ -20,11 +20,25 @@ type ActivityRow = {
   section_type: string | null;
 };
 
+// Helper function to validate image URL and provide a placeholder if needed
+const getValidImageUrl = (imageUrl: string | null): string => {
+  if (!imageUrl) return '/placeholder.svg';
+  
+  // Check if the URL is valid
+  try {
+    new URL(imageUrl);
+    return imageUrl;
+  } catch (e) {
+    console.error('Invalid image URL:', imageUrl);
+    return '/placeholder.svg';
+  }
+};
+
 // Helper function to convert database row to our Activity type
 const mapRowToActivity = (row: ActivityRow): Activity => ({
   id: row.id.toString(),
   title: row.title || 'Untitled Activity',
-  image: row.image || '/placeholder.svg',
+  image: getValidImageUrl(row.image),
   tags: row.tags || [],
   priceRange: row.price_range || 'Free',
   location: row.location || 'Bangalore',
