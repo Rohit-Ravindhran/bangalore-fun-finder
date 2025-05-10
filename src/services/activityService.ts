@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { Activity } from '@/components/ActivityCard';
 
@@ -178,8 +177,34 @@ export const getFilteredActivities = async (
         activity.date === today || (activity.date && activity.date.toLowerCase().includes('today'))
       );
     }
-    
-    // Add more quick filter handlers as needed
+
+    if (quickFilterIds.includes('creative')) {
+      // Filter activities that have tag ID 3
+      filtered = filtered.filter(activity => 
+        activity.tags.includes('3')
+      );
+    }
+
+    if (quickFilterIds.includes('solo')) {
+      // Filter activities that have tag ID 4
+      filtered = filtered.filter(activity => 
+        activity.tags.includes('4')
+      );
+    }
+
+    if (quickFilterIds.includes('plans')) {
+      // Filter activities that have tag ID 5
+      filtered = filtered.filter(activity => 
+        activity.tags.includes('5')
+      );
+    }
+
+    if (quickFilterIds.includes('mindful')) {
+      // Filter activities that have tag ID 6
+      filtered = filtered.filter(activity => 
+        activity.tags.includes('6')
+      );
+    }
   }
   
   if (searchQuery && searchQuery.trim() !== '') {

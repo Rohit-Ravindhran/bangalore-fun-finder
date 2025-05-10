@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
@@ -574,7 +573,7 @@ const Index = () => {
           <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
         </div>
 
-        <div className="bg-white rounded-xl p-3 mb-4 shadow-sm">
+        <div className="bg-white rounded-xl p-3 mb-4 shadow-sm overflow-x-auto">
           <QuickFilter 
             filters={quickFilters}
             selectedFilters={selectedQuickFilters}
@@ -585,7 +584,7 @@ const Index = () => {
 
         <Separator className="my-4 bg-gray-200" />
 
-        <div className="mb-5">
+        <div className="mb-5 overflow-x-auto">
           <CategoryFilter 
             categories={categories}
             selectedCategories={selectedCategories}
