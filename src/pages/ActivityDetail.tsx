@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Clock, Calendar, Share2, Phone, ExternalLink, Heart } from 'lucide-react';
@@ -15,6 +14,10 @@ const ActivityDetail = () => {
   const [activity, setActivity] = useState<Activity | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [liked, setLiked] = useState(false);
+  
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = '/placeholder.svg';
+  };
   
   useEffect(() => {
     const fetchActivity = async () => {
@@ -152,6 +155,7 @@ const ActivityDetail = () => {
           src={activity.image} 
           alt={activity.title} 
           className="w-full h-56 object-cover"
+          onError={handleImageError}
         />
         <Button
           variant="ghost"

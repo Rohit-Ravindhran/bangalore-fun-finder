@@ -17,6 +17,10 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
     }
   };
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = '/placeholder.svg';
+  };
+
   return (
     <Card className="overflow-hidden">
       <div className="relative">
@@ -24,6 +28,7 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
           src={activity.image || '/placeholder.svg'}
           alt={activity.title}
           className="w-full h-64 object-cover"
+          onError={handleImageError}
         />
         <div className="absolute top-4 left-4 flex flex-col gap-2">
           {activity.tags.includes('trending') && (
