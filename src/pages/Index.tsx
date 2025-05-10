@@ -580,7 +580,6 @@ useEffect(() => {
             selectedOption={sortOption}
             onSelectOption={handleSortChange}
           />
-          <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
         </div>
 
         <div className="bg-white rounded-xl p-3 mb-4 shadow-sm overflow-x-auto max-w-[90vw]">

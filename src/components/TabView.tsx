@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import ViewToggle from '@/components/ViewToggle';
 
 interface TabViewProps {
   tabs: {
@@ -82,6 +83,8 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId }) => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
+                  <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
+
         {activeTab && (
           <div className="space-y-4">
             <div className="min-h-[300px]">
