@@ -2,7 +2,6 @@
 import React from 'react';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 export interface QuickFilterItem {
@@ -42,7 +41,6 @@ const QuickFilter: React.FC<QuickFilterProps> = ({
             onClick={() => onSelectFilter(filter.id)}
             className={cn(
               "rounded-full px-4 py-2 text-sm transition-all uppercase tracking-wide font-medium",
-              "transform hover:scale-105 active:scale-95 duration-150",
               selectedFilters.has(filter.id) 
                 ? "bg-w2d-teal text-white shadow-sm"
                 : "bg-white text-primary hover:bg-gray-50 border border-gray-100"
