@@ -240,7 +240,7 @@ export const getActivityById = async (id: string): Promise<Activity | null> => {
 export async function getFilteredActivitiesBySection(sectionType: string, sortOption: string = 'popular'): Promise<Activity[]> {
   console.log('Fetching activities for section:', sectionType);
   
-  let query = supabase.from("activities").select("*").eq("enabled", TRUE);
+  let query = supabase.from("activities").select("*").eq("enabled", true);;
   
   // For "all" section, don't filter by section type
   if (sectionType !== 'all') {
