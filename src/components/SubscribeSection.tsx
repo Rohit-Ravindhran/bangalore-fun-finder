@@ -14,7 +14,6 @@ const SubscribeSection: React.FC<SubscribeSectionProps> = ({ className = '' }) =
   const [contact, setContact] = useState('');
   const { toast } = useToast();
 
-  import { subscribeUser } from '@/lib/your-folder/fetchActivities'; // adjust path as needed
 
 const handleContactSubscribe = async (e: React.FormEvent) => {
   e.preventDefault();
