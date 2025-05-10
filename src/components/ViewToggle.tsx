@@ -25,7 +25,7 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange }) =>
             "rounded-full px-3 py-1 transition-all", 
             "data-[state=on]:bg-w2d-teal data-[state=on]:text-white",
             "data-[state=off]:bg-transparent data-[state=off]:text-gray-500",
-            "data-[state=off]:hover:bg-gray-50 text-xs h-3"
+            "data-[state=off]:hover:bg-gray-50 text-xs h-5"
           )}
         >
           <Layers className="h-2 w-3 mr-1" />
@@ -38,7 +38,7 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange }) =>
             "rounded-full px-3 py-1 transition-all",
             "data-[state=on]:bg-w2d-teal data-[state=on]:text-white",
             "data-[state=off]:bg-transparent data-[state=off]:text-gray-500",
-            "data-[state=off]:hover:bg-gray-50 text-xs h-3"
+            "data-[state=off]:hover:bg-gray-50 text-xs h-5"
           )}
         >
           <LayoutGrid className="h-2 w-3 mr-1" />
