@@ -24,7 +24,7 @@ const QuickFilter: React.FC<QuickFilterProps> = ({
   onClearFilters,
 }) => {
   return (
-    <ScrollArea className="w-full py-1 overflow-x-auto">
+    <ScrollArea className="w-full py-1 overflow-x-auto max-w-[90vw]">
       <div className="flex space-x-2.5 px-3 min-w-max items-center">
         {selectedFilters.size > 0 && (
           <button

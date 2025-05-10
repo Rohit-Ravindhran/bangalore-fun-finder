@@ -573,7 +573,7 @@ const Index = () => {
           <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
         </div>
 
-        <div className="bg-white rounded-xl p-3 mb-4 shadow-sm overflow-x-auto">
+        <div className="bg-white rounded-xl p-3 mb-4 shadow-sm overflow-x-auto max-w-[90vw]">
           <QuickFilter 
             filters={quickFilters}
             selectedFilters={selectedQuickFilters}
@@ -584,7 +584,7 @@ const Index = () => {
 
         <Separator className="my-4 bg-gray-200" />
 
-        <div className="mb-5 overflow-x-auto">
+        <div className="mb-5 overflow-x-auto max-w-[90vw]">
           <CategoryFilter 
             categories={categories}
             selectedCategories={selectedCategories}
