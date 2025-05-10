@@ -70,7 +70,26 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (onShare) onShare(activity.id);
+    
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: activity.title,
+          text: `Check out this activity in Bangalore: ${activity.title}`,
+          url: window.location.origin + `/activity/${activity.id}`,
+        });
+      } else {
+        // Fallback for browsers that don't support Web Share API
+        const url = window.location.origin + `/activity/${activity.id}`;
+        navigator.clipboard.writeText(url);
+        
+        // If onShare callback exists, call it
+        if (onShare) onShare(activity.id);
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+      if (onShare) onShare(activity.id);
+    }
   };
 
   // Touch gesture handling
@@ -110,7 +129,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         <img 
           src={activity.image} 
           alt={activity.title} 
-          className="w-full h-48 object-cover"
+          className="w-full h-52 object-cover"
           loading="lazy"
         />
         <div className="absolute top-2 right-2 flex gap-1.5">
@@ -118,24 +137,24 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
             variant="ghost" 
             size="icon" 
             className={cn(
-              "rounded-full backdrop-blur-sm w-7 h-7 transition-all",
+              "rounded-full backdrop-blur-sm w-8 h-8 transition-all",
               liked ? "bg-red-500/90 text-white" : "bg-white/80 text-gray-600 hover:bg-white/90"
             )}
             onClick={handleLike}
           >
-            <Heart className={cn("h-3.5 w-3.5", liked ? "fill-white" : "")} />
+            <Heart className={cn("h-4 w-4", liked ? "fill-white" : "")} />
           </Button>
           <Button 
             variant="ghost" 
             size="icon" 
-            className="rounded-full bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-white/90 w-7 h-7 transition-all"
+            className="rounded-full bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-white/90 w-8 h-8 transition-all"
             onClick={handleShare}
           >
-            <Share2 className="h-3.5 w-3.5" />
+            <Share2 className="h-4 w-4" />
           </Button>
         </div>
         
-        <div className="absolute top-2 left-2 flex flex-col gap-1">
+        <div className="absolute top-2 left-2 flex flex-col gap-1.5">
           {activity.tags.includes('trending') && (
             <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-sm">🔥 Trending</Badge>
           )}
@@ -146,39 +165,39 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         </div>
       </div>
       
-      <div className="p-3">
-        <h3 className="text-base font-bold mb-1 line-clamp-1">{activity.title}</h3>
+      <div className="p-4">
+        <h3 className="text-lg font-bold mb-1.5">{activity.title}</h3>
         
-        <div className="flex flex-wrap gap-1 mb-2">
-          {activity.tags.slice(0, 2).map((tag, index) => (
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {activity.tags.slice(0, 3).map((tag, index) => (
             <span 
               key={index} 
-              className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2 py-0.5"
+              className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2.5 py-0.5"
             >
               {tag}
             </span>
           ))}
         </div>
         
-        <div className="grid grid-cols-2 gap-1.5 text-xs text-gray-600 mb-3">
-          <div className="flex items-center gap-1">
-            <MapPin className="h-3 w-3 text-w2d-teal" />
-            <span className="truncate">{activity.location}</span>
+        <div className="grid grid-cols-2 gap-2.5 text-sm text-gray-600 mb-4">
+          <div className="flex items-center gap-1.5">
+            <MapPin className="h-4 w-4 text-w2d-teal" />
+            <span>{activity.location}</span>
           </div>
           <div className="flex items-center font-medium">
             <span>{activity.priceRange}</span>
           </div>
           
           {activity.date && (
-            <div className="flex items-center gap-1">
-              <Calendar className="h-3 w-3 text-w2d-teal" />
+            <div className="flex items-center gap-1.5">
+              <Calendar className="h-4 w-4 text-w2d-teal" />
               <span>{activity.date}</span>
             </div>
           )}
           
           {activity.time && (
-            <div className="flex items-center gap-1">
-              <Clock className="h-3 w-3 text-w2d-teal" />
+            <div className="flex items-center gap-1.5">
+              <Clock className="h-4 w-4 text-w2d-teal" />
               <span>{activity.time}</span>
             </div>
           )}
@@ -188,28 +207,28 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           <Button 
             variant="outline" 
             size="sm" 
-            className="rounded-full text-xs px-3 py-1 h-7 hover:bg-w2d-teal hover:text-white border-w2d-teal text-w2d-teal transition-all"
+            className="rounded-full text-xs px-3.5 py-1.5 h-8 hover:bg-w2d-teal hover:text-white border-w2d-teal text-w2d-teal transition-all"
             onClick={handleViewDetails}
           >
-            Details
+            Show me more
           </Button>
           
-          <div className="flex gap-1">
+          <div className="flex gap-1.5">
             <Button 
               variant="ghost" 
               size="icon" 
-              className="rounded-full bg-gray-100 w-7 h-7 hover:bg-gray-200 transition-all" 
+              className="rounded-full bg-gray-100 w-8 h-8 hover:bg-gray-200 transition-all" 
               onClick={handleSwipeLeft}
             >
-              <ArrowLeft className="h-3 w-3" />
+              <ArrowLeft className="h-3.5 w-3.5" />
             </Button>
             <Button 
               variant="ghost" 
               size="icon" 
-              className="rounded-full bg-gray-100 w-7 h-7 hover:bg-gray-200 transition-all" 
+              className="rounded-full bg-gray-100 w-8 h-8 hover:bg-gray-200 transition-all" 
               onClick={handleSwipeRight}
             >
-              <ArrowRight className="h-3 w-3" />
+              <ArrowRight className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>

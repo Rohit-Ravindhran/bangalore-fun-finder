@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { LayoutGrid, Layers } from 'lucide-react';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
 
 interface ViewToggleProps {
@@ -11,34 +12,39 @@ interface ViewToggleProps {
 const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange }) => {
   return (
     <div className="flex justify-center my-3">
-      <div className="bg-white shadow-sm rounded-full border border-gray-200 p-0.5 text-xs flex">
-        <button
-          onClick={() => onViewChange('card')}
+      <ToggleGroup 
+        type="single" 
+        value={currentView} 
+        onValueChange={(value) => value && onViewChange(value as 'card' | 'grid')}
+        className="bg-white shadow-sm rounded-full border border-w2d-mint p-1 text-xs"
+      >
+        <ToggleGroupItem 
+          value="card" 
+          aria-label="Toggle card view" 
           className={cn(
-            "rounded-full px-3 py-1 transition-all flex items-center gap-1", 
-            "hover:bg-gray-50",
-            currentView === 'card' 
-              ? "bg-w2d-teal text-white font-medium"
-              : "bg-transparent text-gray-500"
+            "rounded-full px-3 py-1.5 transition-all", 
+            "data-[state=on]:bg-w2d-teal data-[state=on]:text-white",
+            "data-[state=off]:bg-transparent data-[state=off]:text-gray-500",
+            "data-[state=off]:hover:bg-gray-50"
           )}
         >
-          <Layers className="h-3 w-3" />
+          <Layers className="h-3 w-3 mr-1" />
           <span>Swipe Cards</span>
-        </button>
-        <button
-          onClick={() => onViewChange('grid')}
+        </ToggleGroupItem>
+        <ToggleGroupItem 
+          value="grid" 
+          aria-label="Toggle grid view" 
           className={cn(
-            "rounded-full px-3 py-1 transition-all flex items-center gap-1",
-            "hover:bg-gray-50",
-            currentView === 'grid' 
-              ? "bg-w2d-teal text-white font-medium"
-              : "bg-transparent text-gray-500"
+            "rounded-full px-3 py-1.5 transition-all",
+            "data-[state=on]:bg-w2d-teal data-[state=on]:text-white",
+            "data-[state=off]:bg-transparent data-[state=off]:text-gray-500",
+            "data-[state=off]:hover:bg-gray-50"
           )}
         >
-          <LayoutGrid className="h-3 w-3" />
+          <LayoutGrid className="h-3 w-3 mr-1" />
           <span>Browse Board</span>
-        </button>
-      </div>
+        </ToggleGroupItem>
+      </ToggleGroup>
     </div>
   );
 };
