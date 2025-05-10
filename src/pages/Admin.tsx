@@ -188,6 +188,8 @@ const Admin = () => {
 
       if (currentActivity.id) {
         // Update existing activity
+
+        
         const updated = await updateActivity(
           currentActivity.id, 
           activityToSave as Omit<Activity, 'id' | 'lastUpdated'>
@@ -201,9 +203,10 @@ const Admin = () => {
         });
       } else {
         // Add new activity
-        const created = await createActivity(
-          activityToSave as Omit<Activity, 'id' | 'lastUpdated'>
-        );
+        const { id, lastUpdated, ...activityData } = currentActivity;
+const created = await createActivity(activityData as Omit<Activity, 'id' | 'lastUpdated'>);
+
+      
         setActivities([created, ...activities]);
         toast({
           title: "Activity added",

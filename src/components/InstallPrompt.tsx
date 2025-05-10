@@ -115,7 +115,7 @@ const InstallPrompt: React.FC = () => {
                   size="sm"
                 >
                   <Download className="h-4 w-4" />
-                  <span>📲 Add to Home</span>
+                  <span>📲 Add to Home Screen</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="left">
