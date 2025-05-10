@@ -58,6 +58,16 @@ const Index = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const { toast } = useToast();
 
+
+
+useEffect(() => {
+  const badge = document.getElementById('lovable-badge');
+  if (badge) {
+    badge.style.display = 'none';
+  }
+}, []);
+
+
   useEffect(() => {
     const loadCategories = async () => {
       try {
