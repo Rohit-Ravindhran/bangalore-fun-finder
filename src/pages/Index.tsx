@@ -549,14 +549,12 @@ useEffect(() => {
           </p>
         </div>
 
-        <div className="flex justify-end text-xs text-gray-500 mb-3 items-center">
-          <Clock className="h-3 w-3 mr-1" />
-          <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
-        </div>
+      
         
         <SubscribeSection className="z-10 mb-6" />
 
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
+
 
         {searchVisible && (
           <div className="bg-white rounded-xl p-3 mb-6 shadow-sm">
@@ -573,7 +571,10 @@ useEffect(() => {
             </div>
           </div>
         )}
-
+  <div className="flex justify-end text-xs text-gray-500 mb-3 items-center">
+          <Clock className="h-3 w-3 mr-1" />
+          <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
+        </div>
         <div className="flex justify-between items-center mb-4 gap-3">
           <SortSelector 
             options={sortOptions}
