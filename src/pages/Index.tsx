@@ -602,11 +602,12 @@ useEffect(() => {
           />
         </div>
 
-        <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
         <div className="mb-10">
           <TabView 
             tabs={tabs} 
             defaultTabId="all" 
+            viewMode={viewMode}
+            setViewMode={setViewMode}
           />
         </div>
 

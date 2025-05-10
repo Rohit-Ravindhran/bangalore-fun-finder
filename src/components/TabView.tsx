@@ -15,10 +15,13 @@ interface TabViewProps {
     onLoadMore?: () => void;
     isLoading?: boolean;
   }[];
+  viewMode:any;
+  setViewMode:any;
   defaultTabId?: string;
 }
 
-const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId }) => {
+const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId,viewMode ,
+  setViewMode }) => {
   const [activeTabId, setActiveTabId] = useState(defaultTabId || tabs[0]?.id);
   const [touchStart, setTouchStart] = useState<number | null>(null);
 
@@ -83,7 +86,8 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId }) => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-                 
+                    <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
+     
 
         {activeTab && (
           <div className="space-y-4">
