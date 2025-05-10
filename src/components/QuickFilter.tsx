@@ -7,6 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 export interface QuickFilterItem {
   id: string;
   label: string;
+  tagId?: number; // Added tagId field for mapping to database tag IDs
 }
 
 interface QuickFilterProps {
@@ -23,7 +24,7 @@ const QuickFilter: React.FC<QuickFilterProps> = ({
   onClearFilters,
 }) => {
   return (
-    <ScrollArea className="w-full py-1 no-scrollbar">
+    <ScrollArea className="w-full py-1 overflow-x-auto">
       <div className="flex space-x-2.5 px-3 min-w-max items-center">
         {selectedFilters.size > 0 && (
           <button

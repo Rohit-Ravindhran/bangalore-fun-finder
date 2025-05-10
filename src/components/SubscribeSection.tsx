@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { BellPlus, Clock } from 'lucide-react';
+import { BellPlus } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 interface SubscribeSectionProps {
@@ -26,11 +26,11 @@ const SubscribeSection: React.FC<SubscribeSectionProps> = ({ className = '' }) =
   };
 
   return (
-    <div className={`sticky bottom-0 bg-w2d-teal text-white rounded-t-xl p-5 shadow-lg ${className}`}>
+    <div className={`bg-white text-primary rounded-xl p-5 shadow-sm border border-gray-100 ${className}`}>
       <div className="max-w-lg mx-auto">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
           <div className="flex items-center gap-2">
-            <BellPlus className="h-5 w-5" />
+            <BellPlus className="h-5 w-5 text-w2d-teal" />
             <span className="font-medium">Get weekend plans every Friday 🔔</span>
           </div>
           
@@ -38,7 +38,7 @@ const SubscribeSection: React.FC<SubscribeSectionProps> = ({ className = '' }) =
             <Input 
               type="text" 
               placeholder="Email or phone number" 
-              className="h-10 text-sm bg-white/20 border-0 placeholder:text-white/70 text-white focus-visible:ring-white/50"
+              className="h-10 text-sm border-gray-200 focus-visible:ring-w2d-teal"
               value={contact}
               onChange={(e) => setContact(e.target.value)}
               required
@@ -46,14 +46,12 @@ const SubscribeSection: React.FC<SubscribeSectionProps> = ({ className = '' }) =
             <Button 
               type="submit" 
               size="default" 
-              className="h-10 bg-white text-w2d-teal hover:bg-white/90"
+              className="h-10 bg-w2d-teal text-white hover:bg-w2d-teal/90"
             >
               Subscribe
             </Button>
           </form>
         </div>
-        
-     
       </div>
     </div>
   );

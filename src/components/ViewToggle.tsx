@@ -16,7 +16,7 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange }) =>
         type="single" 
         value={currentView} 
         onValueChange={(value) => value && onViewChange(value as 'card' | 'grid')}
-        className="bg-white shadow-sm rounded-full border border-w2d-mint p-1 text-xs"
+        className="bg-white shadow-sm rounded-full border p-1 text-xs"
       >
         <ToggleGroupItem 
           value="card" 

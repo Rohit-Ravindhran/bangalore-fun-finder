@@ -79,3 +79,16 @@
 .pill-button:active {
   transform: scale(0.95);
 }
+
+/* Fix for horizontal scrolling on mobile */
+.overflow-x-auto {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Make sure horizontal scroll elements are visible on mobile */
+@media (max-width: 640px) {
+  .min-w-max {
+    min-width: max-content;
+  }
+}
