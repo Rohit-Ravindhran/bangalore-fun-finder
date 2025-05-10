@@ -1,9 +1,6 @@
-
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 
 interface TabViewProps {
   tabs: {
@@ -30,19 +27,16 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId }) => {
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (touchStart === null) return;
-    
+
     const touchEnd = e.targetTouches[0].clientX;
     const diff = touchStart - touchEnd;
-    
-    // Swipe threshold (50px)
+
     if (Math.abs(diff) > 50) {
       const currentTabIndex = tabs.findIndex(tab => tab.id === activeTabId);
       if (diff > 0 && currentTabIndex < tabs.length - 1) {
-        // Swipe left
-        setActiveTabId(tabs[currentTabIndex + 1].id);
+        setActiveTabId(tabs[currentTabIndex + 1].id); // Swipe left
       } else if (diff < 0 && currentTabIndex > 0) {
-        // Swipe right
-        setActiveTabId(tabs[currentTabIndex - 1].id);
+        setActiveTabId(tabs[currentTabIndex - 1].id); // Swipe right
       }
       setTouchStart(null);
     }
@@ -53,12 +47,12 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId }) => {
   };
 
   const activeTab = tabs.find(tab => tab.id === activeTabId);
-  
+
   return (
     <div className="w-full">
       <div className="sticky top-[72px] z-30 bg-w2d-cream pt-2 pb-3 shadow-sm">
-        <ScrollArea className="pb-2 overflow-x-auto whitespace-nowrap max-w-[300px]  overflow-x-auto">
-          <div className="flex space-x-4 border-b px-2 min-w-max max-w-[300px]  overflow-x-auto">
+        <ScrollArea className="w-full pb-2 overflow-x-auto">
+          <div className="flex space-x-4 border-b px-2 min-w-full sm:min-w-max items-center">
             {tabs.map(tab => (
               <button
                 key={tab.id}
@@ -87,7 +81,7 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId }) => {
         onTouchEnd={handleTouchEnd}
       >
         {activeTab && (
-          <div className="space-y-4">            
+          <div className="space-y-4">
             <div className="min-h-[300px]">
               {activeTab.content}
             </div>
