@@ -83,7 +83,7 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId }) => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-                  <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
+                 
 
         {activeTab && (
           <div className="space-y-4">

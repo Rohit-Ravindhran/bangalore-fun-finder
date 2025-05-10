@@ -293,3 +293,24 @@ export async function fetchCategories() {
     color: undefined // Default color
   }));
 }
+
+
+export const subscribeUser = async (contact: string): Promise<void> => {
+  let email: string | null = null;
+  let phone: string | null = null;
+
+  if (contact.includes('@')) {
+    email = contact;
+  } else {
+    phone = contact;
+  }
+
+  const { error } = await supabase
+    .from('users')
+    .insert([{ email, phone }]);
+
+  if (error) {
+    console.error('Error subscribing user:', error);
+    throw error;
+  }
+};
