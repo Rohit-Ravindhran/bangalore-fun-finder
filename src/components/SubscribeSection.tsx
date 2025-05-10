@@ -31,7 +31,7 @@ const SubscribeSection: React.FC<SubscribeSectionProps> = ({ className = '' }) =
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
           <div className="flex items-center gap-2">
             <BellPlus className="h-5 w-5 text-w2d-teal" />
-            <span className="font-small">Get weekend plans every Friday 🔔</span>
+            <span className="font-small text-sm">Get weekend plans every Friday 🔔</span>
           </div>
           
           <form className="flex gap-2 w-full md:w-auto" onSubmit={handleContactSubscribe}>
