@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -20,8 +21,7 @@ interface TabViewProps {
   defaultTabId?: string;
 }
 
-const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId,viewMode ,
-  setViewMode }) => {
+const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId, viewMode, setViewMode }) => {
   const [activeTabId, setActiveTabId] = useState(defaultTabId || tabs[0]?.id);
   const [touchStart, setTouchStart] = useState<number | null>(null);
 
@@ -56,8 +56,8 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId,viewMode ,
     <div className="w-full">
       {/* Tab Header */}
       <div className="sticky top-[72px] z-30 bg-w2d-cream pt-2 pb-3 shadow-sm">
-        <div className="w-[300px] pb-2 overflow-x-auto">
-          <div className="flex space-x-4 border-b px-2   items-center">
+        <div className="overflow-x-auto scroll-area-horizontal pb-2">
+          <div className="flex space-x-4 border-b px-2 items-center min-w-max">
             {tabs.map(tab => (
               <button
                 key={tab.id}
@@ -86,9 +86,8 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId,viewMode ,
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-                    <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
+        <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
      
-
         {activeTab && (
           <div className="space-y-4">
             <div className="min-h-[300px]">
