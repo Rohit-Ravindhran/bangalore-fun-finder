@@ -14,29 +14,31 @@ const SubscribeSection: React.FC<SubscribeSectionProps> = ({ className = '' }) =
   const [contact, setContact] = useState('');
   const { toast } = useToast();
 
-  const handleContactSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
 
-    if (!contact) return;
+const handleContactSubscribe = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    try {
-      await subscribeUser(contact);
+  if (!contact) return;
 
-      toast({
-        title: "Subscribed!",
-        description: "You'll receive weekend plans every Friday",
-        duration: 2000,
-      });
+  try {
+    await subscribeUser(contact);
 
-      setContact('');
-    } catch (err) {
-      toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
-        variant: 'destructive',
-      });
-    }
-  };
+    toast({
+      title: "Subscribed!",
+      description: "You'll receive weekend plans every Friday",
+      duration: 2000,
+    });
+
+    setContact('');
+  } catch (err) {
+    toast({
+      title: "Error",
+      description: "Something went wrong. Please try again.",
+      variant: 'destructive',
+    });
+  }
+};
+
 
   return (
     <div className={`bg-white text-primary rounded-xl p-5 shadow-sm border border-gray-100 ${className}`}>
