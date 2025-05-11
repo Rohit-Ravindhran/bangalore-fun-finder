@@ -94,7 +94,7 @@ export async function getFilteredActivitiesBySection(sectionType: string, sortOp
     
     if (error) {
       console.error('Error fetching activities by section:', error);
-      // Return mock data as fallback
+      // Return empty array as fallback
       return [];
     }
     
@@ -111,9 +111,9 @@ export async function getFilteredActivities(filter = {}, sortOption = 'newest') 
   try {
     let query = supabase.from('activities').select('*');
     
-    // Apply category filter
-    if (filter.category) {
-      query = query.contains('category_ids', [filter.category]);
+    // Apply category filter if it exists
+    if (filter && typeof filter === 'object' && 'categoryId' in filter && filter.categoryId) {
+      query = query.contains('category_ids', [filter.categoryId]);
     }
     
     // Apply sorting
@@ -144,6 +144,26 @@ export async function getFilteredActivities(filter = {}, sortOption = 'newest') 
     return transformActivities(data);
   } catch (error) {
     console.error('Error in getFilteredActivities:', error);
+    return [];
+  }
+}
+
+// Fetch all activities
+export async function fetchActivities() {
+  try {
+    const { data, error } = await supabase
+      .from('activities')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) {
+      console.error('Error fetching activities:', error);
+      return [];
+    }
+    
+    return transformActivities(data);
+  } catch (error) {
+    console.error('Error in fetchActivities:', error);
     return [];
   }
 }
