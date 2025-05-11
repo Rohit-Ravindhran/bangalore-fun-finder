@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -22,8 +21,14 @@ const Contact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, we would submit to an API
-    console.log('Form submitted:', formData);
+
+    const subject = encodeURIComponent('Message from What2Do Bangalore');
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`
+    );
+
+    window.location.href = `mailto:whattodobangalore@gmail.com?subject=${subject}&body=${body}`;
+
     setIsSubmitted(true);
     setFormData({ name: '', email: '', message: '' });
   };
@@ -31,24 +36,24 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-w2d-cream">
       <Header />
-      
+
       <main className="container px-4 pt-6 pb-20">
         <h1 className="text-3xl font-bold mb-6 text-primary">Contact Us</h1>
-        
+
         <div className="bg-white rounded-xl p-6 shadow-sm">
           {isSubmitted ? (
             <div className="text-center py-8">
               <h2 className="text-2xl font-bold text-w2d-teal mb-4">Thank You!</h2>
-              <p className="mb-4">Your message has been received. We'll get back to you soon.</p>
+              <p className="mb-4">We've opened your email app. Feel free to edit and send your message.</p>
               <Button onClick={() => setIsSubmitted(false)}>Send Another Message</Button>
             </div>
           ) : (
             <>
               <p className="mb-6">
                 Have questions, suggestions, or want to partner with us? 
-                We'd love to hear from you! Fill out the form below and our team will get back to you as soon as possible.
+                We'd love to hear from you! Fill out the form below and your email client will open with the message pre-filled.
               </p>
-              
+
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                   <label htmlFor="name" className="block text-sm font-medium mb-1">Name</label>
@@ -62,7 +67,7 @@ const Contact = () => {
                     onChange={handleChange}
                   />
                 </div>
-                
+
                 <div className="mb-4">
                   <label htmlFor="email" className="block text-sm font-medium mb-1">Email</label>
                   <input 
@@ -75,7 +80,7 @@ const Contact = () => {
                     onChange={handleChange}
                   />
                 </div>
-                
+
                 <div className="mb-4">
                   <label htmlFor="message" className="block text-sm font-medium mb-1">Message</label>
                   <textarea 
@@ -88,20 +93,19 @@ const Contact = () => {
                     onChange={handleChange}
                   />
                 </div>
-                
+
                 <Button type="submit">Send Message</Button>
               </form>
             </>
           )}
-          
+
           <div className="mt-8 pt-6 border-t">
             <h3 className="text-lg font-bold mb-2">Connect With Us</h3>
-            <p className="mb-2">Email: hello@what2dobangalore.com</p>
-            <p>WhatsApp: +91 9876543210</p>
+            <p className="mb-2">Email: whattodobangalore@gmail.com</p>
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );
