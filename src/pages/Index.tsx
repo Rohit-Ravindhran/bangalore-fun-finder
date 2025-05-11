@@ -34,7 +34,7 @@ const Index = () => {
   const [likedActivities, setLikedActivities] = useState<Set<string>>(new Set());
   const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
   const [viewMode, setViewMode] = useState<'card' | 'grid'>('grid');
-  const [sortOption, setSortOption] = useState('new');
+  const [sortOption, setSortOption] = useState('New');
   const [showSubscribe, setShowSubscribe] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
