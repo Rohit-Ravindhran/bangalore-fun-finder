@@ -161,7 +161,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       
       {/* End of list message */}
       {activities.length > 0 && (
-        <div className="text-center py-8 px-4">
+        <div className="text-center py-8 px-4 end-of-list">
           <p className="text-gray-600 font-medium">✨ That's all for now. More coming soon!</p>
         </div>
       )}
