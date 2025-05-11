@@ -544,17 +544,17 @@ useEffect(() => {
               🏙️ Your Weekend in Bangalore, Sorted. 🎉
             </h1>
           </div>
-          <p className="text-sm md:text-base text-gray-600 italic">
-            Curated with love from trusted Bangalore local communities  💛
+          <p className="text-sm md:text-base text-gray-600 italic mb-1">
+            Curated with love for Bangaloreans 💛
           </p>
+          <div className="text-xs bg-yellow-100/70 inline-block px-3 py-1 rounded-full text-amber-800 mt-1">
+            👀 Early user preview — fully launching soon
+          </div>
         </div>
-
       
-        
         <SubscribeSection className="z-10 mb-6" />
 
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
-
 
         {searchVisible && (
           <div className="bg-white rounded-xl p-3 mb-6 shadow-sm">
@@ -583,7 +583,7 @@ useEffect(() => {
           />
         </div>
 
-        <div className="bg-white rounded-xl p-3 mb-4 shadow-sm overflow-x-auto max-w-[90vw]">
+        <div className="bg-white rounded-xl p-3 mb-4 shadow-sm overflow-x-auto max-w-[90vw] scroll-area-horizontal">
           <QuickFilter 
             filters={quickFilters}
             selectedFilters={selectedQuickFilters}
@@ -594,7 +594,7 @@ useEffect(() => {
 
         <Separator className="my-4 bg-gray-200" />
 
-        <div className="mb-5">
+        <div className="mb-5 overflow-x-auto scroll-area-horizontal">
           <CategoryFilter 
             categories={categories}
             selectedCategories={selectedCategories}
