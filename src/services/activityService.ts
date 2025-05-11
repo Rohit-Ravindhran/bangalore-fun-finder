@@ -1,349 +1,364 @@
-
+import { supabase } from "@/integrations/supabase/client";
 import { Activity } from '@/components/ActivityCard';
-import { Category } from '@/components/CategoryFilter';
-import { categories } from '@/data/mockData';
 
-// Mock activities for the application
-const mockActivities: Activity[] = [
-  {
-    id: '1',
-    title: 'Pottery Workshop',
-    image: 'https://images.unsplash.com/photo-1565122644283-5758bd90c638?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-    description: 'Learn the ancient art of pottery making in this hands-on workshop.',
-    priceRange: '₹1200 per person',
-    location: 'Indiranagar, Bangalore',
-    categoryIds: ['arts'],
-    tags: ['creative', 'unique'],
-    date: 'Every Saturday',
-    time: '10:00 AM - 12:00 PM',
-    mapLink: 'https://maps.google.com/?q=Indiranagar,Bangalore',
-    lastUpdated: '2024-05-09',
-    categoryName: 'Arts'
-  },
-  {
-    id: '2',
-    title: 'Nandi Hills Trek',
-    image: 'https://images.unsplash.com/photo-1537436875793-b1025ba4ff97?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-    description: 'Experience the breathtaking sunrise at Nandi Hills with this guided trek.',
-    priceRange: '₹800 per person',
-    location: 'Nandi Hills, 60km from Bangalore',
-    categoryIds: ['outdoor', 'trek'],
-    tags: ['adventure', 'nature'],
-    date: 'Saturday and Sunday',
-    time: '4:30 AM - 11:00 AM',
-    mapLink: 'https://maps.google.com/?q=Nandi+Hills',
-    lastUpdated: '2024-05-08',
-    categoryName: 'Trek'
-  },
-  {
-    id: '3',
-    title: 'Comedy Night',
-    image: 'https://images.unsplash.com/photo-1610964199131-5e29387e6267?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80',
-    description: 'Laugh your heart out at this comedy night featuring local stand-up comedians.',
-    priceRange: '₹500 - ₹1000',
-    location: 'Koramangala, Bangalore',
-    categoryIds: ['events', 'theatre'],
-    tags: ['entertainment', 'nightlife'],
-    date: 'Friday',
-    time: '8:00 PM - 10:00 PM',
-    mapLink: 'https://maps.google.com/?q=Koramangala,Bangalore',
-    lastUpdated: '2024-05-10',
-    categoryName: 'Events'
-  },
-  {
-    id: '4',
-    title: 'Vineyard Tour & Wine Tasting',
-    image: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-    description: 'Visit a local vineyard and enjoy wine tasting with complementary cheese platter.',
-    priceRange: '₹1500 per person',
-    location: 'Off Kanakapura Road, 50km from Bangalore',
-    categoryIds: ['unique', 'foodie'],
-    tags: ['date', 'unique', 'gourmet'],
-    date: 'Saturday & Sunday',
-    time: '11:00 AM - 4:00 PM',
-    mapLink: 'https://maps.google.com/?q=Kanakapura+Road',
-    lastUpdated: '2024-05-07',
-    contactInfo: '+91 9876543210',
-    categoryName: 'Foodie'
-  },
-  {
-    id: '5',
-    title: 'Cycle Tour of Heritage Bangalore',
-    image: 'https://images.unsplash.com/photo-1563801793838-2e6b06726c85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-    description: 'Discover the old charm of Bangalore city on an eco-friendly cycle tour.',
-    priceRange: '₹700 per person',
-    location: 'Cubbon Park, Bangalore',
-    categoryIds: ['outdoor', 'unique'],
-    tags: ['history', 'fitness', 'morning'],
-    date: 'Sunday',
-    time: '7:00 AM - 10:00 AM',
-    mapLink: 'https://maps.google.com/?q=Cubbon+Park,Bangalore',
-    lastUpdated: '2024-05-06',
-    categoryName: 'Outdoor'
-  },
-  {
-    id: '6',
-    title: 'Camping Under the Stars',
-    image: 'https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80',
-    description: 'Overnight camping experience with stargazing, bonfire and outdoor activities.',
-    priceRange: '₹2000 per person',
-    location: 'Skandagiri, Outskirts of Bangalore',
-    categoryIds: ['outdoor', 'trek'],
-    tags: ['adventure', 'overnight', 'nature'],
-    date: 'Friday to Sunday',
-    time: '4:00 PM - Next day 10:00 AM',
-    mapLink: 'https://maps.google.com/?q=Skandagiri',
-    lastUpdated: '2024-05-05',
-    categoryName: 'Trek'
-  },
-];
-
-// Function to fetch all activities
-export const fetchActivities = async (): Promise<Activity[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(mockActivities);
-    }, 500);
-  });
+// Type that represents what our database actually has
+type ActivityRow = {
+  id: number;
+  title: string | null;
+  image: string | null;
+  tags: string[] | null;
+  price_range: string | null;
+  location: string | null;
+  description: string | null;
+  category_ids: string[] | null;
+  date: string | null;
+  time: string | null;
+  map_link: string | null;
+  contact_info: string | null;
+  created_at: string;
+  updated_at: string | null;
+  section_type: string | null;
 };
 
-// Function to fetch all categories
-export const fetchCategories = async (): Promise<Category[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(categories);
-    }, 500);
-  });
-};
-
-// Function to filter activities based on category IDs
-export const filterActivitiesByCategory = async (categoryIds: string[]): Promise<Activity[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const filteredActivities = mockActivities.filter((activity) =>
-        categoryIds.every((categoryId) => activity.categoryIds.includes(categoryId))
-      );
-      resolve(filteredActivities);
-    }, 500);
-  });
-};
-
-// Function to sort activities based on the selected option
-const sortActivities = (activities: Activity[], sortOption: string): Activity[] => {
-  switch (sortOption) {
-    case 'popular':
-      // Sort by number of likes or views (not available in mock data)
-      return [...activities].sort(() => Math.random() - 0.5); // Placeholder
-    case 'price_low_high':
-      return [...activities].sort((a, b) => {
-        const priceA = parseFloat(a.priceRange.replace(/[^0-9.]/g, '')) || 0;
-        const priceB = parseFloat(b.priceRange.replace(/[^0-9.]/g, '')) || 0;
-        return priceA - priceB;
-      });
-    case 'price_high_low':
-      return [...activities].sort((a, b) => {
-        const priceA = parseFloat(a.priceRange.replace(/[^0-9.]/g, '')) || 0;
-        const priceB = parseFloat(b.priceRange.replace(/[^0-9.]/g, '')) || 0;
-        return priceB - priceA;
-      });
-    case 'newest':
-      return [...activities].sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime());
-    default:
-      return activities;
+// Helper function to validate image URL and provide a placeholder if needed
+const getValidImageUrl = (imageUrl: string | null): string => {
+  if (!imageUrl) return '/placeholder.svg';
+  
+  // Check if the URL is valid
+  try {
+    // Check if it's a Facebook URL which often causes CORS issues
+    if (imageUrl.includes('facebook.com') || imageUrl.includes('fbcdn.net')) {
+      console.warn('Facebook image URLs may not load due to restrictions:', imageUrl);
+      return '/placeholder.svg';
+    }
+    
+    new URL(imageUrl);
+    return imageUrl;
+  } catch (e) {
+    console.error('Invalid image URL:', imageUrl);
+    return '/placeholder.svg';
   }
 };
 
-// Function to filter activities based on a single filter
-export async function getFilteredActivities(filter: { category?: string } = {}, sortOption = 'newest'): Promise<Activity[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      let filteredActivities = [...mockActivities];
+// Helper function to convert database row to our Activity type
+const mapRowToActivity = (row: ActivityRow): Activity => ({
+  id: row.id.toString(),
+  title: row.title || 'Untitled Activity',
+  image: getValidImageUrl(row.image),
+  tags: row.tags || [],
+  priceRange: row.price_range || 'Free',
+  location: row.location || 'Bangalore',
+  lastUpdated: row.updated_at ? new Date(row.updated_at).toLocaleDateString() : new Date(row.created_at).toLocaleDateString(),
+  categoryIds: row.category_ids || [],
+  description: row.description || '',
+  date: row.date || undefined,
+  time: row.time || undefined,
+  mapLink: row.map_link || undefined,
+  contactInfo: row.contact_info || undefined
+});
 
-      if (filter.category) {
-        filteredActivities = filteredActivities.filter((activity) =>
-          activity.categoryIds.includes(filter.category)
-        );
-      }
+export const fetchActivities = async (sortOption = 'popular'): Promise<Activity[]> => {
+  let query = supabase.from('activities').select('*');
 
-      const sortedActivities = sortActivities(filteredActivities, sortOption);
-      
-      // Add category names to activities
-      const activitiesWithCategoryNames = sortedActivities.map(activity => {
-        // For each activity, find its primary category
-        let categoryName = '';
-        if (activity.categoryIds && activity.categoryIds.length > 0) {
-          // Get the first category ID and find its name
-          const primaryCategoryId = activity.categoryIds[0];
-          const category = categories.find(cat => cat.id === primaryCategoryId);
-          if (category) {
-            categoryName = category.name;
-          }
-        }
-        
-        return {
-          ...activity,
-          categoryName
-        };
-      });
-      
-      resolve(activitiesWithCategoryNames);
-    }, 500);
-  });
-}
-
-// Function to get activities filtered by section type
-export async function getFilteredActivitiesBySection(sectionType: string, sortOption: string): Promise<Activity[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      let filteredActivities = mockActivities.filter(activity => {
-        if (sectionType === 'all') {
-          return true;
-        } else if (sectionType === 'unique' && activity.tags.includes('unique')) {
-          return true;
-        } else if (sectionType === 'date' && activity.tags.includes('date')) {
-          return true;
-        }
-        return false;
-      });
+  // Apply sorting
+  switch (sortOption) {
+    case 'price_low_high':
+      query = query.order('price_range', { ascending: true });
+      break;
+    case 'price_high_low':
+      query = query.order('price_range', { ascending: false });
+      break;
+    case 'newest':
+      query = query.order('created_at', { ascending: false });
+      break;
+    case 'popular':
+    default:
+      // For popular, we first get featured items then the rest
+      break;
+  }
   
-      const sortedActivities = sortActivities(filteredActivities, sortOption);
-      
-      // Add category names to activities
-      const activitiesWithCategoryNames = sortedActivities.map(activity => {
-        // For each activity, find its primary category
-        let categoryName = '';
-        if (activity.categoryIds && activity.categoryIds.length > 0) {
-          // Get the first category ID and find its name
-          const primaryCategoryId = activity.categoryIds[0];
-          const category = categories.find(cat => cat.id === primaryCategoryId);
-          if (category) {
-            categoryName = category.name;
-          }
-        }
-        
-        return {
-          ...activity,
-          categoryName
-        };
-      });
-      
-      resolve(activitiesWithCategoryNames);
-    }, 500);
-  });
-}
-
-// Function to get an activity by ID
-export const getActivityById = async (id: string): Promise<Activity | null> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const activity = mockActivities.find(a => a.id === id);
-      if (!activity) {
-        resolve(null);
-        return;
-      }
-      
-      // Add category name
-      let categoryName = '';
-      if (activity.categoryIds && activity.categoryIds.length > 0) {
-        const primaryCategoryId = activity.categoryIds[0];
-        const category = categories.find(cat => cat.id === primaryCategoryId);
-        if (category) {
-          categoryName = category.name;
-        }
-      }
-      
-      resolve({
-        ...activity,
-        categoryName
-      });
-    }, 500);
-  });
+  const { data, error } = await query;
+  
+  if (error) {
+    console.error('Error fetching activities:', error);
+    throw error;
+  }
+  
+  // Transform the data to match our Activity type
+  let activities = (data as ActivityRow[] || []).map(mapRowToActivity);
+  
+  // If sorting by popular, manually sort to put featured items first
+  if (sortOption === 'popular') {
+    activities.sort((a, b) => {
+      const aIsFeatured = a.tags.includes('featured') ? 1 : 0;
+      const bIsFeatured = b.tags.includes('featured') ? 1 : 0;
+      return bIsFeatured - aIsFeatured;
+    });
+  }
+  
+  return activities;
 };
 
-// Admin functions
-export const createActivity = async (activityData: Omit<Activity, 'id' | 'lastUpdated'>): Promise<Activity> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const newId = String(Date.now());
-      const newActivity = {
-        ...activityData,
-        id: newId,
-        lastUpdated: new Date().toISOString().split('T')[0]
-      };
-      // In a real app, this would add to a database
-      mockActivities.unshift(newActivity);
-      resolve(newActivity);
-    }, 500);
-  });
+export const createActivity = async (activity: Omit<Activity, 'id' | 'lastUpdated'>): Promise<Activity> => {
+  // Remove the id property from the activity object to let Supabase generate one
+  const { data, error } = await supabase
+    .from('activities')
+    .insert({
+      title: activity.title,
+      image: activity.image,
+      tags: activity.tags,
+      price_range: activity.priceRange,
+      location: activity.location,
+      category_ids: activity.categoryIds,
+      description: activity.description,
+      date: activity.date,
+      time: activity.time,
+      map_link: activity.mapLink,
+      contact_info: activity.contactInfo
+    })
+    .select()
+    .single();
+  
+  if (error) {
+    console.error('Error creating activity:', error);
+    throw error;
+  }
+  
+  return mapRowToActivity(data as ActivityRow);
 };
 
-export const updateActivity = async (id: string, activityData: Partial<Activity>): Promise<Activity> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const index = mockActivities.findIndex(a => a.id === id);
-      if (index === -1) {
-        reject(new Error("Activity not found"));
-        return;
-      }
-      
-      const updatedActivity = {
-        ...mockActivities[index],
-        ...activityData,
-        lastUpdated: new Date().toISOString().split('T')[0]
-      };
-      
-      mockActivities[index] = updatedActivity;
-      resolve(updatedActivity);
-    }, 500);
-  });
+export const updateActivity = async (id: string, activity: Partial<Omit<Activity, 'id' | 'lastUpdated'>>): Promise<Activity> => {
+  const updateData: any = {};
+  
+  if (activity.title) updateData.title = activity.title;
+  if (activity.image) updateData.image = activity.image;
+  if (activity.tags) updateData.tags = activity.tags;
+  if (activity.priceRange) updateData.price_range = activity.priceRange;
+  if (activity.location) updateData.location = activity.location;
+  if (activity.categoryIds) updateData.category_ids = activity.categoryIds;
+  if (activity.description) updateData.description = activity.description;
+  if (activity.date) updateData.date = activity.date;
+  if (activity.time) updateData.time = activity.time;
+  if (activity.mapLink) updateData.map_link = activity.mapLink;
+  if (activity.contactInfo) updateData.contact_info = activity.contactInfo;
+  
+  const { data, error } = await supabase
+    .from('activities')
+    .update(updateData)
+    .eq('id', parseInt(id, 10))
+    .select()
+    .single();
+  
+  if (error) {
+    console.error('Error updating activity:', error);
+    throw error;
+  }
+  
+  return mapRowToActivity(data as ActivityRow);
 };
 
 export const deleteActivity = async (id: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const index = mockActivities.findIndex(a => a.id === id);
-      if (index === -1) {
-        reject(new Error("Activity not found"));
-        return;
-      }
-      
-      mockActivities.splice(index, 1);
-      resolve();
-    }, 500);
-  });
+  const { error } = await supabase
+    .from('activities')
+    .delete()
+    .eq('id', parseInt(id, 10));
+  
+  if (error) {
+    console.error('Error deleting activity:', error);
+    throw error;
+  }
 };
 
-// Mock tables for admin
-export const fetchCategoriesFromTable = async (): Promise<{ id: number; name: string }[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(categories.map((cat, index) => ({ 
-        id: index + 1, 
-        name: cat.name 
-      })));
-    }, 500);
-  });
-};
-
-export const fetchTagsFromTable = async (): Promise<{ id: number; name: string }[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const uniqueTags = Array.from(
-        new Set(mockActivities.flatMap(activity => activity.tags))
+export const getFilteredActivities = async (
+  categoryIds: string[] | null,
+  quickFilterIds: string[] | null,
+  searchQuery: string = '',
+  sortOption: string = 'popular'
+): Promise<Activity[]> => {
+  // First get all activities with the specified sort option
+  const activities = await fetchActivities(sortOption);
+  
+  let filtered = [...activities];
+  
+  if (categoryIds && categoryIds.length > 0) {
+    filtered = filtered.filter(activity => 
+      categoryIds.some(categoryId => activity.categoryIds.includes(categoryId))
+    );
+  }
+  
+  if (quickFilterIds && quickFilterIds.length > 0) {
+    const today = new Date().toLocaleDateString();
+    
+    if (quickFilterIds.includes('free')) {
+      filtered = filtered.filter(activity => activity.priceRange.toLowerCase().includes('free'));
+    }
+    
+    if (quickFilterIds.includes('today')) {
+      filtered = filtered.filter(activity => 
+        activity.date === today || (activity.date && activity.date.toLowerCase().includes('today'))
       );
-      resolve(uniqueTags.map((tag, index) => ({ 
-        id: index + 1, 
-        name: tag 
-      })));
-    }, 500);
-  });
+    }
+
+    if (quickFilterIds.includes('creative')) {
+      // Filter activities that have tag ID 3
+      filtered = filtered.filter(activity => 
+        activity.tags.includes('3')
+      );
+    }
+
+    if (quickFilterIds.includes('solo')) {
+      // Filter activities that have tag ID 4
+      filtered = filtered.filter(activity => 
+        activity.tags.includes('4')
+      );
+    }
+
+    if (quickFilterIds.includes('plans')) {
+      // Filter activities that have tag ID 5
+      filtered = filtered.filter(activity => 
+        activity.tags.includes('5')
+      );
+    }
+
+    if (quickFilterIds.includes('mindful')) {
+      // Filter activities that have tag ID 6
+      filtered = filtered.filter(activity => 
+        activity.tags.includes('6')
+      );
+    }
+  }
+  
+  if (searchQuery && searchQuery.trim() !== '') {
+    const query = searchQuery.toLowerCase().trim();
+    filtered = filtered.filter(activity => 
+      activity.title.toLowerCase().includes(query) ||
+      activity.description.toLowerCase().includes(query) ||
+      activity.location.toLowerCase().includes(query) ||
+      activity.tags.some(tag => tag.toLowerCase().includes(query))
+    );
+  }
+  
+  return filtered;
 };
 
-// Subscribe user functionality
+export const getActivityById = async (id: string): Promise<Activity | null> => {
+  const { data, error } = await supabase
+    .from('activities')
+    .select('*')
+    .eq('id', parseInt(id, 10))
+    .maybeSingle();
+  
+  if (error) {
+    console.error('Error fetching activity by id:', error);
+    throw error;
+  }
+  
+  if (!data) return null;
+  
+  return mapRowToActivity(data as ActivityRow);
+};
+
+export async function getFilteredActivitiesBySection(sectionType: string, sortOption: string = 'popular'): Promise<Activity[]> {
+  console.log('Fetching activities for section:', sectionType);
+  
+  let query = supabase.from("activities").select("*").eq("enabled", true);;
+  
+  // For "all" section, don't filter by section type
+  if (sectionType !== 'all') {
+    query = query.eq("section_type", sectionType);
+  }
+  
+  // Apply sorting
+  switch (sortOption) {
+    case 'price_low_high':
+      query = query.order('price_range', { ascending: true });
+      break;
+    case 'price_high_low':
+      query = query.order('price_range', { ascending: false });
+      break;
+    case 'newest':
+      query = query.order('created_at', { ascending: false });
+      break;
+    case 'popular':
+    default:
+      // For popular, keeping default order or we could add a specific sort here
+      break;
+  }
+
+  const { data, error } = await query;
+
+  console.log('Response data:', data);
+
+  if (error) {
+    console.error('Error fetching section activities:', error);
+    throw error;
+  }
+  
+  return (data as ActivityRow[] || []).map(mapRowToActivity);
+}
+
+export async function fetchCategories() {
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*');
+  
+  if (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
+  
+  return data.map(category => ({
+    id: category.id.toString(),
+    name: category.name,
+    emoji: '🔍', // Default emoji since database might not have this
+    color: undefined // Default color
+  }));
+}
+
+export async function fetchCategoriesFromTable() {
+  const { data, error } = await supabase
+    .from('categories')
+    .select('id, name')
+    .order('name');
+  
+  if (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
+  
+  return data;
+}
+
+export async function fetchTagsFromTable() {
+  const { data, error } = await supabase
+    .from('tags')
+    .select('id, name')
+    .order('name');
+  
+  if (error) {
+    console.error('Error fetching tags:', error);
+    throw error;
+  }
+  
+  return data;
+}
+
 export const subscribeUser = async (contact: string): Promise<void> => {
-  return new Promise((resolve) => {
-    // In a real app, this would add the user to a database or mailing list
-    console.log(`User subscribed with contact: ${contact}`);
-    setTimeout(resolve, 500);
-  });
+  let email: string | null = null;
+  let phone: string | null = null;
+
+  if (contact.includes('@')) {
+    email = contact;
+  } else {
+    phone = contact;
+  }
+
+  const { error } = await supabase
+    .from('users')
+    .insert([{ email, phone }]);
+
+  if (error) {
+    console.error('Error subscribing user:', error);
+    throw error;
+  }
 };

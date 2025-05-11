@@ -1,5 +1,4 @@
 
-
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -85,12 +84,6 @@
 .overflow-x-auto {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding-bottom: 10px;
-}
-
-.overflow-x-auto::-webkit-scrollbar {
-  display: none;
 }
 
 /* Make sure horizontal scroll elements are visible on mobile */
@@ -98,63 +91,4 @@
   .min-w-max {
     min-width: max-content;
   }
-  
-  /* Fix horizontal scroll in mobile */
-  .scroll-area-horizontal {
-    width: 100%;
-    overflow-x: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: 8px;
-  }
-  
-  .scroll-area-horizontal::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-/* Card styling */
-.card-hover-effect {
-  transition: all 0.25s ease;
-  border: none;
-}
-
-.card-hover-effect:hover {
-  transform: translateY(-5px);
-}
-
-/* Glassmorphism effect */
-.glass-card {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(10px);
-  border: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-/* Soft colored backgrounds */
-.bg-soft-blue {
-  background-color: #D3E4FD;
-}
-
-.bg-soft-peach {
-  background-color: #FDE1D3;
-}
-
-.bg-soft-pink {
-  background-color: #FFDEE2;
-}
-
-.bg-soft-purple {
-  background-color: #E5DEFF;
-}
-
-/* End of list message */
-.end-of-list-message {
-  background: linear-gradient(to right, #e6e9f0 0%, #eef1f5 100%);
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-  margin: 20px 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }

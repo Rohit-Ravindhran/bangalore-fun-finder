@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -16,12 +15,13 @@ interface TabViewProps {
     onLoadMore?: () => void;
     isLoading?: boolean;
   }[];
-  viewMode: 'card' | 'grid';
-  setViewMode: (viewMode: 'card' | 'grid') => void;
+  viewMode:any;
+  setViewMode:any;
   defaultTabId?: string;
 }
 
-const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId, viewMode, setViewMode }) => {
+const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId,viewMode ,
+  setViewMode }) => {
   const [activeTabId, setActiveTabId] = useState(defaultTabId || tabs[0]?.id);
   const [touchStart, setTouchStart] = useState<number | null>(null);
 
@@ -56,8 +56,8 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId, viewMode, setView
     <div className="w-full">
       {/* Tab Header */}
       <div className="sticky top-[72px] z-30 bg-w2d-cream pt-2 pb-3 shadow-sm">
-        <div className="overflow-x-auto scroll-area-horizontal pb-2 no-scrollbar">
-          <div className="flex space-x-4 border-b px-2 items-center min-w-max">
+        <div className="w-[300px] pb-2 overflow-x-auto">
+          <div className="flex space-x-4 border-b px-2   items-center">
             {tabs.map(tab => (
               <button
                 key={tab.id}
@@ -86,31 +86,14 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId, viewMode, setView
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
+                    <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
      
+
         {activeTab && (
           <div className="space-y-4">
             <div className="min-h-[300px]">
               {activeTab.content}
             </div>
-            
-            {activeTab.count && activeTab.onLoadMore && activeTab.count.loaded < activeTab.count.total && (
-              <div className="flex justify-center mt-8">
-                <button
-                  onClick={activeTab.onLoadMore}
-                  disabled={activeTab.isLoading}
-                  className="px-6 py-2 bg-w2d-teal text-white rounded-full shadow hover:bg-opacity-90 transition-all disabled:opacity-50"
-                >
-                  {activeTab.isLoading ? 'Loading...' : 'Load More'}
-                </button>
-              </div>
-            )}
-            
-            {(!activeTab.count || activeTab.count.loaded >= activeTab.count.total) && (
-              <div className="end-of-list-message mt-8 mx-auto max-w-xl">
-                <p className="font-medium text-gray-600">✨ That's all for now. More coming soon!</p>
-              </div>
-            )}
           </div>
         )}
       </div>

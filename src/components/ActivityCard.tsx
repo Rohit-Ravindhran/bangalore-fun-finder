@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, ArrowRight, ArrowLeft, Share2, MapPin, Calendar, Clock } from 'lucide-react';
@@ -20,7 +19,6 @@ export interface Activity {
   time?: string;
   mapLink?: string;
   contactInfo?: string;
-  categoryName?: string;
 }
 
 interface ActivityCardProps {
@@ -125,7 +123,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   return (
     <div 
       className={cn(
-        "activity-card w-full max-w-sm mx-auto bg-white/90 backdrop-blur-sm rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300",
+        "activity-card w-full max-w-sm mx-auto bg-white rounded-xl overflow-hidden shadow-sm transition-all duration-300",
         isLeaving === 'left' ? 'swipe-left' : isLeaving === 'right' ? 'swipe-right' : ''
       )}
       onTouchStart={handleTouchStart}
@@ -168,12 +166,6 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           
           {activity.lastUpdated.includes("today") && (
             <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0 shadow-sm">🆕 New</Badge>
-          )}
-          
-          {activity.categoryName && (
-            <Badge variant="outline" className="bg-white/90 text-primary text-xs py-0 shadow-sm border-none">
-              {activity.categoryName}
-            </Badge>
           )}
         </div>
       </div>

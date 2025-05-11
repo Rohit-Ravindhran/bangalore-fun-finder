@@ -59,7 +59,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       {activities.map((activity) => (
         <Card 
           key={activity.id}
-          className="overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer border-0 shadow-sm rounded-xl bg-white/90 backdrop-blur-sm transform hover:-translate-y-1"
+          className="overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer border-0 shadow-sm rounded-xl transform hover:-translate-y-1"
           onClick={() => handleCardClick(activity.id)}
         >
           <div className="relative">
@@ -108,12 +108,6 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
               
               {sectionType === 'All' && activity.tags.includes('ourpick') && (
                 <Badge variant="secondary" className="bg-w2d-yellow text-primary text-xs py-0 shadow-sm">✨ Our Pick</Badge>
-              )}
-              
-              {activity.categoryName && (
-                <Badge variant="outline" className="bg-white/90 text-primary text-xs py-0 shadow-sm border-none">
-                  {activity.categoryName}
-                </Badge>
               )}
             </div>
           </div>
@@ -164,13 +158,6 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
           </CardContent>
         </Card>
       ))}
-      
-      {activities.length > 0 && (
-        <div className="py-6 px-4 bg-gradient-to-r from-gray-50/70 to-white/70 rounded-xl text-center mb-10 shadow-sm backdrop-blur-sm">
-          <div className="text-lg font-semibold">✨ That's all for now. More coming soon!</div>
-          <p className="text-sm text-gray-600 mt-1">We're adding new activities every day.</p>
-        </div>
-      )}
     </div>
   );
 };
