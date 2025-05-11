@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, ArrowRight, ArrowLeft, Share2, MapPin, Calendar, Clock } from 'lucide-react';
@@ -19,6 +20,7 @@ export interface Activity {
   time?: string;
   mapLink?: string;
   contactInfo?: string;
+  categoryNames?: string[]; // Add categoryNames for displaying category names
 }
 
 interface ActivityCardProps {
@@ -123,7 +125,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   return (
     <div 
       className={cn(
-        "activity-card w-full max-w-sm mx-auto bg-white rounded-xl overflow-hidden shadow-sm transition-all duration-300",
+        "activity-card w-full max-w-sm mx-auto bg-transparent rounded-xl overflow-hidden transition-all duration-300",
         isLeaving === 'left' ? 'swipe-left' : isLeaving === 'right' ? 'swipe-right' : ''
       )}
       onTouchStart={handleTouchStart}
@@ -133,7 +135,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         <img 
           src={activity.image} 
           alt={activity.title} 
-          className="w-full h-52 object-cover"
+          className="w-full h-52 object-cover rounded-xl"
           loading="lazy"
           onError={handleImageError}
         />
@@ -174,12 +176,12 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         <h3 className="text-lg font-bold mb-1.5">{activity.title}</h3>
         
         <div className="flex flex-wrap gap-1.5 mb-3">
-          {activity.tags.slice(0, 3).map((tag, index) => (
+          {activity.categoryNames && activity.categoryNames.slice(0, 3).map((category, index) => (
             <span 
               key={index} 
               className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2.5 py-0.5"
             >
-              {tag}
+              {category}
             </span>
           ))}
         </div>

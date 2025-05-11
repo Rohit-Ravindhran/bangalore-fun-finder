@@ -544,8 +544,11 @@ useEffect(() => {
               🏙️ Your Weekend in Bangalore, Sorted. 🎉
             </h1>
           </div>
-          <p className="text-sm md:text-base text-gray-600 italic">
-            Curated with love from trusted Bangalore local communities  💛
+          <p className="text-sm md:text-base text-gray-600 italic mb-1">
+            Curated with love from trusted Bangalore local communities 💛
+          </p>
+          <p className="text-xs text-w2d-teal font-medium">
+            👀 Early user preview — fully launching soon
           </p>
         </div>
 
