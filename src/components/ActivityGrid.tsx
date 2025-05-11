@@ -59,7 +59,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       {activities.map((activity) => (
         <Card 
           key={activity.id}
-          className="overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer border-0 shadow-sm rounded-xl transform hover:-translate-y-1 bg-transparent"
+          className="overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer border-0 shadow-sm rounded-xl transform hover:-translate-y-1 bg-white"
           onClick={() => handleCardClick(activity.id)}
         >
           <div className="relative">
@@ -98,15 +98,15 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
             </div>
             
             <div className="absolute top-2 left-2 flex flex-col gap-1">
-              {activity.tags.includes('trending') && (
+              {activity.tags && activity.tags.includes('trending') && (
                 <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-sm">🔥 Trending</Badge>
               )}
               
-              {activity.lastUpdated.includes("today") && (
+              {activity.lastUpdated && activity.lastUpdated.includes("today") && (
                 <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0 shadow-sm">🆕 New</Badge>
               )}
               
-              {sectionType === 'All' && activity.tags.includes('ourpick') && (
+              {sectionType === 'All' && activity.tags && activity.tags.includes('ourpick') && (
                 <Badge variant="secondary" className="bg-w2d-yellow text-primary text-xs py-0 shadow-sm">✨ Our Pick</Badge>
               )}
             </div>

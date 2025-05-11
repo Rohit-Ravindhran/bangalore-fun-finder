@@ -125,7 +125,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   return (
     <div 
       className={cn(
-        "activity-card w-full max-w-sm mx-auto bg-transparent rounded-xl overflow-hidden transition-all duration-300",
+        "activity-card w-full max-w-sm mx-auto bg-white rounded-xl overflow-hidden transition-all duration-300",
         isLeaving === 'left' ? 'swipe-left' : isLeaving === 'right' ? 'swipe-right' : ''
       )}
       onTouchStart={handleTouchStart}
@@ -162,11 +162,11 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         </div>
         
         <div className="absolute top-2 left-2 flex flex-col gap-1.5">
-          {activity.tags.includes('trending') && (
+          {activity.tags && activity.tags.includes('trending') && (
             <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-sm">🔥 Trending</Badge>
           )}
           
-          {activity.lastUpdated.includes("today") && (
+          {activity.lastUpdated && activity.lastUpdated.includes("today") && (
             <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0 shadow-sm">🆕 New</Badge>
           )}
         </div>
