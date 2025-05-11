@@ -59,7 +59,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       {activities.map((activity) => (
         <Card 
           key={activity.id}
-          className="overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer border-0 shadow-sm rounded-xl transform hover:-translate-y-1"
+          className="overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer border-0 shadow-sm rounded-xl transform hover:-translate-y-1 bg-white/90"
           onClick={() => handleCardClick(activity.id)}
         >
           <div className="relative">
@@ -122,14 +122,25 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
             )}
             
             <div className="flex flex-wrap gap-1.5 mb-3">
-              {activity.tags.slice(0, 3).map((tag, idx) => (
-                <span 
-                  key={idx} 
-                  className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2.5 py-0.5"
-                >
-                  {tag}
-                </span>
-              ))}
+              {activity.categoryNames ? (
+                activity.categoryNames.slice(0, 3).map((category, idx) => (
+                  <span 
+                    key={idx} 
+                    className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2.5 py-0.5"
+                  >
+                    {category}
+                  </span>
+                ))
+              ) : (
+                activity.tags.slice(0, 3).map((tag, idx) => (
+                  <span 
+                    key={idx} 
+                    className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2.5 py-0.5"
+                  >
+                    {tag}
+                  </span>
+                ))
+              )}
             </div>
             
             <div className="grid grid-cols-2 gap-2.5 text-xs text-gray-500">
@@ -158,6 +169,12 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
           </CardContent>
         </Card>
       ))}
+      
+      {activities.length > 0 && (
+        <div className="bg-gray-100/80 rounded-xl p-4 text-center my-6 backdrop-blur-sm">
+          <p className="text-gray-600 font-medium">✨ That's all for now. More coming soon!</p>
+        </div>
+      )}
     </div>
   );
 };

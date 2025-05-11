@@ -544,17 +544,17 @@ useEffect(() => {
               🏙️ Your Weekend in Bangalore, Sorted. 🎉
             </h1>
           </div>
-          <p className="text-sm md:text-base text-gray-600 italic">
-            Curated with love from trusted Bangalore local communities  💛
+          <p className="text-sm md:text-base text-gray-600">
+            Curated with love for Bangaloreans 💛
+          </p>
+          <p className="text-xs text-gray-500 mt-1 italic">
+            👀 Early user preview — fully launching soon
           </p>
         </div>
 
-      
-        
         <SubscribeSection className="z-10 mb-6" />
 
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
-
 
         {searchVisible && (
           <div className="bg-white rounded-xl p-3 mb-6 shadow-sm">
@@ -571,10 +571,12 @@ useEffect(() => {
             </div>
           </div>
         )}
-  <div className="flex justify-end text-xs text-gray-500 mb-3 items-center">
+        
+        <div className="flex justify-end text-xs text-gray-500 mb-3 items-center">
           <Clock className="h-3 w-3 mr-1" />
           <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
         </div>
+        
         <div className="flex justify-between items-center mb-4 gap-3">
           <SortSelector 
             options={sortOptions}
