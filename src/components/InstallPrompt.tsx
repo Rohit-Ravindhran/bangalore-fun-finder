@@ -101,7 +101,7 @@ const InstallPrompt: React.FC = () => {
     return null;
   }
 
-  // Show floating button if it's installable
+  // Show floating button if it's installable - simplified to just an icon
   if (isInstallable) {
     return (
       <div className="fixed bottom-20 right-6 z-50">
@@ -111,11 +111,10 @@ const InstallPrompt: React.FC = () => {
               <TooltipTrigger asChild>
                 <Button 
                   onClick={handleInstallClick}
-                  className="rounded-full bg-gradient-to-r from-w2d-yellow to-w2d-peach hover:from-w2d-yellow hover:to-w2d-peach/90 text-primary flex gap-1 items-center px-4 py-2 shadow-md"
-                  size="sm"
+                  className="rounded-full bg-gradient-to-r from-w2d-yellow to-w2d-peach hover:from-w2d-yellow hover:to-w2d-peach/90 text-primary"
+                  size="icon"
                 >
                   <Download className="h-4 w-4" />
-                  <span>📲 Add to phone</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="left">

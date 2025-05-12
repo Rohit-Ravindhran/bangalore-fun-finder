@@ -541,7 +541,7 @@ useEffect(() => {
               />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-[#323232] mb-3 relative">
-              💛 ChaloOut <span className="text-amber-600">Bangalore</span>
+              💛 What-To-Do <span className="text-amber-600">Bangalore</span>
             </h1>
           </div>
           <p className="text-sm md:text-base text-gray-600 italic">
@@ -572,12 +572,15 @@ useEffect(() => {
           <Clock className="h-3 w-3 mr-1" />
           <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
         </div>
+        
+        {/* Modified view controls layout */}
         <div className="flex justify-between items-center mb-4 gap-3">
           <SortSelector 
             options={sortOptions}
             selectedOption={sortOption}
             onSelectOption={handleSortChange}
           />
+          <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
         </div>
 
         {/* Hide QuickFilter but keep it in code */}
