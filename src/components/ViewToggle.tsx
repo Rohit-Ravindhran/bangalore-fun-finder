@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { LayoutGrid, Layers } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
@@ -11,38 +10,39 @@ interface ViewToggleProps {
 
 const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange }) => {
   return (
-    <div className="flex justify-center my-3 mb-5">
+    <div className="flex justify-center my-4">
       <ToggleGroup 
         type="single" 
         value={currentView} 
         onValueChange={(value) => value && onViewChange(value as 'card' | 'grid')}
-        className="shadow-sm rounded-full p-1 text-xs"
+        className="bg-[#fff8ea] rounded-full px-1 py-1 shadow-md"
       >
         <ToggleGroupItem 
           value="card" 
-          aria-label="Toggle card view" 
+          aria-label="Card view" 
           className={cn(
-            "rounded-full px-3 py-1 transition-all", 
-            "data-[state=on]:bg-amber-600 data-[state=on]:text-white",
+            "flex items-center gap-1 px-4 py-2 rounded-full text-sm transition-all",
+            "data-[state=on]:bg-amber-400 data-[state=on]:text-white",
             "data-[state=off]:bg-transparent data-[state=off]:text-gray-500",
-            "data-[state=off]:hover:bg-amber-50 text-xs h-8"
+            "data-[state=off]:hover:bg-amber-100"
           )}
         >
-          <Layers className="h-2 w-3 mr-1" />
-          <span>Swipe Cards</span>
+          <Layers className="h-4 w-4" />
+          <span>Swipe</span>
         </ToggleGroupItem>
+
         <ToggleGroupItem 
           value="grid" 
-          aria-label="Toggle grid view" 
+          aria-label="Grid view" 
           className={cn(
-            "rounded-full px-3 py-1 transition-all",
-            "data-[state=on]:bg-amber-600 data-[state=on]:text-white",
+            "flex items-center gap-1 px-4 py-2 rounded-full text-sm transition-all",
+            "data-[state=on]:bg-amber-400 data-[state=on]:text-white",
             "data-[state=off]:bg-transparent data-[state=off]:text-gray-500",
-            "data-[state=off]:hover:bg-amber-50 text-xs h-8"
+            "data-[state=off]:hover:bg-amber-100"
           )}
         >
-          <LayoutGrid className="h-2 w-3 mr-1" />
-          <span>Browse Board</span>
+          <LayoutGrid className="h-4 w-4" />
+          <span>Browse</span>
         </ToggleGroupItem>
       </ToggleGroup>
     </div>
