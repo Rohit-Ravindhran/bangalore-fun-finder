@@ -573,15 +573,7 @@ useEffect(() => {
           <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
         </div>
         
-        {/* Repositioned sort and view toggle controls above tabs */}
-        <div className="flex justify-between items-center mb-4 gap-3">
-          <SortSelector 
-            options={sortOptions}
-            selectedOption={sortOption}
-            onSelectOption={handleSortChange}
-          />
-          <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
-        </div>
+    
 
         <div className="mb-8">
           <h2 className="text-xl font-bold mb-4 text-[#323232]">Categories</h2>
@@ -613,6 +605,9 @@ useEffect(() => {
             defaultTabId="all" 
             viewMode={viewMode}
             setViewMode={setViewMode}
+              sortOptions={sortOptions}
+  sortOption={sortOption}
+  handleSortChange={handleSortChange}
           />
         </div>
 

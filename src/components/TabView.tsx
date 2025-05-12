@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ViewToggle from '@/components/ViewToggle';
+import SortSelector from '@/components/SortSelector';
 
 interface TabViewProps {
   tabs: {
@@ -18,10 +19,15 @@ interface TabViewProps {
   }[];
   viewMode:any;
   setViewMode:any;
+  sortOptions:any;
+  sortOption:any;
+  handleSortChange:any;
   defaultTabId?: string;
 }
 
-const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId, viewMode, setViewMode }) => {
+const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId, viewMode, setViewMode,sortOptions,
+  sortOption,
+  handleSortChange }) => {
   const [activeTabId, setActiveTabId] = useState(defaultTabId || tabs[0]?.id);
   const [touchStart, setTouchStart] = useState<number | null>(null);
 
@@ -78,7 +84,15 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId, viewMode, setView
           </div>
         </div>
       </div>
-
+    {/* Repositioned sort and view toggle controls above tabs */}
+        <div className="flex justify-between items-center mb-4 gap-3">
+          <SortSelector 
+            options={sortOptions}
+            selectedOption={sortOption}
+            onSelectOption={handleSortChange}
+          />
+          <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
+        </div>
       {/* Tab Content */}
       <div 
         className="mt-6 pb-4"
