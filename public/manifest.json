@@ -5,17 +5,17 @@
   "description": "Discover fun activities in Bangalore - your local city guide",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#bf8b7e",
+  "background_color": "#FFF8EA",
   "theme_color": "#1a6c6c",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/icons/icon-192.png",
+      "src": "/lovable-uploads/cfc8749a-d6f2-4de5-8ae8-cb3134f86ad7.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icons/icon-512.png",
+      "src": "/lovable-uploads/cfc8749a-d6f2-4de5-8ae8-cb3134f86ad7.png",
       "sizes": "512x512",
       "type": "image/png"
     }

@@ -541,7 +541,7 @@ useEffect(() => {
               />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-[#323232] mb-3 relative">
-              💛 What-To-Do <span className="text-amber-600">Bangalore</span>
+              💛 what-to-do <span className="text-amber-600">bangalore</span>
             </h1>
           </div>
           <p className="text-sm md:text-base text-gray-600 italic">
@@ -573,7 +573,7 @@ useEffect(() => {
           <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
         </div>
         
-        {/* Modified view controls layout */}
+        {/* Repositioned sort and view toggle controls above tabs */}
         <div className="flex justify-between items-center mb-4 gap-3">
           <SortSelector 
             options={sortOptions}
@@ -583,6 +583,16 @@ useEffect(() => {
           <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
         </div>
 
+        <div className="mb-8">
+          <h2 className="text-xl font-bold mb-4 text-[#323232]">Categories</h2>
+          <CategoryFilter 
+            categories={categories}
+            selectedCategories={selectedCategories}
+            onSelectCategory={handleCategorySelect}
+            onSelectAll={handleSelectAllCategories}
+          />
+        </div>
+        
         {/* Hide QuickFilter but keep it in code */}
         {/* 
         <div className="bg-white rounded-xl p-3 mb-4 shadow-sm overflow-x-auto max-w-[90vw]">
@@ -596,16 +606,6 @@ useEffect(() => {
         */}
 
         <Separator className="my-6 bg-amber-100" />
-
-        <div className="mb-8">
-          <h2 className="text-xl font-bold mb-4 text-[#323232]">Categories</h2>
-          <CategoryFilter 
-            categories={categories}
-            selectedCategories={selectedCategories}
-            onSelectCategory={handleCategorySelect}
-            onSelectAll={handleSelectAllCategories}
-          />
-        </div>
 
         <div className="mb-10">
           <TabView 
