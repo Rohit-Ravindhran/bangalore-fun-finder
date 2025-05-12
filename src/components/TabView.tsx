@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -20,8 +21,7 @@ interface TabViewProps {
   defaultTabId?: string;
 }
 
-const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId,viewMode ,
-  setViewMode }) => {
+const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId, viewMode, setViewMode }) => {
   const [activeTabId, setActiveTabId] = useState(defaultTabId || tabs[0]?.id);
   const [touchStart, setTouchStart] = useState<number | null>(null);
 
@@ -55,9 +55,9 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId,viewMode ,
   return (
     <div className="w-full">
       {/* Tab Header */}
-      <div className="sticky top-[72px] z-30 bg-w2d-cream pt-2 pb-3 shadow-sm">
-        <div className="w-[300px] pb-2 overflow-x-auto">
-          <div className="flex space-x-4 border-b px-2   items-center">
+      <div className="sticky top-[72px] z-30 bg-[#FFF8F0] pt-2 pb-3 shadow-sm">
+        <div className="w-full pb-2 overflow-x-auto">
+          <div className="flex space-x-4 border-b border-amber-200 px-2 items-center">
             {tabs.map(tab => (
               <button
                 key={tab.id}
@@ -65,13 +65,13 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId,viewMode ,
                 className={cn(
                   "px-4 py-3 text-center whitespace-nowrap font-medium text-base transition-all relative",
                   activeTabId === tab.id 
-                    ? "text-w2d-teal border-b-2 border-w2d-teal" 
+                    ? "text-amber-600 border-b-2 border-amber-600" 
                     : "text-gray-500 hover:text-gray-700"
                 )}
               >
                 {tab.title}
                 {activeTabId === tab.id && (
-                  <div className="absolute -bottom-[2px] left-0 right-0 h-0.5 bg-w2d-teal" />
+                  <div className="absolute -bottom-[2px] left-0 right-0 h-0.5 bg-amber-600" />
                 )}
               </button>
             ))}
@@ -86,8 +86,7 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId,viewMode ,
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-                    <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
-     
+        <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
 
         {activeTab && (
           <div className="space-y-4">

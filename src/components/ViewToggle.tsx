@@ -16,16 +16,16 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange }) =>
         type="single" 
         value={currentView} 
         onValueChange={(value) => value && onViewChange(value as 'card' | 'grid')}
-        className=" shadow-sm rounded-full  p-1 text-xs"
+        className="shadow-sm rounded-full p-1 text-xs"
       >
         <ToggleGroupItem 
           value="card" 
           aria-label="Toggle card view" 
           className={cn(
             "rounded-full px-3 py-1 transition-all", 
-            "data-[state=on]:bg-w2d-teal data-[state=on]:text-white",
+            "data-[state=on]:bg-amber-600 data-[state=on]:text-white",
             "data-[state=off]:bg-transparent data-[state=off]:text-gray-500",
-            "data-[state=off]:hover:bg-gray-50 text-xs h-8"
+            "data-[state=off]:hover:bg-amber-50 text-xs h-8"
           )}
         >
           <Layers className="h-2 w-3 mr-1" />
@@ -36,9 +36,9 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange }) =>
           aria-label="Toggle grid view" 
           className={cn(
             "rounded-full px-3 py-1 transition-all",
-            "data-[state=on]:bg-w2d-teal data-[state=on]:text-white",
+            "data-[state=on]:bg-amber-600 data-[state=on]:text-white",
             "data-[state=off]:bg-transparent data-[state=off]:text-gray-500",
-            "data-[state=off]:hover:bg-gray-50 text-xs h-8"
+            "data-[state=off]:hover:bg-amber-50 text-xs h-8"
           )}
         >
           <LayoutGrid className="h-2 w-3 mr-1" />
