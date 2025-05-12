@@ -541,11 +541,11 @@ useEffect(() => {
               />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-[#323232] mb-3 relative">
-              🏙️ Whattodoin <span className="text-amber-600">Bangalore</span>
+              🏙️ Whattodo <span className="text-amber-600">Bangalore</span>
             </h1>
           </div>
           <p className="text-sm md:text-base text-gray-600 italic">
-            Curated with love by Bangalore locals 💛
+            Curated with love from trusted local communities 💛
           </p>
         </div>
 
