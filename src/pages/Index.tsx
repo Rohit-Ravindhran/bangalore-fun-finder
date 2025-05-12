@@ -541,7 +541,7 @@ useEffect(() => {
               />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-[#323232] mb-3 relative">
-              🏙️ Whattodo <span className="text-amber-600">Bangalore</span>
+              💛 ChaloOut <span className="text-amber-600">Bangalore</span>
             </h1>
           </div>
           <p className="text-sm md:text-base text-gray-600 italic">
