@@ -7,35 +7,35 @@
 
 @layer base {
   :root {
-    --background: 48 47% 95%;
-    --foreground: 195 54% 24%;
+    --background: 36 33% 97%;
+    --foreground: 210 6% 13%;
 
     --card: 0 0% 100%;
-    --card-foreground: 195 54% 24%;
+    --card-foreground: 210 6% 13%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 195 54% 24%;
+    --popover-foreground: 210 6% 13%;
 
-    --primary: 195 54% 24%;
+    --primary: 38 93% 40%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 185 50% 80%;
-    --secondary-foreground: 195 54% 24%;
+    --secondary: 38 93% 95%;
+    --secondary-foreground: 38 93% 40%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 24 94% 81%;
-    --accent-foreground: 195 54% 24%;
+    --accent: 38 93% 90%;
+    --accent-foreground: 38 93% 30%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 195 54% 24%;
+    --border: 38 93% 88%;
+    --input: 38 93% 88%;
+    --ring: 38 93% 40%;
 
-    --radius: 0.8rem;
+    --radius: 1rem;
   }
 }
 
@@ -45,7 +45,7 @@
   }
 
   body {
-    @apply bg-w2d-cream text-foreground font-poppins;
+    @apply bg-[#FFF8F0] text-foreground font-poppins;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -54,13 +54,14 @@
 }
 
 .card-shadow {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
 }
 
 .activity-card {
   transform-style: preserve-3d;
   perspective: 1000px;
   transition: transform 0.5s ease-out;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
 }
 
 .swipe-left {
@@ -69,4 +70,74 @@
 
 .swipe-right {
   @apply animate-slide-in-right;
+}
+
+/* Smooth animations */
+.smooth-scroll {
+  scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
+}
+
+/* Micro-animations */
+.hover-lift {
+  transition: transform 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-3px);
+}
+
+/* More playful components */
+.pill-button {
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.pill-button:hover {
+  transform: scale(1.05);
+}
+
+.pill-button:active {
+  transform: scale(0.95);
+}
+
+/* Fix for horizontal scrolling on mobile */
+.overflow-x-auto {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Make sure horizontal scroll elements are visible on mobile */
+@media (max-width: 640px) {
+  .min-w-max {
+    min-width: max-content;
+  }
+}
+
+/* End of list animation */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.end-of-list {
+  animation: fade-in-up 0.5s ease-out;
+}
+
+/* Card swipe animations */
+.swipe-left {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.swipe-right {
+  transform: translateX(100%);
+  opacity: 0;
 }

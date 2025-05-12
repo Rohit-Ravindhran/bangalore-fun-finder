@@ -19,9 +19,9 @@ const Header: React.FC<HeaderProps> = ({ toggleSearch }) => {
 
   return (
     <>
-      <header className="flex items-center justify-between py-5 px-5 bg-w2d-cream sticky top-0 z-40 shadow-sm">
-        <div className="text-2xl font-nunito font-bold text-primary">
-          What2Do <span className="text-w2d-teal">Bangalore</span>
+      <header className="flex items-center justify-between py-5 px-5 bg-[#FFF8F0] sticky top-0 z-40 shadow-sm border-b border-amber-100">
+        <div className="text-2xl font-nunito font-bold text-[#323232]">
+          Whattodoin <span className="text-amber-600">Bangalore</span>
         </div>
         <div className="flex items-center gap-3">
           <TooltipProvider>
@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSearch }) => {
                   variant="outline" 
                   size="icon" 
                   onClick={toggleSearch}
-                  className="h-10 w-10 rounded-full bg-white border-none shadow-sm hover:bg-w2d-light-blue hover:shadow-md transition-all"
+                  className="h-10 w-10 rounded-full bg-white border-none shadow-sm hover:bg-amber-50 hover:shadow-md transition-all"
                 >
                   <Search className="h-5 w-5 text-primary" />
                 </Button>
@@ -49,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSearch }) => {
                   variant="outline" 
                   size="icon" 
                   onClick={handleToggleMenu} 
-                  className="h-10 w-10 rounded-full bg-white border-none shadow-sm hover:bg-w2d-light-blue hover:shadow-md transition-all"
+                  className="h-10 w-10 rounded-full bg-white border-none shadow-sm hover:bg-amber-50 hover:shadow-md transition-all"
                 >
                   <Menu className="h-5 w-5 text-primary" />
                 </Button>

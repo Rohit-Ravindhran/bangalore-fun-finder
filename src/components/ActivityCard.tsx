@@ -125,7 +125,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   return (
     <div 
       className={cn(
-        "activity-card w-full max-w-sm mx-auto bg-white rounded-xl overflow-hidden transition-all duration-300",
+        "activity-card w-full max-w-sm mx-auto bg-white rounded-xl overflow-hidden transition-all duration-300 shadow-lg",
         isLeaving === 'left' ? 'swipe-left' : isLeaving === 'right' ? 'swipe-right' : ''
       )}
       onTouchStart={handleTouchStart}
@@ -135,7 +135,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         <img 
           src={activity.image} 
           alt={activity.title} 
-          className="w-full h-52 object-cover rounded-xl"
+          className="w-full h-52 object-cover"
           loading="lazy"
           onError={handleImageError}
         />
@@ -163,23 +163,23 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         
         <div className="absolute top-2 left-2 flex flex-col gap-1.5">
           {activity.tags && activity.tags.includes('trending') && (
-            <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-sm">🔥 Trending</Badge>
+            <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-md">🔥 Trending</Badge>
           )}
           
           {activity.lastUpdated && activity.lastUpdated.includes("today") && (
-            <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0 shadow-sm">🆕 New</Badge>
+            <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0 shadow-md">🆕 New</Badge>
           )}
         </div>
       </div>
       
-      <div className="p-4">
-        <h3 className="text-lg font-bold mb-1.5">{activity.title}</h3>
+      <div className="p-5">
+        <h3 className="text-lg font-bold mb-2">{activity.title}</h3>
         
-        <div className="flex flex-wrap gap-1.5 mb-3">
+        <div className="flex flex-wrap gap-2 mb-3">
           {activity.categoryNames && activity.categoryNames.slice(0, 3).map((category, index) => (
             <span 
               key={index} 
-              className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2.5 py-0.5"
+              className="inline-block text-xs bg-amber-100 text-amber-800 rounded-full px-3 py-1"
             >
               {category}
             </span>
@@ -188,7 +188,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         
         <div className="grid grid-cols-2 gap-2.5 text-sm text-gray-600 mb-4">
           <div className="flex items-center gap-1.5">
-            <MapPin className="h-4 w-4 text-w2d-teal" />
+            <MapPin className="h-4 w-4 text-amber-600" />
             <span>{activity.location}</span>
           </div>
           <div className="flex items-center font-medium">
@@ -197,14 +197,14 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           
           {activity.date && (
             <div className="flex items-center gap-1.5">
-              <Calendar className="h-4 w-4 text-w2d-teal" />
+              <Calendar className="h-4 w-4 text-amber-600" />
               <span>{activity.date}</span>
             </div>
           )}
           
           {activity.time && (
             <div className="flex items-center gap-1.5">
-              <Clock className="h-4 w-4 text-w2d-teal" />
+              <Clock className="h-4 w-4 text-amber-600" />
               <span>{activity.time}</span>
             </div>
           )}
@@ -214,7 +214,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           <Button 
             variant="outline" 
             size="sm" 
-            className="rounded-full text-xs px-3.5 py-1.5 h-8 hover:bg-w2d-teal hover:text-white border-w2d-teal text-w2d-teal transition-all"
+            className="rounded-full text-xs px-3.5 py-1.5 h-8 hover:bg-amber-600 hover:text-white border-amber-600 text-amber-600 transition-all"
             onClick={handleViewDetails}
           >
             Show me more

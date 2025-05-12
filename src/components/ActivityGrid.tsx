@@ -59,14 +59,14 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       {activities.map((activity) => (
         <Card 
           key={activity.id}
-          className="overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer border-0 shadow-sm rounded-xl transform hover:-translate-y-1 bg-white"
+          className="overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer border-0 shadow-lg rounded-xl transform hover:-translate-y-1 bg-white"
           onClick={() => handleCardClick(activity.id)}
         >
           <div className="relative">
             <img 
               src={activity.image || '/placeholder.svg'} 
               alt={activity.title} 
-              className="w-full h-40 object-cover rounded-t-xl"
+              className="w-full h-48 object-cover rounded-t-xl"
               loading="lazy"
               onError={handleImageError}
             />
@@ -99,42 +99,42 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
             
             <div className="absolute top-2 left-2 flex flex-col gap-1">
               {activity.tags && activity.tags.includes('trending') && (
-                <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-sm">🔥 Trending</Badge>
+                <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-md">🔥 Trending</Badge>
               )}
               
               {activity.lastUpdated && activity.lastUpdated.includes("today") && (
-                <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0 shadow-sm">🆕 New</Badge>
+                <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0 shadow-md">🆕 New</Badge>
               )}
               
               {sectionType === 'All' && activity.tags && activity.tags.includes('ourpick') && (
-                <Badge variant="secondary" className="bg-w2d-yellow text-primary text-xs py-0 shadow-sm">✨ Our Pick</Badge>
+                <Badge variant="secondary" className="bg-amber-500 text-white text-xs py-0 shadow-md">✨ Our Pick</Badge>
               )}
             </div>
           </div>
           
-          <CardContent className="p-4">
-            <h3 className="font-bold text-base mb-1.5 line-clamp-2">{activity.title}</h3>
+          <CardContent className="p-5">
+            <h3 className="font-bold text-lg mb-2 line-clamp-2">{activity.title}</h3>
             
             {activity.description && (
-              <p className="text-xs text-gray-600 mb-2 line-clamp-2">
+              <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                 {truncateText(activity.description, 100)}
               </p>
             )}
             
-            <div className="flex flex-wrap gap-1.5 mb-3">
+            <div className="flex flex-wrap gap-2 mb-4">
               {activity.categoryNames && activity.categoryNames.slice(0, 3).map((category, idx) => (
                 <span 
                   key={idx} 
-                  className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2.5 py-0.5"
+                  className="inline-block text-xs bg-amber-100 text-amber-800 rounded-full px-3 py-1"
                 >
                   {category}
                 </span>
               ))}
             </div>
             
-            <div className="grid grid-cols-2 gap-2.5 text-xs text-gray-500">
+            <div className="grid grid-cols-2 gap-2.5 text-sm text-gray-500">
               <div className="flex items-center gap-1.5">
-                <MapPin className="h-3 w-3 text-w2d-teal" />
+                <MapPin className="h-3 w-3 text-amber-600" />
                 <span>{activity.location}</span>
               </div>
               <div className="flex items-center">
@@ -143,14 +143,14 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
               
               {activity.date && (
                 <div className="flex items-center gap-1.5">
-                  <Calendar className="h-3 w-3 text-w2d-teal" />
+                  <Calendar className="h-3 w-3 text-amber-600" />
                   <span>{activity.date}</span>
                 </div>
               )}
               
               {activity.time && (
                 <div className="flex items-center gap-1.5">
-                  <Clock className="h-3 w-3 text-w2d-teal" />
+                  <Clock className="h-3 w-3 text-amber-600" />
                   <span>{activity.time}</span>
                 </div>
               )}

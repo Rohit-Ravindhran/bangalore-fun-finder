@@ -527,11 +527,11 @@ useEffect(() => {
   const lastUpdatedDate = yesterday.toLocaleDateString();
 
   return (
-    <div className="min-h-screen bg-w2d-cream overflow-x-hidden">
+    <div className="min-h-screen bg-[#FFF8F0] overflow-x-hidden">
       <Header toggleSearch={toggleSearch} />
 
       <main className="container px-4 pt-6 pb-32">
-        <div className="text-center mb-6">
+        <div className="text-center mb-8">
           <div className="relative">
             <div className="absolute inset-0 flex justify-center opacity-5 pointer-events-none">
               <img 
@@ -540,27 +540,21 @@ useEffect(() => {
                 className="h-24 object-contain"
               />
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3 relative">
-              🏙️ Your Weekend in Bangalore, Sorted. 🎉
+            <h1 className="text-3xl md:text-4xl font-bold text-[#323232] mb-3 relative">
+              🏙️ Whattodoin <span className="text-amber-600">Bangalore</span>
             </h1>
           </div>
-          <p className="text-sm md:text-base text-gray-600 italic mb-1">
-            Curated with love from trusted Bangalore local communities 💛
-          </p>
-          <p className="text-xs text-w2d-teal font-medium">
-            👀 Early user preview — fully launching soon
+          <p className="text-sm md:text-base text-gray-600 italic">
+            Curated with love by Bangalore locals 💛
           </p>
         </div>
 
-      
-        
-        <SubscribeSection className="z-10 mb-6" />
+        <SubscribeSection className="z-10 mb-8 shadow-md" />
 
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
 
-
         {searchVisible && (
-          <div className="bg-white rounded-xl p-3 mb-6 shadow-sm">
+          <div className="bg-white rounded-xl p-3 mb-6 shadow-md">
             <div className="flex items-center gap-2">
               <Search className="h-5 w-5 text-gray-400" />
               <Input 
@@ -574,7 +568,7 @@ useEffect(() => {
             </div>
           </div>
         )}
-  <div className="flex justify-end text-xs text-gray-500 mb-3 items-center">
+        <div className="flex justify-end text-xs text-gray-500 mb-3 items-center">
           <Clock className="h-3 w-3 mr-1" />
           <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
         </div>
@@ -586,6 +580,8 @@ useEffect(() => {
           />
         </div>
 
+        {/* Hide QuickFilter but keep it in code */}
+        {/* 
         <div className="bg-white rounded-xl p-3 mb-4 shadow-sm overflow-x-auto max-w-[90vw]">
           <QuickFilter 
             filters={quickFilters}
@@ -594,10 +590,12 @@ useEffect(() => {
             onClearFilters={handleClearFilters}
           />
         </div>
+        */}
 
-        <Separator className="my-4 bg-gray-200" />
+        <Separator className="my-6 bg-amber-100" />
 
-        <div className="mb-5">
+        <div className="mb-8">
+          <h2 className="text-xl font-bold mb-4 text-[#323232]">Categories</h2>
           <CategoryFilter 
             categories={categories}
             selectedCategories={selectedCategories}
