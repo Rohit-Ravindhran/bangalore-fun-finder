@@ -86,7 +86,7 @@ const TabView: React.FC<TabViewProps> = ({ tabs, defaultTabId, viewMode, setView
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <ViewToggle currentView={viewMode} onViewChange={setViewMode} />
+        {/* The view toggle has been moved to index.tsx to be placed alongside sort selector */}
 
         {activeTab && (
           <div className="space-y-4">
