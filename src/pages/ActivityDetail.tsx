@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Clock, Calendar, Share2, Phone, ExternalLink, Heart } from 'lucide-react';
@@ -151,6 +152,8 @@ const ActivityDetail = () => {
       window.open(`https://www.google.com/search?q=${searchQuery}`, '_blank');
     }
   };
+
+  const hasExternalLink = Boolean(activity.mapLink || activity.url);
   
   return (
     <div className="min-h-screen bg-w2d-cream">
@@ -227,7 +230,7 @@ const ActivityDetail = () => {
             <Button 
               className="w-full bg-w2d-teal hover:bg-opacity-90"
               onClick={goToMap}
-              disabled={!activity.mapLink && !activity.url}
+              disabled={!hasExternalLink}
             >
               {activity.mapLink ? "View on Map" : "Visit Website"}
             </Button>

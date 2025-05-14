@@ -24,6 +24,8 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
     console.log('Image failed to load, using placeholder instead');
   };
 
+  const hasExternalLink = Boolean(activity.mapLink || activity.url);
+
   return (
     <Card className="overflow-hidden">
       <div className="relative">
@@ -102,7 +104,7 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
           <Button 
             onClick={handleKnowMore} 
             className="flex items-center gap-2"
-            disabled={!activity.mapLink && !activity.url}
+            disabled={!hasExternalLink}
           >
             Know More <ExternalLink className="h-4 w-4" />
           </Button>
