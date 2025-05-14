@@ -14,6 +14,8 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
   const handleKnowMore = () => {
     if (activity.mapLink) {
       window.open(activity.mapLink, '_blank');
+    } else if (activity.url) {
+      window.open(activity.url, '_blank');
     }
   };
 
@@ -100,7 +102,7 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
           <Button 
             onClick={handleKnowMore} 
             className="flex items-center gap-2"
-            disabled={!activity.mapLink}
+            disabled={!activity.mapLink && !activity.url}
           >
             Know More <ExternalLink className="h-4 w-4" />
           </Button>

@@ -67,7 +67,6 @@ useEffect(() => {
   }
 }, []);
 
-
   useEffect(() => {
     const loadCategories = async () => {
       try {
@@ -541,7 +540,7 @@ useEffect(() => {
               />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-[#323232] mb-3 relative">
-              💛 what-to-do <span className="text-amber-600">bangalore</span>
+              💛 happenings <span className="text-amber-600">bangalore</span>
             </h1>
           </div>
           <p className="text-sm md:text-base text-gray-600 italic">
@@ -605,9 +604,9 @@ useEffect(() => {
             defaultTabId="all" 
             viewMode={viewMode}
             setViewMode={setViewMode}
-              sortOptions={sortOptions}
-  sortOption={sortOption}
-  handleSortChange={handleSortChange}
+            sortOptions={sortOptions}
+            sortOption={sortOption}
+            handleSortChange={handleSortChange}
           />
         </div>
 

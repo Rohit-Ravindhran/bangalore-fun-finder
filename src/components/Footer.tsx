@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
     <footer className="bg-white p-8 border-t">
       <div className="max-w-md mx-auto text-center">
         <p className="text-gray-600 mb-6 text-sm">
-          What2Do in Bangalore is your personal city guide to hidden and trending things to do – curated just for you.
+          Happenings in Bangalore is your personal city guide to hidden and trending things to do – curated just for you.
         </p>
         
         <div className="mb-8 px-4 flex flex-col items-center">
@@ -38,7 +38,7 @@ const Footer: React.FC = () => {
           <Link to="/favorites" className="hover:underline">Favorites</Link>
         </div>
         <p className="text-xs text-gray-500 mt-5">
-          © {new Date().getFullYear()} What2Do Bangalore
+          © {new Date().getFullYear()} Happenings Bangalore
         </p>
       </div>
     </footer>
