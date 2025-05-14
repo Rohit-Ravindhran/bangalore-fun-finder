@@ -135,14 +135,18 @@ const ActivityDetail = () => {
   const goToMap = () => {
     if (activity.mapLink) {
       window.open(activity.mapLink, '_blank');
+    } else if (activity.url) {
+      window.open(activity.url, '_blank');
     }
   };
 
   const goToKnowMore = () => {
     if (activity.mapLink) {
       window.open(activity.mapLink, '_blank');
+    } else if (activity.url) {
+      window.open(activity.url, '_blank');
     } else {
-      // If no map link, search for the activity on Google
+      // If no map link or url, search for the activity on Google
       const searchQuery = encodeURIComponent(`${activity.title} ${activity.location}`);
       window.open(`https://www.google.com/search?q=${searchQuery}`, '_blank');
     }
@@ -223,8 +227,9 @@ const ActivityDetail = () => {
             <Button 
               className="w-full bg-w2d-teal hover:bg-opacity-90"
               onClick={goToMap}
+              disabled={!activity.mapLink && !activity.url}
             >
-              View on Map
+              {activity.mapLink ? "View on Map" : "Visit Website"}
             </Button>
 
             <Button 
