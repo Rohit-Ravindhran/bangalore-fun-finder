@@ -1,4 +1,3 @@
-
 import { categories } from '@/data/mockData';
 import { supabase } from '@/integrations/supabase/client';
 import { Activity } from '@/components/ActivityCard';
@@ -29,7 +28,8 @@ const transformActivities = (activities: any[]): Activity[] => {
     date: act.date || '',
     time: act.time || '',
     mapLink: act.map_link || '',
-    contactInfo: act.contact_info || ''
+    contactInfo: act.contact_info || '',
+    url: act.url || ''
   }));
 };
 
@@ -201,7 +201,8 @@ export async function getActivityById(id: string) {
       date: data.date || '',
       time: data.time || '',
       mapLink: data.map_link || '',
-      contactInfo: data.contact_info || ''
+      contactInfo: data.contact_info || '',
+      url: data.url || ''
     };
   } catch (error) {
     console.error('Error in getActivityById:', error);
@@ -226,7 +227,8 @@ export const createActivity = async (activity: Partial<Activity>) => {
           date: activity.date,
           time: activity.time,
           map_link: activity.mapLink,
-          contact_info: activity.contactInfo
+          contact_info: activity.contactInfo,
+          url: activity.url
         }
       ])
       .select();
@@ -259,7 +261,8 @@ export const updateActivity = async (id: string, activity: Partial<Activity>) =>
         date: activity.date,
         time: activity.time,
         map_link: activity.mapLink,
-        contact_info: activity.contactInfo
+        contact_info: activity.contactInfo,
+        url: activity.url
       })
       .eq('id', parseInt(id, 10))
       .select();
