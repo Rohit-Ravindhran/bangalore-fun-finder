@@ -88,7 +88,8 @@ const TabView = ({
         </TabsContent>
       ))}
       
-      <style jsx global>{`
+      <style>
+        {`
         .no-scrollbar {
           -ms-overflow-style: none;  /* IE and Edge */
           scrollbar-width: none;  /* Firefox */
@@ -96,7 +97,8 @@ const TabView = ({
         .no-scrollbar::-webkit-scrollbar {
           display: none; /* Chrome, Safari, Opera */
         }
-      `}</style>
+        `}
+      </style>
     </Tabs>
   );
 };
