@@ -17,17 +17,17 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange, disa
         type="single" 
         value={currentView} 
         onValueChange={(value) => value && onViewChange(value as 'card' | 'grid')}
-        className="glass-effect rounded-full px-1.5 py-1.5 shadow-md"
+        className="bg-[#fff8ea] rounded-full px-1 py-1 shadow-md"
         disabled={disabled}
       >
         <ToggleGroupItem 
           value="card" 
           aria-label="Card view" 
           className={cn(
-            "flex items-center gap-1 px-3 py-2 rounded-full text-xs transition-all",
-            "data-[state=on]:bg-red-600 data-[state=on]:text-white data-[state=on]:shadow-inner",
-            "data-[state=off]:bg-transparent data-[state=off]:text-white/80",
-            "data-[state=off]:hover:bg-red-600/30"
+            "flex items-center gap-1 px-3 py-1.5 rounded-full text-xs transition-all",
+            "data-[state=on]:bg-amber-400 data-[state=on]:text-white",
+            "data-[state=off]:bg-transparent data-[state=off]:text-gray-500",
+            "data-[state=off]:hover:bg-amber-100"
           )}
         >
           <Layers className="h-3.5 w-3.5" />
@@ -38,10 +38,10 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange, disa
           value="grid" 
           aria-label="Grid view" 
           className={cn(
-            "flex items-center gap-1 px-3 py-2 rounded-full text-xs transition-all",
-            "data-[state=on]:bg-red-600 data-[state=on]:text-white data-[state=on]:shadow-inner",
-            "data-[state=off]:bg-transparent data-[state=off]:text-white/80",
-            "data-[state=off]:hover:bg-red-600/30"
+            "flex items-center gap-1 px-3 py-1.5 rounded-full text-xs transition-all",
+            "data-[state=on]:bg-amber-400 data-[state=on]:text-white",
+            "data-[state=off]:bg-transparent data-[state=off]:text-gray-500",
+            "data-[state=off]:hover:bg-amber-100"
           )}
         >
           <LayoutGrid className="h-3.5 w-3.5" />

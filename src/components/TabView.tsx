@@ -41,14 +41,12 @@ const TabView = ({
   return (
     <Tabs defaultValue={defaultTabId} onValueChange={setActiveTab} className="w-full">
       <div className="flex justify-between items-center mb-4">
-        <TabsList className="glass-effect border-0 overflow-x-auto max-w-[100%] w-full flex-nowrap no-scrollbar rounded-xl">
+        <TabsList className="bg-transparent border border-gray-200 overflow-x-auto max-w-[100%] w-full flex-nowrap no-scrollbar">
           {tabs.map((tab) => (
             <TabsTrigger 
               key={tab.id} 
               value={tab.id}
-              className="relative px-2 sm:px-4 py-2 flex-shrink-0 text-xs sm:text-sm whitespace-nowrap 
-                data-[state=active]:bg-red-600/90 data-[state=active]:shadow-md data-[state=active]:text-white
-                text-white/80 hover:text-white"
+              className="relative px-2 sm:px-4 py-1.5 flex-shrink-0 text-xs sm:text-sm whitespace-nowrap data-[state=active]:bg-amber-50 data-[state=active]:shadow-none data-[state=active]:text-amber-900"
             >
               {tab.title}
             </TabsTrigger>
@@ -81,7 +79,7 @@ const TabView = ({
                 variant="outline" 
                 onClick={tab.onLoadMore}
                 disabled={tab.isLoading}
-                className="text-sm py-6 px-6 bg-white/20 border-white/30 text-white hover:bg-white/30 physical-button"
+                className="text-sm"
               >
                 {tab.isLoading ? 'Loading...' : `Load More (${tab.count.loaded} of ${tab.count.total})`}
               </Button>
@@ -90,8 +88,7 @@ const TabView = ({
         </TabsContent>
       ))}
       
-      <style>
-        {`
+      <style jsx global>{`
         .no-scrollbar {
           -ms-overflow-style: none;  /* IE and Edge */
           scrollbar-width: none;  /* Firefox */
@@ -99,8 +96,7 @@ const TabView = ({
         .no-scrollbar::-webkit-scrollbar {
           display: none; /* Chrome, Safari, Opera */
         }
-        `}
-      </style>
+      `}</style>
     </Tabs>
   );
 };
