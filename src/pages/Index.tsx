@@ -58,14 +58,19 @@ const Index = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const { toast } = useToast();
 
+  // Custom filters for the weekend
+  const customQuickFilters = [
+    { id: 'free', label: 'Free' },
+    { id: 'today', label: 'Today' },
+    { id: 'weekend', label: 'This Weekend (Exclusive)' }
+  ];
 
-
-useEffect(() => {
-  const badge = document.getElementById('lovable-badge');
-  if (badge) {
-    badge.style.display = 'none';
-  }
-}, []);
+  useEffect(() => {
+    const badge = document.getElementById('lovable-badge');
+    if (badge) {
+      badge.style.display = 'none';
+    }
+  }, []);
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -155,7 +160,58 @@ useEffect(() => {
             );
           }
           
-          // Add more quick filter implementations as needed
+          // Add weekend filter
+          if (selectedQuickFilters.has('weekend')) {
+            const now = new Date();
+            const currentDay = now.getDay(); // 0 is Sunday, 6 is Saturday
+            
+            // Calculate the next Saturday and Sunday dates
+            const nextSaturday = new Date(now);
+            const nextSunday = new Date(now);
+            
+            // If today is already Saturday or Sunday, use today's date
+            if (currentDay === 6) { // Saturday
+              nextSaturday.setDate(now.getDate());
+              nextSunday.setDate(now.getDate() + 1);
+            } else if (currentDay === 0) { // Sunday
+              nextSaturday.setDate(now.getDate() - 1);
+              nextSunday.setDate(now.getDate());
+            } else {
+              // Calculate days until next Saturday
+              const daysUntilSaturday = 6 - currentDay;
+              nextSaturday.setDate(now.getDate() + daysUntilSaturday);
+              nextSunday.setDate(now.getDate() + daysUntilSaturday + 1);
+            }
+            
+            // Format dates for comparison (MM/DD/YYYY or similar depending on locale)
+            const saturdayString = nextSaturday.toLocaleDateString();
+            const sundayString = nextSunday.toLocaleDateString();
+            
+            // Filter activities by weekend dates
+            filteredAll = filteredAll.filter(activity => {
+              return activity.date === saturdayString || 
+                     activity.date === sundayString ||
+                     (activity.date && activity.date.toLowerCase().includes('saturday')) ||
+                     (activity.date && activity.date.toLowerCase().includes('sunday')) ||
+                     (activity.date && activity.date.toLowerCase().includes('weekend'));
+            });
+            
+            filteredUnique = filteredUnique.filter(activity => {
+              return activity.date === saturdayString || 
+                     activity.date === sundayString ||
+                     (activity.date && activity.date.toLowerCase().includes('saturday')) ||
+                     (activity.date && activity.date.toLowerCase().includes('sunday')) ||
+                     (activity.date && activity.date.toLowerCase().includes('weekend'));
+            });
+            
+            filteredDateIdeas = filteredDateIdeas.filter(activity => {
+              return activity.date === saturdayString || 
+                     activity.date === sundayString ||
+                     (activity.date && activity.date.toLowerCase().includes('saturday')) ||
+                     (activity.date && activity.date.toLowerCase().includes('sunday')) ||
+                     (activity.date && activity.date.toLowerCase().includes('weekend'));
+            });
+          }
         }
         
         // Apply search query
@@ -584,20 +640,32 @@ useEffect(() => {
           />
         </div>
         
-        {/* Hide QuickFilter but keep it in code */}
-        {/* 
+        {/* Make the QuickFilter visible */}
         <div className="bg-white rounded-xl p-3 mb-4 shadow-sm overflow-x-auto max-w-[90vw]">
           <QuickFilter 
-            filters={quickFilters}
+            filters={customQuickFilters}
             selectedFilters={selectedQuickFilters}
             onSelectFilter={handleQuickFilterSelect}
             onClearFilters={handleClearFilters}
           />
         </div>
-        */}
 
         <Separator className="my-6 bg-amber-100" />
 
+        {/* Position sort and switch controls above tab content */}
+        <div className="flex justify-between items-center mb-4">
+          <SortSelector 
+            options={sortOptions} 
+            selectedOption={sortOption} 
+            onSelect={handleSortChange} 
+          />
+          <ViewToggle 
+            selectedMode={viewMode} 
+            onSelect={setViewMode} 
+            disabled={currentTab !== 'all'} 
+          />
+        </div>
+        
         <div className="mb-10">
           <TabView 
             tabs={tabs} 
@@ -607,6 +675,7 @@ useEffect(() => {
             sortOptions={sortOptions}
             sortOption={sortOption}
             handleSortChange={handleSortChange}
+            hideControls={true} // Hide controls since we moved them above
           />
         </div>
 

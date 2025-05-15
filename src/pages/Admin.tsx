@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -432,6 +431,22 @@ const created = await createActivity(activityData as Omit<Activity, 'id' | 'last
                   onChange={handleInputChange}
                   placeholder="https://maps.google.com/..."
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Google Maps or other location link that opens in the map view
+                </p>
+              </div>
+              
+              <div>
+                <label className="block mb-1 text-sm font-medium">Website URL</label>
+                <Input
+                  name="url"
+                  value={currentActivity.url || ''}
+                  onChange={handleInputChange}
+                  placeholder="https://example.com/event"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Official website of the activity or event
+                </p>
               </div>
               
               <div>
