@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
-import CategoryFilter from '@/components/CategoryFilter';
+import HeroSection from '@/components/HeroSection';
 import QuickFilter from '@/components/QuickFilter';
 import ActivityCard from '@/components/ActivityCard';
 import ActivityGrid from '@/components/ActivityGrid';
@@ -11,7 +10,6 @@ import { SortSelectorWithLegacyProps as SortSelector } from '@/components/SortSe
 import Footer from '@/components/Footer';
 import InstallPrompt from '@/components/InstallPrompt';
 import SubscribePopup from '@/components/SubscribePopup';
-import SubscribeSection from '@/components/SubscribeSection';
 import TabView from '@/components/TabView';
 import { quickFilters } from '@/data/mockData';
 import { 
@@ -20,7 +18,7 @@ import {
   fetchCategories 
 } from '@/services/activityService';
 import { useToast } from '@/components/ui/use-toast';
-import { Dice6, Share2, Search, Loader2, Clock } from 'lucide-react';
+import { Dice6, Share2, Search, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Activity } from '@/components/ActivityCard';
@@ -521,10 +519,10 @@ const Index = () => {
 
   // Define sort options
   const sortOptions = [
-    { id: 'popular', label: '🔥 Popular' },
-    { id: 'price_low_high', label: '💸 Budget low to high' },
-    { id: 'price_high_low', label: '💸 Budget high to low' },
-    { id: 'newest', label: '🆕 New' }
+    { id: 'popular', label: 'Popular' },
+    { id: 'price_low_high', label: 'Budget low to high' },
+    { id: 'price_high_low', label: 'Budget high to low' },
+    { id: 'newest', label: 'New' }
   ];
 
   // Prepare tab configuration
@@ -586,26 +584,13 @@ const Index = () => {
     <div className="min-h-screen bg-[#FFF8F0] overflow-x-hidden">
       <Header toggleSearch={toggleSearch} />
 
-      <main className="container px-4 pt-6 pb-32">
-        <div className="text-center mb-8">
-          <div className="relative">
-            <div className="absolute inset-0 flex justify-center opacity-5 pointer-events-none">
-              <img 
-                src="/placeholder.svg" 
-                alt="Bangalore Skyline" 
-                className="h-24 object-contain"
-              />
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-[#323232] mb-3 relative">
-              💛 happenings <span className="text-amber-600">bangalore</span>
-            </h1>
-          </div>
-          <p className="text-sm md:text-base text-gray-600 italic">
-            Curated with love from trusted local communities 💛
-          </p>
-        </div>
-
-        <SubscribeSection className="z-10 mb-8 shadow-md" />
+      <main className="container px-4 pt-2 pb-32">
+        {/* Replace the old hero section with our new component */}
+        <HeroSection 
+          onSelectCategory={handleCategorySelect}
+          selectedCategories={selectedCategories}
+          onSelectAll={handleSelectAllCategories}
+        />
 
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
 
@@ -624,22 +609,6 @@ const Index = () => {
             </div>
           </div>
         )}
-        <div className="flex justify-end text-xs text-gray-500 mb-3 items-center">
-          <Clock className="h-3 w-3 mr-1" />
-          <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
-        </div>
-        
-    
-
-        <div className="mb-8">
-          <h2 className="text-xl font-bold mb-4 text-[#323232]">Categories</h2>
-          <CategoryFilter 
-            categories={categories}
-            selectedCategories={selectedCategories}
-            onSelectCategory={handleCategorySelect}
-            onSelectAll={handleSelectAllCategories}
-          />
-        </div>
         
         {/* Make the QuickFilter visible */}
         <div className="bg-white rounded-xl p-3 mb-4 shadow-sm overflow-x-auto max-w-[90vw]">
