@@ -26,6 +26,54 @@ import { Separator } from '@/components/ui/separator';
 
 const ITEMS_PER_PAGE = 6;
 
+// Helper function to check if a date is today
+const isToday = (dateString: string) => {
+  const today = new Date().toLocaleDateString();
+  return dateString === today || 
+         (dateString && dateString.toLowerCase().includes('today'));
+};
+
+// Helper function to check if a date is this weekend
+const isThisWeekend = () => {
+  const now = new Date();
+  const currentDay = now.getDay(); // 0 is Sunday, 6 is Saturday
+  const nextSaturday = new Date(now);
+  const nextSunday = new Date(now);
+  
+  // If today is already Saturday or Sunday, use today's date
+  if (currentDay === 6) { // Saturday
+    nextSaturday.setDate(now.getDate());
+    nextSunday.setDate(now.getDate() + 1);
+  } else if (currentDay === 0) { // Sunday
+    nextSaturday.setDate(now.getDate() - 1);
+    nextSunday.setDate(now.getDate());
+  } else {
+    // Calculate days until next Saturday
+    const daysUntilSaturday = 6 - currentDay;
+    nextSaturday.setDate(now.getDate() + daysUntilSaturday);
+    nextSunday.setDate(now.getDate() + daysUntilSaturday + 1);
+  }
+  
+  // Format dates for comparison
+  return {
+    saturdayString: nextSaturday.toLocaleDateString(),
+    sundayString: nextSunday.toLocaleDateString()
+  };
+};
+
+// Helper function to check if an activity is this weekend
+const isWeekend = (dateString: string) => {
+  if (!dateString) return false;
+  
+  const { saturdayString, sundayString } = isThisWeekend();
+  
+  return dateString === saturdayString || 
+         dateString === sundayString ||
+         dateString.toLowerCase().includes('saturday') ||
+         dateString.toLowerCase().includes('sunday') ||
+         dateString.toLowerCase().includes('weekend');
+};
+
 const Index = () => {
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
   const [selectedQuickFilters, setSelectedQuickFilters] = useState<Set<string>>(new Set());
@@ -132,83 +180,29 @@ const Index = () => {
         
         // Apply quick filters
         if (selectedQuickFilters.size > 0) {
-          const today = new Date().toLocaleDateString();
-          
           if (selectedQuickFilters.has('free')) {
             filteredAll = filteredAll.filter(activity => 
-              activity.priceRange.toLowerCase().includes('free')
+              activity.priceRange?.toLowerCase().includes('free')
             );
             filteredUnique = filteredUnique.filter(activity => 
-              activity.priceRange.toLowerCase().includes('free')
+              activity.priceRange?.toLowerCase().includes('free')
             );
             filteredDateIdeas = filteredDateIdeas.filter(activity => 
-              activity.priceRange.toLowerCase().includes('free')
+              activity.priceRange?.toLowerCase().includes('free')
             );
           }
           
           if (selectedQuickFilters.has('today')) {
-            filteredAll = filteredAll.filter(activity => 
-              activity.date === today || (activity.date && activity.date.toLowerCase().includes('today'))
-            );
-            filteredUnique = filteredUnique.filter(activity => 
-              activity.date === today || (activity.date && activity.date.toLowerCase().includes('today'))
-            );
-            filteredDateIdeas = filteredDateIdeas.filter(activity => 
-              activity.date === today || (activity.date && activity.date.toLowerCase().includes('today'))
-            );
+            filteredAll = filteredAll.filter(activity => isToday(activity.date || ''));
+            filteredUnique = filteredUnique.filter(activity => isToday(activity.date || ''));
+            filteredDateIdeas = filteredDateIdeas.filter(activity => isToday(activity.date || ''));
           }
           
           // Add weekend filter
           if (selectedQuickFilters.has('weekend')) {
-            const now = new Date();
-            const currentDay = now.getDay(); // 0 is Sunday, 6 is Saturday
-            
-            // Calculate the next Saturday and Sunday dates
-            const nextSaturday = new Date(now);
-            const nextSunday = new Date(now);
-            
-            // If today is already Saturday or Sunday, use today's date
-            if (currentDay === 6) { // Saturday
-              nextSaturday.setDate(now.getDate());
-              nextSunday.setDate(now.getDate() + 1);
-            } else if (currentDay === 0) { // Sunday
-              nextSaturday.setDate(now.getDate() - 1);
-              nextSunday.setDate(now.getDate());
-            } else {
-              // Calculate days until next Saturday
-              const daysUntilSaturday = 6 - currentDay;
-              nextSaturday.setDate(now.getDate() + daysUntilSaturday);
-              nextSunday.setDate(now.getDate() + daysUntilSaturday + 1);
-            }
-            
-            // Format dates for comparison (MM/DD/YYYY or similar depending on locale)
-            const saturdayString = nextSaturday.toLocaleDateString();
-            const sundayString = nextSunday.toLocaleDateString();
-            
-            // Filter activities by weekend dates
-            filteredAll = filteredAll.filter(activity => {
-              return activity.date === saturdayString || 
-                     activity.date === sundayString ||
-                     (activity.date && activity.date.toLowerCase().includes('saturday')) ||
-                     (activity.date && activity.date.toLowerCase().includes('sunday')) ||
-                     (activity.date && activity.date.toLowerCase().includes('weekend'));
-            });
-            
-            filteredUnique = filteredUnique.filter(activity => {
-              return activity.date === saturdayString || 
-                     activity.date === sundayString ||
-                     (activity.date && activity.date.toLowerCase().includes('saturday')) ||
-                     (activity.date && activity.date.toLowerCase().includes('sunday')) ||
-                     (activity.date && activity.date.toLowerCase().includes('weekend'));
-            });
-            
-            filteredDateIdeas = filteredDateIdeas.filter(activity => {
-              return activity.date === saturdayString || 
-                     activity.date === sundayString ||
-                     (activity.date && activity.date.toLowerCase().includes('saturday')) ||
-                     (activity.date && activity.date.toLowerCase().includes('sunday')) ||
-                     (activity.date && activity.date.toLowerCase().includes('weekend'));
-            });
+            filteredAll = filteredAll.filter(activity => isWeekend(activity.date || ''));
+            filteredUnique = filteredUnique.filter(activity => isWeekend(activity.date || ''));
+            filteredDateIdeas = filteredDateIdeas.filter(activity => isWeekend(activity.date || ''));
           }
         }
         
@@ -245,6 +239,9 @@ const Index = () => {
         setAllActivitiesTotal(filteredAll.length);
         setUniqueExperiencesTotal(filteredUnique.length);
         setDateIdeasTotal(filteredDateIdeas.length);
+        
+        // Reset current activity index when filters change
+        setCurrentActivityIndex(0);
       } catch (error) {
         console.error('Error loading sections:', error);
         toast({

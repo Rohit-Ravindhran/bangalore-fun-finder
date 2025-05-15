@@ -24,28 +24,28 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange, disa
           value="card" 
           aria-label="Card view" 
           className={cn(
-            "flex items-center gap-1 px-4 py-2 rounded-full text-sm transition-all",
+            "flex items-center gap-1 px-3 py-1.5 rounded-full text-xs transition-all",
             "data-[state=on]:bg-amber-400 data-[state=on]:text-white",
             "data-[state=off]:bg-transparent data-[state=off]:text-gray-500",
             "data-[state=off]:hover:bg-amber-100"
           )}
         >
-          <Layers className="h-4 w-4" />
-          <span>Swipe</span>
+          <Layers className="h-3.5 w-3.5" />
+          <span className="hidden sm:inline">Swipe</span>
         </ToggleGroupItem>
 
         <ToggleGroupItem 
           value="grid" 
           aria-label="Grid view" 
           className={cn(
-            "flex items-center gap-1 px-4 py-2 rounded-full text-sm transition-all",
+            "flex items-center gap-1 px-3 py-1.5 rounded-full text-xs transition-all",
             "data-[state=on]:bg-amber-400 data-[state=on]:text-white",
             "data-[state=off]:bg-transparent data-[state=off]:text-gray-500",
             "data-[state=off]:hover:bg-amber-100"
           )}
         >
-          <LayoutGrid className="h-4 w-4" />
-          <span>Browse</span>
+          <LayoutGrid className="h-3.5 w-3.5" />
+          <span className="hidden sm:inline">Browse</span>
         </ToggleGroupItem>
       </ToggleGroup>
     </div>
