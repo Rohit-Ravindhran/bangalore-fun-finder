@@ -15,6 +15,9 @@ interface CategoryFilterProps {
   selectedCategories: Set<string>;
   onSelectCategory: (categoryId: string) => void;
   onSelectAll: () => void;
+  quickFilters?: { id: string; label: string }[];
+  selectedQuickFilters?: Set<string>;
+  onSelectQuickFilter?: (filterId: string) => void;
 }
 
 const CategoryFilter: React.FC<CategoryFilterProps> = ({
@@ -22,6 +25,9 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
   selectedCategories,
   onSelectCategory,
   onSelectAll,
+  quickFilters = [],
+  selectedQuickFilters = new Set(),
+  onSelectQuickFilter = () => {},
 }) => {
   const allSelected = selectedCategories.size === 0;
 
@@ -39,10 +45,27 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
                 : "bg-white text-primary font-normal hover:bg-amber-50 border border-amber-100"
             )}
           >
-            <span>🔍</span>
             <span>All</span>
           </button>
 
+          {/* Quick filters */}
+          {quickFilters.map((filter) => (
+            <button
+              key={filter.id}
+              onClick={() => onSelectQuickFilter(filter.id)}
+              className={cn(
+                "rounded-full py-2.5 px-5 text-sm transition-all whitespace-nowrap",
+                "transform hover:scale-105 active:scale-95 duration-150 shadow-sm",
+                selectedQuickFilters.has(filter.id)
+                  ? "bg-w2d-teal text-white font-medium"
+                  : "bg-white text-primary font-normal hover:bg-amber-50 border border-amber-100"
+              )}
+            >
+              <span>{filter.label}</span>
+            </button>
+          ))}
+
+          {/* Category filters */}
           {categories.map((category) => (
             <button
               key={category.id}
