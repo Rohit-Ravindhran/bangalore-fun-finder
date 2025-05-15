@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { LayoutGrid, Layers } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
@@ -6,9 +7,10 @@ import { cn } from '@/lib/utils';
 interface ViewToggleProps {
   currentView: 'card' | 'grid';
   onViewChange: (view: 'card' | 'grid') => void;
+  disabled?: boolean;
 }
 
-const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange }) => {
+const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange, disabled = false }) => {
   return (
     <div className="flex justify-center my-4">
       <ToggleGroup 
@@ -16,6 +18,7 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange }) =>
         value={currentView} 
         onValueChange={(value) => value && onViewChange(value as 'card' | 'grid')}
         className="bg-[#fff8ea] rounded-full px-1 py-1 shadow-md"
+        disabled={disabled}
       >
         <ToggleGroupItem 
           value="card" 
@@ -47,6 +50,15 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange }) =>
       </ToggleGroup>
     </div>
   );
+};
+
+// Add these named exports for backward compatibility
+export const ViewToggleWithLegacyProps: React.FC<{
+  selectedMode: 'card' | 'grid';
+  onSelect: (mode: 'card' | 'grid') => void;
+  disabled?: boolean;
+}> = ({ selectedMode, onSelect, disabled }) => {
+  return <ViewToggle currentView={selectedMode} onViewChange={onSelect} disabled={disabled} />;
 };
 
 export default ViewToggle;

@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import ViewToggle from '@/components/ViewToggle';
-import SortSelector from '@/components/SortSelector';
+import { ViewToggleWithLegacyProps as ViewToggle } from '@/components/ViewToggle';
+import { SortSelectorWithLegacyProps as SortSelector } from '@/components/SortSelector';
 import { Button } from '@/components/ui/button';
 
 interface TabViewProps {
