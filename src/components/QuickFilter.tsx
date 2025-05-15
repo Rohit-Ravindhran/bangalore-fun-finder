@@ -4,10 +4,12 @@ import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
+// This component is no longer used as the filters
+// have been moved to the CategoryFilter component
 export interface QuickFilterItem {
   id: string;
   label: string;
-  tagId?: number; // Added tagId field for mapping to database tag IDs
+  tagId?: number;
 }
 
 interface QuickFilterProps {
@@ -24,9 +26,8 @@ const QuickFilter: React.FC<QuickFilterProps> = ({
   onClearFilters,
 }) => {
   return (
-  <ScrollArea className="w-full py-1 overflow-x-auto">
-  <div className="flex space-x-2.5 px-3 min-w-full sm:min-w-max items-center max-w-[300px]  overflow-x-auto">
-
+    <ScrollArea className="w-full py-1 overflow-x-auto">
+      <div className="flex space-x-2.5 px-3 min-w-full sm:min-w-max items-center max-w-[300px] overflow-x-auto">
         {selectedFilters.size > 0 && (
           <button
             onClick={onClearFilters}

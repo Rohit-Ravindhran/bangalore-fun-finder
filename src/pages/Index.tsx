@@ -1,8 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
-import QuickFilter from '@/components/QuickFilter';
 import ActivityCard from '@/components/ActivityCard';
 import ActivityGrid from '@/components/ActivityGrid';
 import ShuffleButton from '@/components/ShuffleButton';
@@ -13,7 +11,6 @@ import InstallPrompt from '@/components/InstallPrompt';
 import SubscribePopup from '@/components/SubscribePopup';
 import SubscribeSection from '@/components/SubscribeSection';
 import TabView from '@/components/TabView';
-import { quickFilters } from '@/data/mockData';
 import { 
   getFilteredActivitiesBySection, 
   getFilteredActivities, 
@@ -63,7 +60,7 @@ const Index = () => {
   const customQuickFilters = [
     { id: 'free', label: 'Free' },
     { id: 'today', label: 'Today' },
-    { id: 'weekend', label: 'This Weekend (Exclusive)' }
+    { id: 'weekend', label: 'This Weekend' }
   ];
 
   useEffect(() => {
@@ -597,11 +594,11 @@ const Index = () => {
               />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-[#323232] mb-3 relative">
-              💛 happenings <span className="text-amber-600">bangalore</span>
+              happenings <span className="text-amber-600">bangalore</span>
             </h1>
           </div>
           <p className="text-sm md:text-base text-gray-600 italic">
-            Curated with love from trusted local communities 💛
+            Curated with love from trusted local communities
           </p>
         </div>
 
@@ -629,8 +626,6 @@ const Index = () => {
           <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
         </div>
         
-    
-
         <div className="mb-8">
           <h2 className="text-xl font-bold mb-4 text-[#323232]">Categories</h2>
           <CategoryFilter 
@@ -638,16 +633,9 @@ const Index = () => {
             selectedCategories={selectedCategories}
             onSelectCategory={handleCategorySelect}
             onSelectAll={handleSelectAllCategories}
-          />
-        </div>
-        
-        {/* Make the QuickFilter visible */}
-        <div className="bg-white rounded-xl p-3 mb-4 shadow-sm overflow-x-auto max-w-[90vw]">
-          <QuickFilter 
-            filters={customQuickFilters}
-            selectedFilters={selectedQuickFilters}
-            onSelectFilter={handleQuickFilterSelect}
-            onClearFilters={handleClearFilters}
+            quickFilters={customQuickFilters}
+            selectedQuickFilters={selectedQuickFilters}
+            onSelectQuickFilter={handleQuickFilterSelect}
           />
         </div>
 
