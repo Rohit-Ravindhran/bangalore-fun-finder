@@ -131,7 +131,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   return (
     <div 
       className={cn(
-        "activity-card w-full max-w-sm mx-auto bg-white rounded-xl overflow-hidden transition-all duration-300 shadow-lg",
+        "activity-card w-full max-w-sm mx-auto glass-card rounded-xl overflow-hidden transition-all duration-300",
         isLeaving === 'left' ? 'swipe-left' : isLeaving === 'right' ? 'swipe-right' : ''
       )}
       onTouchStart={handleTouchStart}
@@ -150,7 +150,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
             variant="ghost" 
             size="icon" 
             className={cn(
-              "rounded-full backdrop-blur-sm w-8 h-8 transition-all",
+              "rounded-full backdrop-blur-sm w-9 h-9 transition-all physical-button",
               liked ? "bg-red-500/90 text-white" : "bg-white/80 text-gray-600 hover:bg-white/90"
             )}
             onClick={handleLike}
@@ -160,7 +160,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           <Button 
             variant="ghost" 
             size="icon" 
-            className="rounded-full bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-white/90 w-8 h-8 transition-all"
+            className="rounded-full bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-white/90 w-9 h-9 transition-all physical-button"
             onClick={handleShare}
           >
             <Share2 className="h-4 w-4" />
@@ -182,8 +182,8 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         <h3 className="text-lg font-bold mb-2">{activity.title}</h3>
         
         {activity.description && (
-          <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-            {truncateText(activity.description, 120)}
+          <p className="text-sm text-gray-600 mb-3 line-clamp-3">
+            {activity.description}
           </p>
         )}
         
@@ -200,7 +200,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         
         <div className="grid grid-cols-2 gap-2.5 text-sm text-gray-600 mb-4">
           <div className="flex items-center gap-1.5">
-            <MapPin className="h-4 w-4 text-amber-600" />
+            <MapPin className="h-4 w-4 text-red-500" />
             <span>{activity.location}</span>
           </div>
           <div className="flex items-center font-medium">
@@ -209,14 +209,14 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           
           {activity.date && (
             <div className="flex items-center gap-1.5">
-              <Calendar className="h-4 w-4 text-amber-600" />
+              <Calendar className="h-4 w-4 text-red-500" />
               <span>{activity.date}</span>
             </div>
           )}
           
           {activity.time && (
             <div className="flex items-center gap-1.5">
-              <Clock className="h-4 w-4 text-amber-600" />
+              <Clock className="h-4 w-4 text-red-500" />
               <span>{activity.time}</span>
             </div>
           )}
@@ -226,7 +226,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           <Button 
             variant="outline" 
             size="sm" 
-            className="rounded-full text-xs px-3.5 py-1.5 h-8 hover:bg-amber-600 hover:text-white border-amber-600 text-amber-600 transition-all"
+            className="rounded-full text-xs px-4 py-2 h-9 hover:bg-red-600 hover:text-white border-red-600 text-red-600 transition-all physical-button"
             onClick={handleViewDetails}
           >
             Show me more
@@ -236,7 +236,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
             <Button 
               variant="ghost" 
               size="icon" 
-              className="rounded-full bg-gray-100 w-8 h-8 hover:bg-gray-200 transition-all" 
+              className="rounded-full bg-gray-100 w-9 h-9 hover:bg-gray-200 transition-all physical-button" 
               onClick={handleSwipeLeft}
             >
               <ArrowLeft className="h-3.5 w-3.5" />
@@ -244,7 +244,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
             <Button 
               variant="ghost" 
               size="icon" 
-              className="rounded-full bg-gray-100 w-8 h-8 hover:bg-gray-200 transition-all" 
+              className="rounded-full bg-gray-100 w-9 h-9 hover:bg-gray-200 transition-all physical-button" 
               onClick={handleSwipeRight}
             >
               <ArrowRight className="h-3.5 w-3.5" />

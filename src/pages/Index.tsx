@@ -17,7 +17,7 @@ import {
   fetchCategories 
 } from '@/services/activityService';
 import { useToast } from '@/components/ui/use-toast';
-import { Dice6, Share2, Search, Loader2, Clock } from 'lucide-react';
+import { Dice6, Share2, Search, Loader2, Clock, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Activity } from '@/components/ActivityCard';
@@ -476,14 +476,14 @@ const Index = () => {
     if (isLoading) {
       return (
         <div className="flex justify-center items-center py-20">
-          <Loader2 className="h-10 w-10 animate-spin text-w2d-teal" />
+          <Loader2 className="h-10 w-10 animate-spin text-red-500" />
         </div>
       );
     }
 
     if (activities.length === 0) {
       return (
-        <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
+        <div className="glass-card p-8 text-center my-8">
           <h3 className="text-xl font-bold mb-2">No activities found</h3>
           <p className="text-gray-600">Try a different filter</p>
         </div>
@@ -551,7 +551,7 @@ const Index = () => {
       content: dateIdeas.length > 0 
         ? renderTabContent(dateIdeas, 'Date Ideas')
         : (
-          <div className="bg-white rounded-2xl p-8 text-center shadow-sm border-dashed border-2 border-gray-300">
+          <div className="glass-card p-8 text-center my-8 border-dashed border-2 border-white/30">
             <h3 className="text-xl font-bold mb-2">Coming Soon</h3>
             <p className="text-gray-600">Sign up to get updates!</p>
           </div>
@@ -577,54 +577,52 @@ const Index = () => {
   const lastUpdatedDate = yesterday.toLocaleDateString();
 
   return (
-    <div className="min-h-screen bg-[#FFF8F0] overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden">
       <Header toggleSearch={toggleSearch} />
 
       <main className="container px-4 pt-6 pb-32">
         <div className="text-center mb-8">
-          <div className="relative">
-            <div className="absolute inset-0 flex justify-center opacity-5 pointer-events-none">
-              <img 
-                src="/placeholder.svg" 
-                alt="Bangalore Skyline" 
-                className="h-24 object-contain"
-              />
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-[#323232] mb-3 relative">
-              happenings <span className="text-amber-600">bangalore</span>
-            </h1>
+          <h1 className="text-4xl md:text-5xl font-black text-white mb-4 retro-title uppercase tracking-tighter">
+            SWIPE YOUR<br/>WEEKEND PLAN
+          </h1>
+          <h2 className="text-2xl md:text-3xl font-bold text-white retro-title">
+            <span className="text-white">BANGALORE</span>
+          </h2>
+          <div className="inline-flex items-center bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full mt-4">
+            <Target className="h-4 w-4 text-white mr-1" />
+            <p className="text-sm text-white">
+              Curated with love from local communities
+            </p>
           </div>
-          <p className="text-sm md:text-base text-gray-600 italic">
-            Curated with love from trusted local communities
-          </p>
         </div>
 
-        <SubscribeSection className="z-10 mb-8 shadow-md" />
+        <SubscribeSection className="z-10 mb-8 shadow-xl glass-effect" />
 
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
 
         {searchVisible && (
-          <div className="bg-white rounded-xl p-3 mb-6 shadow-md">
-            <div className="flex items-center gap-2">
-              <Search className="h-5 w-5 text-gray-400" />
+          <div className="glass-card mb-6 relative overflow-hidden">
+            <div className="flex items-center gap-2 p-3">
+              <Search className="h-5 w-5 text-white" />
               <Input 
                 id="search-input"
                 type="text" 
                 placeholder="Search activities..." 
-                className="border-0 focus-visible:ring-0"
+                className="border-0 focus-visible:ring-0 bg-transparent text-white placeholder:text-white/70"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
           </div>
         )}
-        <div className="flex justify-end text-xs text-gray-500 mb-3 items-center">
+        
+        <div className="flex justify-end text-xs text-white mb-3 items-center">
           <Clock className="h-3 w-3 mr-1" />
           <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
         </div>
         
         <div className="mb-8">
-          <h2 className="text-xl font-bold mb-4 text-[#323232]">Categories</h2>
+          <h2 className="text-xl font-bold mb-4 text-white">Categories</h2>
           <CategoryFilter 
             categories={categories}
             selectedCategories={selectedCategories}
@@ -636,7 +634,7 @@ const Index = () => {
           />
         </div>
 
-        <Separator className="my-6 bg-amber-100" />
+        <Separator className="my-6 bg-white/30" />
 
         {/* Position sort and switch controls above tab content */}
         <div className="flex justify-between items-center mb-4">
