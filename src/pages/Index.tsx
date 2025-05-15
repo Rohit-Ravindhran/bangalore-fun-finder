@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
@@ -5,8 +6,8 @@ import QuickFilter from '@/components/QuickFilter';
 import ActivityCard from '@/components/ActivityCard';
 import ActivityGrid from '@/components/ActivityGrid';
 import ShuffleButton from '@/components/ShuffleButton';
-import ViewToggle from '@/components/ViewToggle';
-import SortSelector from '@/components/SortSelector';
+import { ViewToggleWithLegacyProps as ViewToggle } from '@/components/ViewToggle';
+import { SortSelectorWithLegacyProps as SortSelector } from '@/components/SortSelector';
 import Footer from '@/components/Footer';
 import InstallPrompt from '@/components/InstallPrompt';
 import SubscribePopup from '@/components/SubscribePopup';

@@ -54,4 +54,13 @@ const SortSelector: React.FC<SortSelectorProps> = ({
   );
 };
 
+// Add these named exports for backward compatibility
+export const SortSelectorWithLegacyProps: React.FC<{
+  options: SortOption[];
+  selectedOption: string;
+  onSelect: (optionId: string) => void;
+}> = ({ options, selectedOption, onSelect }) => {
+  return <SortSelector options={options} selectedOption={selectedOption} onSelectOption={onSelect} />;
+};
+
 export default SortSelector;
