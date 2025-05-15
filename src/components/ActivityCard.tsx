@@ -20,7 +20,7 @@ export interface Activity {
   time?: string;
   mapLink?: string;
   contactInfo?: string;
-  categoryNames?: string[]; // Add categoryNames for displaying category names
+  categoryNames?: string[];
 }
 
 interface ActivityCardProps {
@@ -122,6 +122,12 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
     }
   };
 
+  // Function to truncate text
+  const truncateText = (text: string, maxLength: number) => {
+    if (!text) return '';
+    return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+  };
+
   return (
     <div 
       className={cn(
@@ -174,6 +180,12 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
       
       <div className="p-5">
         <h3 className="text-lg font-bold mb-2">{activity.title}</h3>
+        
+        {activity.description && (
+          <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+            {truncateText(activity.description, 120)}
+          </p>
+        )}
         
         <div className="flex flex-wrap gap-2 mb-3">
           {activity.categoryNames && activity.categoryNames.slice(0, 3).map((category, index) => (
