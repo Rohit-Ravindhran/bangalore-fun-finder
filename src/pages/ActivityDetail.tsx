@@ -134,6 +134,8 @@ const ActivityDetail = () => {
   };
   
   const goToMap = () => {
+    if (!activity) return;
+    
     if (activity.mapLink) {
       window.open(activity.mapLink, '_blank');
     } else if (activity.url) {
@@ -142,10 +144,12 @@ const ActivityDetail = () => {
   };
 
   const goToKnowMore = () => {
-    if (activity.mapLink) {
-      window.open(activity.mapLink, '_blank');
-    } else if (activity.url) {
+    if (!activity) return;
+    
+    if (activity.url) {
       window.open(activity.url, '_blank');
+    } else if (activity.mapLink) {
+      window.open(activity.mapLink, '_blank');
     } else {
       // If no map link or url, search for the activity on Google
       const searchQuery = encodeURIComponent(`${activity.title} ${activity.location}`);
@@ -153,14 +157,14 @@ const ActivityDetail = () => {
     }
   };
 
-  const hasExternalLink = Boolean(activity.mapLink || activity.url);
+  const hasExternalLink = activity && Boolean(activity.mapLink || activity.url);
   
   return (
     <div className="min-h-screen bg-w2d-cream">
       <div className="relative">
         <img 
-          src={activity.image} 
-          alt={activity.title} 
+          src={activity?.image} 
+          alt={activity?.title} 
           className="w-full h-56 object-cover"
           onError={handleImageError}
         />
@@ -183,92 +187,94 @@ const ActivityDetail = () => {
         </Button>
       </div>
       
-      <div className="container px-4 -mt-6 relative">
-        <div className="bg-white rounded-t-3xl p-6 shadow-sm">
-          <h1 className="text-2xl font-bold mb-3">{activity.title}</h1>
-          
-          <div className="flex flex-wrap gap-1 mb-4">
-            {activity.tags.map((tag, index) => (
-              <span 
-                key={index} 
-                className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2 py-1"
+      {activity && (
+        <div className="container px-4 -mt-6 relative">
+          <div className="bg-white rounded-t-3xl p-6 shadow-sm">
+            <h1 className="text-2xl font-bold mb-3">{activity.title}</h1>
+            
+            <div className="flex flex-wrap gap-1 mb-4">
+              {activity.tags.map((tag, index) => (
+                <span 
+                  key={index} 
+                  className="inline-block text-xs bg-w2d-blue bg-opacity-20 rounded-full px-2 py-1"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+            
+            <p className="text-gray-700 mb-6">{activity.description}</p>
+            
+            <div className="space-y-4 mb-6">
+              {activity.date && (
+                <div className="flex items-center space-x-2 text-gray-700">
+                  <Calendar className="h-4 w-4" />
+                  <span>{activity.date}</span>
+                </div>
+              )}
+              
+              {activity.time && (
+                <div className="flex items-center space-x-2 text-gray-700">
+                  <Clock className="h-4 w-4" />
+                  <span>{activity.time}</span>
+                </div>
+              )}
+              
+              <div className="flex items-center space-x-2 text-gray-700">
+                <MapPin className="h-4 w-4" />
+                <span>{activity.location}</span>
+              </div>
+              
+              <div className="flex items-center space-x-2 text-gray-700">
+                <span className="font-medium">Price:</span>
+                <span>{activity.priceRange}</span>
+              </div>
+            </div>
+            
+            <div className="flex flex-col space-y-3">
+              <Button 
+                className="w-full bg-w2d-teal hover:bg-opacity-90"
+                onClick={goToMap}
+                disabled={!hasExternalLink}
               >
-                {tag}
-              </span>
-            ))}
-          </div>
-          
-          <p className="text-gray-700 mb-6">{activity.description}</p>
-          
-          <div className="space-y-4 mb-6">
-            {activity.date && (
-              <div className="flex items-center space-x-2 text-gray-700">
-                <Calendar className="h-4 w-4" />
-                <span>{activity.date}</span>
-              </div>
-            )}
-            
-            {activity.time && (
-              <div className="flex items-center space-x-2 text-gray-700">
-                <Clock className="h-4 w-4" />
-                <span>{activity.time}</span>
-              </div>
-            )}
-            
-            <div className="flex items-center space-x-2 text-gray-700">
-              <MapPin className="h-4 w-4" />
-              <span>{activity.location}</span>
-            </div>
-            
-            <div className="flex items-center space-x-2 text-gray-700">
-              <span className="font-medium">Price:</span>
-              <span>{activity.priceRange}</span>
-            </div>
-          </div>
-          
-          <div className="flex flex-col space-y-3">
-            <Button 
-              className="w-full bg-w2d-teal hover:bg-opacity-90"
-              onClick={goToMap}
-              disabled={!hasExternalLink}
-            >
-              {activity.mapLink ? "View on Map" : "Visit Website"}
-            </Button>
+                {activity.mapLink ? "View on Map" : "Visit Website"}
+              </Button>
 
-            <Button 
-              variant="outline" 
-              className="w-full"
-              onClick={goToKnowMore}
-            >
-              <ExternalLink className="h-4 w-4 mr-2" />
-              Know More
-            </Button>
-            
-            {activity.contactInfo && (
               <Button 
                 variant="outline" 
                 className="w-full"
-                onClick={() => window.open(`tel:${activity.contactInfo}`, '_self')}
+                onClick={goToKnowMore}
               >
-                <Phone className="h-4 w-4 mr-2" />
-                Contact
+                <ExternalLink className="h-4 w-4 mr-2" />
+                Know More
               </Button>
-            )}
-            
-            <Button 
-              variant="outline" 
-              className="w-full"
-              onClick={handleShare}
-            >
-              <Share2 className="h-4 w-4 mr-2" />
-              Share
-            </Button>
+              
+              {activity.contactInfo && (
+                <Button 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={() => window.open(`tel:${activity.contactInfo}`, '_self')}
+                >
+                  <Phone className="h-4 w-4 mr-2" />
+                  Contact
+                </Button>
+              )}
+              
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={handleShare}
+              >
+                <Share2 className="h-4 w-4 mr-2" />
+                Share
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
       
       <div className="text-center text-xs text-gray-500 mt-6 pb-6">
-        <p>Last updated: {activity.lastUpdated} 🕗</p>
+        <p>Last updated: {activity?.lastUpdated} 🕗</p>
       </div>
     </div>
   );
