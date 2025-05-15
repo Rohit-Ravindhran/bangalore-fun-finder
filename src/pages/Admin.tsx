@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/table';
 import { useToast } from '@/components/ui/use-toast';
 import { Activity } from '@/components/ActivityCard';
-import { Plus, Edit, Trash, Loader2, Check } from 'lucide-react';
+import { Plus, Edit, Trash, Loader2, Check, FileText } from 'lucide-react';
 import { createActivity, deleteActivity, fetchActivities, updateActivity, fetchCategoriesFromTable, fetchTagsFromTable } from '@/services/activityService';
 import { 
   Select, 
@@ -24,6 +24,7 @@ import {
   SelectValue 
 } from '@/components/ui/select';
 import { Checkbox } from "@/components/ui/checkbox";
+import { Link } from 'react-router-dom';
 
 type CategoryItem = {
   id: number;
@@ -270,9 +271,16 @@ const created = await createActivity(activityData as Omit<Activity, 'id' | 'last
       <main className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <Button onClick={() => setIsEditing(!isEditing)} disabled={isSaving}>
-            {isEditing ? 'Cancel' : <><Plus className="mr-2 h-4 w-4" /> Add Activity</>}
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" asChild>
+              <Link to="/admin/bms-import">
+                <FileText className="mr-2 h-4 w-4" /> Import from BMS
+              </Link>
+            </Button>
+            <Button onClick={() => setIsEditing(!isEditing)} disabled={isSaving}>
+              {isEditing ? 'Cancel' : <><Plus className="mr-2 h-4 w-4" /> Add Activity</>}
+            </Button>
+          </div>
         </div>
         
         {isEditing && (
