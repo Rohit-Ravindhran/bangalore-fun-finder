@@ -59,7 +59,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       {activities.map((activity) => (
         <Card 
           key={activity.id}
-          className="overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer border-0 shadow-lg rounded-xl transform hover:-translate-y-1 bg-white"
+          className="overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer border-0 shadow-lg rounded-xl transform hover:-translate-y-1 bg-white/90 glass-card folded-corner"
           onClick={() => handleCardClick(activity.id)}
         >
           <div className="relative">
@@ -75,7 +75,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
                 variant="ghost"
                 size="icon"
                 className={cn(
-                  "rounded-full backdrop-blur-sm w-8 h-8 transition-all",
+                  "rounded-full backdrop-blur-sm w-9 h-9 transition-all physical-button",
                   likedActivities.has(activity.id) 
                     ? "bg-red-500/90 text-white" 
                     : "bg-white/80 text-gray-600 hover:bg-white/90"
@@ -89,7 +89,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="bg-white/80 rounded-full backdrop-blur-sm w-8 h-8 text-gray-600 hover:bg-white/90 transition-all"
+                  className="bg-white/80 rounded-full backdrop-blur-sm w-9 h-9 text-gray-600 hover:bg-white/90 transition-all physical-button"
                   onClick={(e) => handleShare(e, activity.id)}
                 >
                   <Share2 className="h-4 w-4" />
@@ -116,8 +116,8 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
             <h3 className="font-bold text-lg mb-2 line-clamp-2">{activity.title}</h3>
             
             {activity.description && (
-              <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                {truncateText(activity.description, 100)}
+              <p className="text-sm text-gray-600 mb-3 line-clamp-3">
+                {activity.description}
               </p>
             )}
             
@@ -134,7 +134,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
             
             <div className="grid grid-cols-2 gap-2.5 text-sm text-gray-500">
               <div className="flex items-center gap-1.5">
-                <MapPin className="h-3 w-3 text-amber-600" />
+                <MapPin className="h-3 w-3 text-red-500" />
                 <span>{activity.location}</span>
               </div>
               <div className="flex items-center">
@@ -143,14 +143,14 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
               
               {activity.date && (
                 <div className="flex items-center gap-1.5">
-                  <Calendar className="h-3 w-3 text-amber-600" />
+                  <Calendar className="h-3 w-3 text-red-500" />
                   <span>{activity.date}</span>
                 </div>
               )}
               
               {activity.time && (
                 <div className="flex items-center gap-1.5">
-                  <Clock className="h-3 w-3 text-amber-600" />
+                  <Clock className="h-3 w-3 text-red-500" />
                   <span>{activity.time}</span>
                 </div>
               )}
@@ -162,7 +162,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       {/* End of list message */}
       {activities.length > 0 && (
         <div className="text-center py-8 px-4 end-of-list">
-          <p className="text-gray-600 font-medium">✨ That's all for now. More coming soon!</p>
+          <p className="text-white font-medium handwritten-underline">✨ That's all for now. More coming soon!</p>
         </div>
       )}
     </div>
