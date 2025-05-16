@@ -93,11 +93,11 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
     }
   };
 
-  // Format time to 12-hour format with improved validation
+  // Improved format time to 12-hour format with better validation
   const formatTimeTo12Hour = (timeString: string | undefined): string => {
     if (!timeString) return '';
     
-    // If it's already in 12-hour format, just return it
+    // If it's already in 12-hour format with AM/PM, just return it
     if (timeString.toLowerCase().includes('am') || timeString.toLowerCase().includes('pm')) {
       return timeString;
     }
@@ -119,10 +119,11 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
       hours = hours % 12;
       hours = hours ? hours : 12; // Convert 0 to 12
       
+      // Return formatted time with padding for minutes
       return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
     } catch (error) {
       console.error('Error formatting time:', error);
-      return timeString; // Return original on error
+      return '12:00 PM'; // Default fallback time on error instead of returning the invalid time
     }
   };
 
