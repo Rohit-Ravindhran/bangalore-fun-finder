@@ -38,7 +38,7 @@ const isToday = (dateString: string) => {
          lowerDateString.includes('now');
 };
 
-// Improved helper function to check if a date is this weekend
+// Enhanced helper function to check if a date is this weekend
 const isThisWeekend = () => {
   const now = new Date();
   const currentDay = now.getDay(); // 0 is Sunday, 6 is Saturday
@@ -60,14 +60,15 @@ const isThisWeekend = () => {
     sunday.setDate(now.getDate() + daysUntilSaturday + 1);
   }
   
-  // Format dates for easy string comparison
+  // Format for output
   return {
     saturdayString: saturday.toLocaleDateString(),
     sundayString: sunday.toLocaleDateString(),
     saturdayDay: saturday.getDate(),
     sundayDay: sunday.getDate(),
     saturdayMonth: saturday.getMonth() + 1,
-    sundayMonth: sunday.getMonth() + 1
+    sundayMonth: sunday.getMonth() + 1,
+    weekendDates: [saturday, sunday]
   };
 };
 
@@ -76,28 +77,18 @@ const isWeekend = (dateString: string) => {
   if (!dateString) return false;
   
   const lowerDateString = dateString.toLowerCase().trim();
-  const { 
-    saturdayString, sundayString, 
-    saturdayDay, sundayDay,
-    saturdayMonth, sundayMonth
-  } = isThisWeekend();
-  
   console.log('Checking if date is weekend:', dateString);
-  console.log('This weekend is:', saturdayString, sundayString);
   
-  // Direct date match
-  if (dateString === saturdayString || dateString === sundayString) {
-    console.log('Direct date match found');
-    return true;
-  }
-  
-  // Weekend keywords
+  // Weekend keywords - using a more comprehensive set
   const weekendKeywords = [
-    'weekend', 'saturday', 'sunday', 'sat', 'sun', 
+    'weekend', 'saturday', 'sunday', 'sat', 'sun',
     'this sat', 'this sun', 'this weekend',
-    'sat-sun', 'sat & sun', 'sat and sun', 'sat/sun'
+    'sat-sun', 'sat & sun', 'sat and sun', 'sat/sun',
+    'saturday and sunday', 'saturday & sunday', 'saturday-sunday',
+    'sat - sun', 'saturday - sunday'
   ];
   
+  // Direct keyword match - check first as it's most explicit
   for (const keyword of weekendKeywords) {
     if (lowerDateString.includes(keyword)) {
       console.log('Weekend keyword match found:', keyword);
@@ -105,11 +96,41 @@ const isWeekend = (dateString: string) => {
     }
   }
   
-  // Check for day numbers in the date string (e.g., "25-26 May" for weekend days)
-  if (lowerDateString.includes(saturdayDay.toString()) || 
-      lowerDateString.includes(sundayDay.toString())) {
-    console.log('Weekend day number found in string');
+  // Get weekend dates for comparison
+  const { 
+    saturdayString, sundayString, 
+    saturdayDay, sundayDay,
+    saturdayMonth, sundayMonth,
+    weekendDates
+  } = isThisWeekend();
+  
+  console.log('This weekend dates:', saturdayString, sundayString);
+  
+  // Direct date match
+  if (dateString === saturdayString || dateString === sundayString) {
+    console.log('Direct date match found');
     return true;
+  }
+  
+  // Try to parse the date string to see if it falls on this weekend
+  try {
+    const possibleDateParts = lowerDateString.match(/\d+/g);
+    if (possibleDateParts && possibleDateParts.length) {
+      // Check if any numbers in the string match weekend days
+      if (possibleDateParts.some(part => {
+        const num = parseInt(part, 10);
+        return num === saturdayDay || num === sundayDay;
+      })) {
+        console.log('Weekend day number found in string');
+        return true;
+      }
+      
+      // Try to extract a date from the string and check if it falls on weekend
+      // This is complex and would require natural language date parsing
+      // For simplicity, we'll check month names instead
+    }
+  } catch (error) {
+    console.error('Error parsing date string:', error);
   }
   
   // Month names (abbreviated and full)
@@ -121,16 +142,44 @@ const isWeekend = (dateString: string) => {
   ];
   
   // Check if current month name is in the string along with the weekend date
-  const currentMonthNames = [
-    monthNames[saturdayMonth - 1],
-    monthNames[saturdayMonth + 11], // Full name
+  const currentMonthShort = monthNames[saturdayMonth - 1];
+  const currentMonthFull = monthNames[saturdayMonth + 11]; // Full name index
+  
+  if ((lowerDateString.includes(currentMonthShort) || lowerDateString.includes(currentMonthFull)) &&
+      (lowerDateString.includes(saturdayDay.toString()) || lowerDateString.includes(sundayDay.toString()))) {
+    console.log('Weekend date with current month found');
+    return true;
+  }
+  
+  // Additional weekend checks (e.g. "this weekend", "upcoming weekend")
+  if (lowerDateString.includes('upcoming weekend') || 
+      lowerDateString.includes('this weekend') || 
+      lowerDateString.includes('coming weekend')) {
+    console.log('Weekend phrase match found');
+    return true;
+  }
+  
+  // Check common date formats (more reliable)
+  // For example: "5/20" or "20/5" or "May 20-21" for a weekend
+  const dateRegexPatterns = [
+    // MM/DD or DD/MM format
+    new RegExp(`${saturdayMonth}/${saturdayDay}|${saturdayDay}/${saturdayMonth}`),
+    new RegExp(`${sundayMonth}/${sundayDay}|${sundayDay}/${sundayMonth}`),
+    
+    // Month name with date
+    new RegExp(`${currentMonthShort}\\s*${saturdayDay}|${currentMonthShort}\\s*${sundayDay}`, 'i'),
+    new RegExp(`${currentMonthFull}\\s*${saturdayDay}|${currentMonthFull}\\s*${sundayDay}`, 'i'),
+    
+    // Date range including weekend
+    new RegExp(`${saturdayDay}\\s*-\\s*${sundayDay}\\s*${currentMonthShort}`, 'i'),
+    new RegExp(`${saturdayDay}\\s*-\\s*${sundayDay}\\s*${currentMonthFull}`, 'i'),
+    new RegExp(`${currentMonthShort}\\s*${saturdayDay}\\s*-\\s*${sundayDay}`, 'i'),
+    new RegExp(`${currentMonthFull}\\s*${saturdayDay}\\s*-\\s*${sundayDay}`, 'i'),
   ];
   
-  for (const monthName of currentMonthNames) {
-    if (lowerDateString.includes(monthName) && 
-        (lowerDateString.includes(saturdayDay.toString()) || 
-         lowerDateString.includes(sundayDay.toString()))) {
-      console.log('Weekend date with current month found');
+  for (const pattern of dateRegexPatterns) {
+    if (pattern.test(lowerDateString)) {
+      console.log('Date regex match found:', pattern);
       return true;
     }
   }
