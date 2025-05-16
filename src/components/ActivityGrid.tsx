@@ -43,9 +43,48 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
     }
   };
 
-  // Function to handle image loading error
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = '/placeholder.svg';
+  // Function to handle image loading error - use title-based placeholder
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>, title: string) => {
+    if (title) {
+      // Generate a hash from the title to get a consistent color
+      let hash = 0;
+      for (let i = 0; i < title.length; i++) {
+        hash = title.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      
+      // Generate a color based on the hash
+      const backgroundColor = Math.abs(hash).toString(16).substring(0, 6);
+      e.currentTarget.src = `https://via.placeholder.com/400x300/${backgroundColor}/FFFFFF?text=${encodeURIComponent(title.substring(0, 20))}`;
+    } else {
+      e.currentTarget.src = '/placeholder.svg';
+    }
+  };
+
+  // Format time to 12-hour format
+  const formatTimeTo12Hour = (timeString: string | undefined): string => {
+    if (!timeString) return '';
+    
+    // If it's already in 12-hour format, just return it
+    if (timeString.toLowerCase().includes('am') || timeString.toLowerCase().includes('pm')) {
+      return timeString;
+    }
+    
+    try {
+      // Try to parse the time string assuming 24-hour format
+      const timeParts = timeString.split(':');
+      if (timeParts.length < 2) return timeString; // Can't parse, return original
+      
+      let hours = parseInt(timeParts[0], 10);
+      const minutes = parseInt(timeParts[1], 10);
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // Convert 0 to 12
+      
+      return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
+    } catch (error) {
+      console.error('Error formatting time:', error);
+      return timeString; // Return original on error
+    }
   };
 
   // Function to truncate text
@@ -68,7 +107,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
               alt={activity.title} 
               className="w-full h-48 object-cover rounded-t-xl"
               loading="lazy"
-              onError={handleImageError}
+              onError={(e) => handleImageError(e, activity.title)}
             />
             <div className="absolute top-2 right-2 flex gap-1.5">
               <Button
@@ -151,7 +190,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
               {activity.time && (
                 <div className="flex items-center gap-1.5">
                   <Clock className="h-3 w-3 text-amber-600" />
-                  <span>{activity.time}</span>
+                  <span>{formatTimeTo12Hour(activity.time)}</span>
                 </div>
               )}
             </div>

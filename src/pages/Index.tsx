@@ -74,6 +74,33 @@ const isWeekend = (dateString: string) => {
          dateString.toLowerCase().includes('weekend');
 };
 
+// Function to format time to 12-hour format with AM/PM
+const formatTimeTo12Hour = (timeString: string | undefined): string => {
+  if (!timeString) return '';
+  
+  // If it's already in 12-hour format, just return it
+  if (timeString.toLowerCase().includes('am') || timeString.toLowerCase().includes('pm')) {
+    return timeString;
+  }
+  
+  try {
+    // Try to parse the time string assuming 24-hour format
+    const timeParts = timeString.split(':');
+    if (timeParts.length < 2) return timeString; // Can't parse, return original
+    
+    let hours = parseInt(timeParts[0], 10);
+    const minutes = parseInt(timeParts[1], 10);
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // Convert 0 to 12
+    
+    return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
+  } catch (error) {
+    console.error('Error formatting time:', error);
+    return timeString; // Return original on error
+  }
+};
+
 const Index = () => {
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
   const [selectedQuickFilters, setSelectedQuickFilters] = useState<Set<string>>(new Set());
@@ -290,6 +317,7 @@ const Index = () => {
     setSelectedQuickFilters(new Set());
   };
 
+  // Update the handleSwipeLeft function to maintain sort order
   const handleSwipeLeft = () => {
     if (currentActivityIndex < allActivities.length - 1) {
       setCurrentActivityIndex(currentActivityIndex + 1);
@@ -303,6 +331,7 @@ const Index = () => {
     }
   };
 
+  // Update the handleSwipeRight function to maintain sort order
   const handleSwipeRight = () => {
     if (currentActivityIndex > 0) {
       setCurrentActivityIndex(currentActivityIndex - 1);
@@ -521,11 +550,11 @@ const Index = () => {
     { id: 'newest', label: '🆕 New' }
   ];
 
-  // Prepare tab configuration
+  // Prepare tab configuration with removed emojis
   const tabs = [
     {
       id: 'all',
-      title: '✨ All',
+      title: 'All',
       content: renderTabContent(allActivities, 'All'),
       count: {
         loaded: allActivities.length,
@@ -536,7 +565,7 @@ const Index = () => {
     },
     {
       id: 'unique-experiences',
-      title: '🎨 Unique Experiences',
+      title: 'Unique Experiences',
       content: renderTabContent(uniqueExperiences, 'Unique Experiences'),
       count: {
         loaded: uniqueExperiences.length,
@@ -547,7 +576,7 @@ const Index = () => {
     },
     {
       id: 'date-ideas',
-      title: '💑 Date Ideas',
+      title: 'Date Ideas',
       content: dateIdeas.length > 0 
         ? renderTabContent(dateIdeas, 'Date Ideas')
         : (
@@ -591,7 +620,7 @@ const Index = () => {
               />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-[#323232] mb-3 relative">
-              happenings <span className="text-amber-600">bangalore</span>
+              Happenings <span className="text-amber-600">Bangalore</span>
             </h1>
           </div>
           <p className="text-sm md:text-base text-gray-600 italic">

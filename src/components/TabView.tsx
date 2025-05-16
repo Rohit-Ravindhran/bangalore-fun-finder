@@ -41,12 +41,12 @@ const TabView = ({
   return (
     <Tabs defaultValue={defaultTabId} onValueChange={setActiveTab} className="w-full">
       <div className="flex justify-between items-center mb-4">
-        <TabsList className="bg-transparent border border-gray-200 overflow-x-auto max-w-[100%] w-full flex-nowrap no-scrollbar">
+        <TabsList className="bg-white border border-gray-200 overflow-x-auto max-w-[100%] w-full flex-nowrap no-scrollbar rounded-lg">
           {tabs.map((tab) => (
             <TabsTrigger 
               key={tab.id} 
               value={tab.id}
-              className="relative px-2 sm:px-4 py-1.5 flex-shrink-0 text-xs sm:text-sm whitespace-nowrap data-[state=active]:bg-amber-50 data-[state=active]:shadow-none data-[state=active]:text-amber-900"
+              className="relative px-3 sm:px-5 py-2 flex-shrink-0 text-xs sm:text-sm whitespace-nowrap data-[state=active]:bg-amber-50 data-[state=active]:shadow-none data-[state=active]:text-amber-900 font-medium"
             >
               {tab.title}
             </TabsTrigger>
