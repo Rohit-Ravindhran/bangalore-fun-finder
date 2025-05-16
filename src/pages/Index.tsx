@@ -33,26 +33,20 @@ const isToday = (dateString: string) => {
          (dateString && dateString.toLowerCase().includes('today'));
 };
 
-// Helper function to check if a date is this weekend
+// Updated helper function to check if a date is this weekend
 const isThisWeekend = () => {
   const now = new Date();
   const currentDay = now.getDay(); // 0 is Sunday, 6 is Saturday
+  
+  // Calculate days until next weekend or use current date if it's already the weekend
+  const daysUntilSaturday = currentDay === 6 ? 0 : (currentDay === 0 ? -1 : 6 - currentDay);
+  const daysUntilSunday = currentDay === 0 ? 0 : (currentDay === 6 ? 1 : 7 - currentDay);
+  
   const nextSaturday = new Date(now);
   const nextSunday = new Date(now);
   
-  // If today is already Saturday or Sunday, use today's date
-  if (currentDay === 6) { // Saturday
-    nextSaturday.setDate(now.getDate());
-    nextSunday.setDate(now.getDate() + 1);
-  } else if (currentDay === 0) { // Sunday
-    nextSaturday.setDate(now.getDate() - 1);
-    nextSunday.setDate(now.getDate());
-  } else {
-    // Calculate days until next Saturday
-    const daysUntilSaturday = 6 - currentDay;
-    nextSaturday.setDate(now.getDate() + daysUntilSaturday);
-    nextSunday.setDate(now.getDate() + daysUntilSaturday + 1);
-  }
+  nextSaturday.setDate(now.getDate() + daysUntilSaturday);
+  nextSunday.setDate(now.getDate() + daysUntilSunday);
   
   // Format dates for comparison
   return {
@@ -61,17 +55,22 @@ const isThisWeekend = () => {
   };
 };
 
-// Helper function to check if an activity is this weekend
+// Updated helper function to check if an activity is this weekend
 const isWeekend = (dateString: string) => {
   if (!dateString) return false;
   
+  const lowerDateString = dateString.toLowerCase();
   const { saturdayString, sundayString } = isThisWeekend();
   
+  // Check for date matches or keywords
   return dateString === saturdayString || 
          dateString === sundayString ||
-         dateString.toLowerCase().includes('saturday') ||
-         dateString.toLowerCase().includes('sunday') ||
-         dateString.toLowerCase().includes('weekend');
+         lowerDateString.includes('saturday') ||
+         lowerDateString.includes('sunday') ||
+         lowerDateString.includes('weekend') ||
+         // Add additional weekend keywords that might be in your data
+         lowerDateString.includes('sat') ||
+         lowerDateString.includes('sun');
 };
 
 // Function to format time to 12-hour format with AM/PM
