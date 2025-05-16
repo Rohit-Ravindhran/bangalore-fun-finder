@@ -93,9 +93,48 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
     }
   };
 
-  // Handle image loading errors
+  // Format time to 12-hour format
+  const formatTimeTo12Hour = (timeString: string | undefined): string => {
+    if (!timeString) return '';
+    
+    // If it's already in 12-hour format, just return it
+    if (timeString.toLowerCase().includes('am') || timeString.toLowerCase().includes('pm')) {
+      return timeString;
+    }
+    
+    try {
+      // Try to parse the time string assuming 24-hour format
+      const timeParts = timeString.split(':');
+      if (timeParts.length < 2) return timeString; // Can't parse, return original
+      
+      let hours = parseInt(timeParts[0], 10);
+      const minutes = parseInt(timeParts[1], 10);
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // Convert 0 to 12
+      
+      return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
+    } catch (error) {
+      console.error('Error formatting time:', error);
+      return timeString; // Return original on error
+    }
+  };
+
+  // Handle image loading errors - generate title-based placeholder
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = '/placeholder.svg';
+    if (activity.title) {
+      // Generate a hash from the title to get a consistent color
+      let hash = 0;
+      for (let i = 0; i < activity.title.length; i++) {
+        hash = activity.title.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      
+      // Generate a color based on the hash
+      const backgroundColor = Math.abs(hash).toString(16).substring(0, 6);
+      e.currentTarget.src = `https://via.placeholder.com/400x300/${backgroundColor}/FFFFFF?text=${encodeURIComponent(activity.title.substring(0, 20))}`;
+    } else {
+      e.currentTarget.src = '/placeholder.svg';
+    }
   };
 
   // Touch gesture handling
@@ -217,7 +256,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           {activity.time && (
             <div className="flex items-center gap-1.5">
               <Clock className="h-4 w-4 text-amber-600" />
-              <span>{activity.time}</span>
+              <span>{formatTimeTo12Hour(activity.time)}</span>
             </div>
           )}
         </div>
