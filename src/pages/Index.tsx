@@ -33,44 +33,76 @@ const isToday = (dateString: string) => {
          (dateString && dateString.toLowerCase().includes('today'));
 };
 
-// Updated helper function to check if a date is this weekend
+// Improved helper function to check if a date is this weekend
 const isThisWeekend = () => {
   const now = new Date();
   const currentDay = now.getDay(); // 0 is Sunday, 6 is Saturday
   
-  // Calculate days until next weekend or use current date if it's already the weekend
-  const daysUntilSaturday = currentDay === 6 ? 0 : (currentDay === 0 ? -1 : 6 - currentDay);
-  const daysUntilSunday = currentDay === 0 ? 0 : (currentDay === 6 ? 1 : 7 - currentDay);
+  // If it's already the weekend, return today and tomorrow (or yesterday and today)
+  if (currentDay === 0 || currentDay === 6) {
+    const saturday = new Date(now);
+    const sunday = new Date(now);
+    
+    if (currentDay === 0) { // Sunday
+      saturday.setDate(now.getDate() - 1);
+      // Sunday is already set
+    } else { // Saturday
+      // Saturday is already set
+      sunday.setDate(now.getDate() + 1);
+    }
+    
+    return {
+      saturdayString: saturday.toLocaleDateString(),
+      sundayString: sunday.toLocaleDateString()
+    };
+  }
   
-  const nextSaturday = new Date(now);
-  const nextSunday = new Date(now);
+  // Otherwise, calculate the next weekend
+  const daysUntilSaturday = 6 - currentDay;
+  const saturday = new Date(now);
+  const sunday = new Date(now);
   
-  nextSaturday.setDate(now.getDate() + daysUntilSaturday);
-  nextSunday.setDate(now.getDate() + daysUntilSunday);
+  saturday.setDate(now.getDate() + daysUntilSaturday);
+  sunday.setDate(now.getDate() + daysUntilSaturday + 1);
   
-  // Format dates for comparison
   return {
-    saturdayString: nextSaturday.toLocaleDateString(),
-    sundayString: nextSunday.toLocaleDateString()
+    saturdayString: saturday.toLocaleDateString(),
+    sundayString: sunday.toLocaleDateString()
   };
 };
 
-// Updated helper function to check if an activity is this weekend
+// Improved helper function to check if an activity is this weekend
 const isWeekend = (dateString: string) => {
   if (!dateString) return false;
   
   const lowerDateString = dateString.toLowerCase();
   const { saturdayString, sundayString } = isThisWeekend();
   
-  // Check for date matches or keywords
-  return dateString === saturdayString || 
-         dateString === sundayString ||
-         lowerDateString.includes('saturday') ||
-         lowerDateString.includes('sunday') ||
-         lowerDateString.includes('weekend') ||
-         // Add additional weekend keywords that might be in your data
-         lowerDateString.includes('sat') ||
-         lowerDateString.includes('sun');
+  // Debug logs for weekend matching
+  console.log('Checking for weekend:', dateString);
+  console.log('Saturday:', saturdayString, 'Sunday:', sundayString);
+  
+  // Weekend keywords to check
+  const weekendKeywords = [
+    'weekend', 'saturday', 'sunday', 'sat', 'sun', 
+    'this sat', 'this sun', 'this weekend'
+  ];
+  
+  // Check for exact date matches
+  if (dateString === saturdayString || dateString === sundayString) {
+    console.log('Date matched weekend date directly');
+    return true;
+  }
+  
+  // Check for weekend keywords
+  for (const keyword of weekendKeywords) {
+    if (lowerDateString.includes(keyword)) {
+      console.log('Weekend keyword match found:', keyword);
+      return true;
+    }
+  }
+  
+  return false;
 };
 
 // Function to format time to 12-hour format with AM/PM

@@ -109,11 +109,16 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
       
       let hours = parseInt(timeParts[0], 10);
       const minutes = parseInt(timeParts[1], 10);
+      
+      // Fix for invalid minute values
+      const validMinutes = minutes >= 0 && minutes < 60 ? minutes : 0;
+      
+      // AM/PM determination
       const ampm = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12;
       hours = hours ? hours : 12; // Convert 0 to 12
       
-      return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
+      return `${hours}:${validMinutes < 10 ? '0' + validMinutes : validMinutes} ${ampm}`;
     } catch (error) {
       console.error('Error formatting time:', error);
       return timeString; // Return original on error
