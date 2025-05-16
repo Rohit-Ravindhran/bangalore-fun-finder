@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Heart, Share2, Clock, MapPin, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -60,7 +59,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
     }
   };
 
-  // Format time to 12-hour format
+  // Format time to 12-hour format with improved validation
   const formatTimeTo12Hour = (timeString: string | undefined): string => {
     if (!timeString) return '';
     
@@ -75,17 +74,18 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       if (timeParts.length < 2) return timeString; // Can't parse, return original
       
       let hours = parseInt(timeParts[0], 10);
-      const minutes = parseInt(timeParts[1], 10);
+      let minutes = parseInt(timeParts[1], 10);
       
-      // Fix for invalid minute values
-      const validMinutes = minutes >= 0 && minutes < 60 ? minutes : 0;
+      // Validate hours and minutes
+      if (isNaN(hours) || hours < 0 || hours > 23) hours = 0;
+      if (isNaN(minutes) || minutes < 0 || minutes > 59) minutes = 0;
       
       // AM/PM determination
       const ampm = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12;
       hours = hours ? hours : 12; // Convert 0 to 12
       
-      return `${hours}:${validMinutes < 10 ? '0' + validMinutes : validMinutes} ${ampm}`;
+      return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
     } catch (error) {
       console.error('Error formatting time:', error);
       return timeString; // Return original on error
