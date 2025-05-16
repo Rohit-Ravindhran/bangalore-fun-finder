@@ -19,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSearch }) => {
 
   return (
     <>
-      <header className="flex items-center justify-between py-3 px-5 bg-[#FFF8F0] sticky top-0 z-40 shadow-sm border-b border-amber-100">
+      <header className="flex items-center justify-between py-2 px-5 bg-[#FFF8F0] sticky top-0 z-40 shadow-sm border-b border-amber-100">
         <div className="text-2xl font-nunito font-bold text-[#323232]">
           {/* App name removed from header */}
         </div>

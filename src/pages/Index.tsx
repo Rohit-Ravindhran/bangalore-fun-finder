@@ -28,9 +28,14 @@ const ITEMS_PER_PAGE = 6;
 
 // Helper function to check if a date is today
 const isToday = (dateString: string) => {
+  if (!dateString) return false;
+  
   const today = new Date().toLocaleDateString();
+  const lowerDateString = dateString.toLowerCase();
+  
   return dateString === today || 
-         (dateString && dateString.toLowerCase().includes('today'));
+         lowerDateString.includes('today') || 
+         lowerDateString.includes('now');
 };
 
 // Improved helper function to check if a date is this weekend
@@ -38,66 +43,94 @@ const isThisWeekend = () => {
   const now = new Date();
   const currentDay = now.getDay(); // 0 is Sunday, 6 is Saturday
   
-  // If it's already the weekend, return today and tomorrow (or yesterday and today)
-  if (currentDay === 0 || currentDay === 6) {
-    const saturday = new Date(now);
-    const sunday = new Date(now);
-    
-    if (currentDay === 0) { // Sunday
-      saturday.setDate(now.getDate() - 1);
-      // Sunday is already set
-    } else { // Saturday
-      // Saturday is already set
-      sunday.setDate(now.getDate() + 1);
-    }
-    
-    return {
-      saturdayString: saturday.toLocaleDateString(),
-      sundayString: sunday.toLocaleDateString()
-    };
-  }
-  
-  // Otherwise, calculate the next weekend
-  const daysUntilSaturday = 6 - currentDay;
+  // Calculate this weekend's dates
   const saturday = new Date(now);
   const sunday = new Date(now);
   
-  saturday.setDate(now.getDate() + daysUntilSaturday);
-  sunday.setDate(now.getDate() + daysUntilSaturday + 1);
+  if (currentDay === 0) { // If today is Sunday
+    saturday.setDate(now.getDate() - 1); // Yesterday was Saturday
+    // sunday is already today
+  } else if (currentDay === 6) { // If today is Saturday
+    // saturday is already today
+    sunday.setDate(now.getDate() + 1); // Tomorrow is Sunday
+  } else { 
+    // Set to the upcoming weekend
+    const daysUntilSaturday = 6 - currentDay; // Days until next Saturday
+    saturday.setDate(now.getDate() + daysUntilSaturday);
+    sunday.setDate(now.getDate() + daysUntilSaturday + 1);
+  }
   
+  // Format dates for easy string comparison
   return {
     saturdayString: saturday.toLocaleDateString(),
-    sundayString: sunday.toLocaleDateString()
+    sundayString: sunday.toLocaleDateString(),
+    saturdayDay: saturday.getDate(),
+    sundayDay: sunday.getDate(),
+    saturdayMonth: saturday.getMonth() + 1,
+    sundayMonth: sunday.getMonth() + 1
   };
 };
 
-// Improved helper function to check if an activity is this weekend
+// Completely revamped weekend detection function
 const isWeekend = (dateString: string) => {
   if (!dateString) return false;
   
-  const lowerDateString = dateString.toLowerCase();
-  const { saturdayString, sundayString } = isThisWeekend();
+  const lowerDateString = dateString.toLowerCase().trim();
+  const { 
+    saturdayString, sundayString, 
+    saturdayDay, sundayDay,
+    saturdayMonth, sundayMonth
+  } = isThisWeekend();
   
-  // Debug logs for weekend matching
-  console.log('Checking for weekend:', dateString);
-  console.log('Saturday:', saturdayString, 'Sunday:', sundayString);
+  console.log('Checking if date is weekend:', dateString);
+  console.log('This weekend is:', saturdayString, sundayString);
   
-  // Weekend keywords to check
-  const weekendKeywords = [
-    'weekend', 'saturday', 'sunday', 'sat', 'sun', 
-    'this sat', 'this sun', 'this weekend'
-  ];
-  
-  // Check for exact date matches
+  // Direct date match
   if (dateString === saturdayString || dateString === sundayString) {
-    console.log('Date matched weekend date directly');
+    console.log('Direct date match found');
     return true;
   }
   
-  // Check for weekend keywords
+  // Weekend keywords
+  const weekendKeywords = [
+    'weekend', 'saturday', 'sunday', 'sat', 'sun', 
+    'this sat', 'this sun', 'this weekend',
+    'sat-sun', 'sat & sun', 'sat and sun', 'sat/sun'
+  ];
+  
   for (const keyword of weekendKeywords) {
     if (lowerDateString.includes(keyword)) {
       console.log('Weekend keyword match found:', keyword);
+      return true;
+    }
+  }
+  
+  // Check for day numbers in the date string (e.g., "25-26 May" for weekend days)
+  if (lowerDateString.includes(saturdayDay.toString()) || 
+      lowerDateString.includes(sundayDay.toString())) {
+    console.log('Weekend day number found in string');
+    return true;
+  }
+  
+  // Month names (abbreviated and full)
+  const monthNames = [
+    'jan', 'feb', 'mar', 'apr', 'may', 'jun', 
+    'jul', 'aug', 'sep', 'oct', 'nov', 'dec',
+    'january', 'february', 'march', 'april', 'may', 'june',
+    'july', 'august', 'september', 'october', 'november', 'december'
+  ];
+  
+  // Check if current month name is in the string along with the weekend date
+  const currentMonthNames = [
+    monthNames[saturdayMonth - 1],
+    monthNames[saturdayMonth + 11], // Full name
+  ];
+  
+  for (const monthName of currentMonthNames) {
+    if (lowerDateString.includes(monthName) && 
+        (lowerDateString.includes(saturdayDay.toString()) || 
+         lowerDateString.includes(sundayDay.toString()))) {
+      console.log('Weekend date with current month found');
       return true;
     }
   }
@@ -208,7 +241,8 @@ const Index = () => {
   useEffect(() => {
     localStorage.setItem('likedActivities', JSON.stringify([...likedActivities]));
   }, [likedActivities]);
-
+  
+  // Main data fetching useEffect - modified for weekend filter
   useEffect(() => {
     const fetchSectionActivities = async () => {
       setIsLoading(true);
@@ -256,9 +290,21 @@ const Index = () => {
             filteredDateIdeas = filteredDateIdeas.filter(activity => isToday(activity.date || ''));
           }
           
-          // Add weekend filter
+          // Enhanced weekend filter
           if (selectedQuickFilters.has('weekend')) {
-            filteredAll = filteredAll.filter(activity => isWeekend(activity.date || ''));
+            console.log('Weekend filter active, checking dates...');
+            
+            // Log all dates before filtering for debugging
+            allActivitiesData.forEach(activity => {
+              console.log(`Activity: ${activity.title}, Date: ${activity.date}`);
+            });
+            
+            filteredAll = filteredAll.filter(activity => {
+              const result = isWeekend(activity.date || '');
+              console.log(`Activity: ${activity.title}, Date: ${activity.date}, Is Weekend: ${result}`);
+              return result;
+            });
+            
             filteredUnique = filteredUnique.filter(activity => isWeekend(activity.date || ''));
             filteredDateIdeas = filteredDateIdeas.filter(activity => isWeekend(activity.date || ''));
           }
