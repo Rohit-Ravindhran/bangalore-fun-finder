@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heart, ArrowRight, ArrowLeft, Share2, MapPin, Calendar, Clock } from 'lucide-react';
+import { Heart, ArrowRight, ArrowLeft, Share2, MapPin, Calendar, Clock, Pin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -21,6 +21,7 @@ export interface Activity {
   mapLink?: string;
   contactInfo?: string;
   categoryNames?: string[];
+  url?: string;
 }
 
 interface ActivityCardProps {
@@ -43,6 +44,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   const navigate = useNavigate();
   const [isLeaving, setIsLeaving] = React.useState<string | null>(null);
   const [touchStart, setTouchStart] = React.useState<number | null>(null);
+  const [rotationAngle] = React.useState(Math.floor(Math.random() * 2) === 0 ? 2 : -2); 
   
   const handleViewDetails = () => {
     navigate(`/activity/${activity.id}`);
@@ -123,7 +125,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
       return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
     } catch (error) {
       console.error('Error formatting time:', error);
-      return '12:00 PM'; // Default fallback time on error instead of returning the invalid time
+      return '12:00 PM'; // Default fallback time on error
     }
   };
 
@@ -174,20 +176,29 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
     return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
   };
 
+  const isEven = activity.id.charCodeAt(0) % 2 === 0;
+
   return (
     <div 
       className={cn(
-        "activity-card w-full max-w-sm mx-auto bg-white rounded-xl overflow-hidden transition-all duration-300 shadow-lg",
+        "activity-card w-full max-w-sm mx-auto rounded-xl overflow-hidden transition-all duration-300 sticky-note",
+        isEven ? "sticky-note-even" : "sticky-note-odd",
         isLeaving === 'left' ? 'swipe-left' : isLeaving === 'right' ? 'swipe-right' : ''
       )}
+      style={{ transform: `rotate(${rotationAngle}deg)` }}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
     >
+      {/* Thumbtack/pin */}
+      <div className="thumbtack" aria-hidden="true">
+        <Pin className="h-4 w-4 text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+      </div>
+      
       <div className="relative">
         <img 
           src={activity.image} 
           alt={activity.title} 
-          className="w-full h-52 object-cover"
+          className="w-full h-52 object-cover border-b-2 border-amber-200"
           loading="lazy"
           onError={handleImageError}
         />
@@ -215,7 +226,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         
         <div className="absolute top-2 left-2 flex flex-col gap-1.5">
           {activity.tags && activity.tags.includes('trending') && (
-            <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-md">🔥 Trending</Badge>
+            <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-md">🔥 Pinned</Badge>
           )}
           
           {activity.lastUpdated && activity.lastUpdated.includes("today") && (
@@ -225,10 +236,10 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
       </div>
       
       <div className="p-5">
-        <h3 className="text-lg font-bold mb-2">{activity.title}</h3>
+        <h3 className="text-lg font-caveat font-semibold mb-3 sticky-title text-xl">{activity.title}</h3>
         
         {activity.description && (
-          <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+          <p className="text-sm text-gray-700 mb-3 line-clamp-2">
             {truncateText(activity.description, 120)}
           </p>
         )}
@@ -237,16 +248,16 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           {activity.categoryNames && activity.categoryNames.slice(0, 3).map((category, index) => (
             <span 
               key={index} 
-              className="inline-block text-xs bg-amber-100 text-amber-800 rounded-full px-3 py-1"
+              className="inline-block text-xs bg-amber-100 text-amber-800 rounded-full px-3 py-1 font-medium"
             >
               {category}
             </span>
           ))}
         </div>
         
-        <div className="grid grid-cols-2 gap-2.5 text-sm text-gray-600 mb-4">
+        <div className="grid grid-cols-2 gap-2.5 text-sm text-gray-700 mb-4">
           <div className="flex items-center gap-1.5">
-            <MapPin className="h-4 w-4 text-amber-600" />
+            <MapPin className="h-4 w-4 text-amber-700" />
             <span>{activity.location}</span>
           </div>
           <div className="flex items-center font-medium">
@@ -255,14 +266,14 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           
           {activity.date && (
             <div className="flex items-center gap-1.5">
-              <Calendar className="h-4 w-4 text-amber-600" />
+              <Calendar className="h-4 w-4 text-amber-700" />
               <span>{activity.date}</span>
             </div>
           )}
           
           {activity.time && (
             <div className="flex items-center gap-1.5">
-              <Clock className="h-4 w-4 text-amber-600" />
+              <Clock className="h-4 w-4 text-amber-700" />
               <span>{formatTimeTo12Hour(activity.time)}</span>
             </div>
           )}
@@ -270,9 +281,9 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         
         <div className="flex justify-between items-center">
           <Button 
-            variant="outline" 
+            variant="ghost" 
             size="sm" 
-            className="rounded-full text-xs px-3.5 py-1.5 h-8 hover:bg-amber-600 hover:text-white border-amber-600 text-amber-600 transition-all"
+            className="rounded-b-lg text-xs px-3.5 py-1.5 h-auto sticky-tab bg-w2d-sticky-dark hover:bg-amber-200 border-t border-amber-200 text-amber-800 -mx-1"
             onClick={handleViewDetails}
           >
             Show me more
