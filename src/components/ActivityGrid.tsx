@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Heart, Share2, Clock, MapPin, Calendar } from 'lucide-react';
+import { Heart, Share2, Clock, MapPin, Calendar, Pin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Activity } from '@/components/ActivityCard';
@@ -90,7 +90,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
     } catch (error) {
       console.error('Error formatting time:', error);
-      return '12:00 PM'; // Default fallback time on error instead of returning the invalid time
+      return '12:00 PM'; // Default fallback time on error
     }
   };
 
@@ -102,108 +102,134 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
 
   return (
     <div className="space-y-4">
-      {activities.map((activity) => (
-        <Card 
-          key={activity.id}
-          className="overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer border-0 shadow-lg rounded-xl transform hover:-translate-y-1 bg-white"
-          onClick={() => handleCardClick(activity.id)}
-        >
-          <div className="relative">
-            <img 
-              src={activity.image || '/placeholder.svg'} 
-              alt={activity.title} 
-              className="w-full h-48 object-cover rounded-t-xl"
-              loading="lazy"
-              onError={(e) => handleImageError(e, activity.title)}
-            />
-            <div className="absolute top-2 right-2 flex gap-1.5">
-              <Button
-                variant="ghost"
-                size="icon"
-                className={cn(
-                  "rounded-full backdrop-blur-sm w-8 h-8 transition-all",
-                  likedActivities.has(activity.id) 
-                    ? "bg-red-500/90 text-white" 
-                    : "bg-white/80 text-gray-600 hover:bg-white/90"
-                )}
-                onClick={(e) => handleLike(e, activity.id)}
-              >
-                <Heart className={`h-4 w-4 ${likedActivities.has(activity.id) ? 'fill-white' : ''}`} />
-              </Button>
-              
-              {onShare && (
+      {activities.map((activity) => {
+        // Random rotation between -2 and 2 degrees, but consistent for each activity
+        const rotationDeg = activity.id.charCodeAt(0) % 2 === 0 ? 1 : -1;
+        const isEven = activity.id.charCodeAt(0) % 2 === 0;
+        
+        return (
+          <Card 
+            key={activity.id}
+            className={cn(
+              "overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer border-0 shadow-lg rounded-xl bg-w2d-sticky relative",
+              "sticky-note transform hover:-translate-y-1",
+              isEven ? "sticky-note-even" : "sticky-note-odd"
+            )}
+            onClick={() => handleCardClick(activity.id)}
+            style={{ transform: `rotate(${rotationDeg}deg)` }}
+          >
+            {/* Thumbtack/pin */}
+            <div className="thumbtack" aria-hidden="true">
+              <Pin className="h-4 w-4 text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            </div>
+            
+            <div className="relative">
+              <img 
+                src={activity.image || '/placeholder.svg'} 
+                alt={activity.title} 
+                className="w-full h-48 object-cover border-b-2 border-amber-200"
+                loading="lazy"
+                onError={(e) => handleImageError(e, activity.title)}
+              />
+              <div className="absolute top-2 right-2 flex gap-1.5">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="bg-white/80 rounded-full backdrop-blur-sm w-8 h-8 text-gray-600 hover:bg-white/90 transition-all"
-                  onClick={(e) => handleShare(e, activity.id)}
+                  className={cn(
+                    "rounded-full backdrop-blur-sm w-8 h-8 transition-all",
+                    likedActivities.has(activity.id) 
+                      ? "bg-red-500/90 text-white" 
+                      : "bg-white/80 text-gray-600 hover:bg-white/90"
+                  )}
+                  onClick={(e) => handleLike(e, activity.id)}
                 >
-                  <Share2 className="h-4 w-4" />
+                  <Heart className={`h-4 w-4 ${likedActivities.has(activity.id) ? 'fill-white' : ''}`} />
                 </Button>
-              )}
+                
+                {onShare && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="bg-white/80 rounded-full backdrop-blur-sm w-8 h-8 text-gray-600 hover:bg-white/90 transition-all"
+                    onClick={(e) => handleShare(e, activity.id)}
+                  >
+                    <Share2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+              
+              <div className="absolute top-2 left-2 flex flex-col gap-1">
+                {activity.tags && activity.tags.includes('trending') && (
+                  <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-md">🔥 Pinned</Badge>
+                )}
+                
+                {activity.lastUpdated && activity.lastUpdated.includes("today") && (
+                  <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0 shadow-md">🆕 New</Badge>
+                )}
+                
+                {sectionType === 'All' && activity.tags && activity.tags.includes('ourpick') && (
+                  <Badge variant="secondary" className="bg-amber-500 text-white text-xs py-0 shadow-md">✨ Our Pick</Badge>
+                )}
+              </div>
             </div>
             
-            <div className="absolute top-2 left-2 flex flex-col gap-1">
-              {activity.tags && activity.tags.includes('trending') && (
-                <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-md">🔥 Trending</Badge>
+            <CardContent className="p-5">
+              <h3 className="font-caveat text-xl mb-2 line-clamp-2 sticky-title">{activity.title}</h3>
+              
+              {activity.description && (
+                <p className="text-sm text-gray-700 mb-3 line-clamp-2">
+                  {truncateText(activity.description, 100)}
+                </p>
               )}
               
-              {activity.lastUpdated && activity.lastUpdated.includes("today") && (
-                <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0 shadow-md">🆕 New</Badge>
-              )}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {activity.categoryNames && activity.categoryNames.slice(0, 3).map((category, idx) => (
+                  <span 
+                    key={idx} 
+                    className="inline-block text-xs bg-amber-100 text-amber-800 rounded-full px-3 py-1 font-medium"
+                  >
+                    {category}
+                  </span>
+                ))}
+              </div>
               
-              {sectionType === 'All' && activity.tags && activity.tags.includes('ourpick') && (
-                <Badge variant="secondary" className="bg-amber-500 text-white text-xs py-0 shadow-md">✨ Our Pick</Badge>
-              )}
-            </div>
-          </div>
-          
-          <CardContent className="p-5">
-            <h3 className="font-bold text-lg mb-2 line-clamp-2">{activity.title}</h3>
-            
-            {activity.description && (
-              <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                {truncateText(activity.description, 100)}
-              </p>
-            )}
-            
-            <div className="flex flex-wrap gap-2 mb-4">
-              {activity.categoryNames && activity.categoryNames.slice(0, 3).map((category, idx) => (
-                <span 
-                  key={idx} 
-                  className="inline-block text-xs bg-amber-100 text-amber-800 rounded-full px-3 py-1"
+              <div className="grid grid-cols-2 gap-2.5 text-sm text-gray-700">
+                <div className="flex items-center gap-1.5">
+                  <MapPin className="h-3 w-3 text-amber-700" />
+                  <span>{activity.location}</span>
+                </div>
+                <div className="flex items-center">
+                  <span className="font-medium">{activity.priceRange}</span>
+                </div>
+                
+                {activity.date && (
+                  <div className="flex items-center gap-1.5">
+                    <Calendar className="h-3 w-3 text-amber-700" />
+                    <span>{activity.date}</span>
+                  </div>
+                )}
+                
+                {activity.time && (
+                  <div className="flex items-center gap-1.5">
+                    <Clock className="h-3 w-3 text-amber-700" />
+                    <span>{formatTimeTo12Hour(activity.time)}</span>
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex justify-center mt-4">
+                <Button 
+                  variant="ghost"
+                  size="sm"
+                  className="rounded-b-lg text-xs px-3.5 py-1.5 h-auto sticky-tab bg-w2d-sticky-dark hover:bg-amber-200 border-t border-amber-200 text-amber-800 -mx-1"
                 >
-                  {category}
-                </span>
-              ))}
-            </div>
-            
-            <div className="grid grid-cols-2 gap-2.5 text-sm text-gray-500">
-              <div className="flex items-center gap-1.5">
-                <MapPin className="h-3 w-3 text-amber-600" />
-                <span>{activity.location}</span>
+                  Show me more
+                </Button>
               </div>
-              <div className="flex items-center">
-                <span className="font-medium">{activity.priceRange}</span>
-              </div>
-              
-              {activity.date && (
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="h-3 w-3 text-amber-600" />
-                  <span>{activity.date}</span>
-                </div>
-              )}
-              
-              {activity.time && (
-                <div className="flex items-center gap-1.5">
-                  <Clock className="h-3 w-3 text-amber-600" />
-                  <span>{formatTimeTo12Hour(activity.time)}</span>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+            </CardContent>
+          </Card>
+        );
+      })}
       
       {/* End of list message */}
       {activities.length > 0 && (

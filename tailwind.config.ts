@@ -22,6 +22,7 @@ export default {
 			fontFamily: {
 				'nunito': ['Nunito', 'sans-serif'],
 				'poppins': ['Poppins', 'sans-serif'],
+				'caveat': ['Caveat', 'cursive'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -78,6 +79,9 @@ export default {
 					'light-blue': '#E5F3F7',
 					'light-peach': '#FEE9DC',
 					'light-mint': '#E8F7F0',
+					'sticky': '#FEF9C3',    // Light yellow for sticky notes
+					'sticky-dark': '#F7E99E', // Slightly darker yellow for contrast
+					'pin-red': '#E11D48',   // Red for pins/thumbtacks
 				},
 			},
 			borderRadius: {

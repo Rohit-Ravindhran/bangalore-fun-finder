@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&family=Caveat:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -140,4 +140,59 @@
 .swipe-right {
   transform: translateX(100%);
   opacity: 0;
+}
+
+/* Sticky Note Card Styles */
+.sticky-note {
+  background-color: #FEF9C3; /* Light yellow */
+  transform: rotate(var(--rotate-angle, 1deg));
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.sticky-note:hover {
+  transform: translateY(-5px) rotate(var(--rotate-angle, 1deg));
+  box-shadow: 0 8px 15px rgba(0,0,0,0.15), 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.sticky-note-even {
+  --rotate-angle: 1deg;
+}
+
+.sticky-note-odd {
+  --rotate-angle: -1deg;
+}
+
+.thumbtack {
+  width: 20px;
+  height: 20px;
+  background-color: #E11D48; /* Red */
+  border-radius: 50%;
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+.sticky-title {
+  font-family: 'Caveat', cursive;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.sticky-tab {
+  position: relative;
+  background-color: #FEF9C3;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  border-top: 1px dashed rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+.sticky-tab:hover {
+  transform: translateY(1px);
 }
