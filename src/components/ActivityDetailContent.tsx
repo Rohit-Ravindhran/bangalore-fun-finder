@@ -24,6 +24,30 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
     console.log('Image failed to load, using placeholder instead');
   };
 
+  // Function to validate and format time
+  const isValidTime = (timeString: string | undefined): boolean => {
+    if (!timeString) return false;
+    
+    // Check if it's already in 12-hour format with AM/PM
+    if (timeString.toLowerCase().includes('am') || timeString.toLowerCase().includes('pm')) {
+      return true;
+    }
+    
+    // Parse the time string assuming 24-hour format
+    const timeParts = timeString.split(':');
+    if (timeParts.length < 2) return true; // Can't parse, return as is
+    
+    const hours = parseInt(timeParts[0], 10);
+    const minutes = parseInt(timeParts[1], 10);
+    
+    // Check for invalid time ranges (50:00 to 60:00)
+    if (hours >= 50 && hours < 60) return false;
+    if (isNaN(hours) || isNaN(minutes)) return false;
+    if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return false;
+    
+    return true;
+  };
+
   const hasExternalLink = Boolean(activity.mapLink || activity.url);
   const rotationDeg = activity.id.charCodeAt(0) % 2 === 0 ? 1 : -1;
 
@@ -84,7 +108,7 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
             </div>
           )}
 
-          {activity.time && (
+          {activity.time && isValidTime(activity.time) && (
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-amber-700" />
               <span>{activity.time}</span>

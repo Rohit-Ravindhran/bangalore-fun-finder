@@ -112,9 +112,12 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
       let hours = parseInt(timeParts[0], 10);
       let minutes = parseInt(timeParts[1], 10);
       
+      // Check for invalid time ranges (50:00 to 60:00)
+      if (hours >= 50 && hours < 60) return '';
+      
       // Validate hours and minutes
-      if (isNaN(hours) || hours < 0 || hours > 23) hours = 0;
-      if (isNaN(minutes) || minutes < 0 || minutes > 59) minutes = 0;
+      if (isNaN(hours) || hours < 0 || hours > 23) return '';
+      if (isNaN(minutes) || minutes < 0 || minutes > 59) return '';
       
       // AM/PM determination
       const ampm = hours >= 12 ? 'PM' : 'AM';
@@ -125,8 +128,14 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
       return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
     } catch (error) {
       console.error('Error formatting time:', error);
-      return '12:00 PM'; // Default fallback time on error
+      return ''; // Return empty string on error instead of default time
     }
+  };
+
+  // Helper function to check if time is valid
+  const isValidTime = (timeString: string | undefined): boolean => {
+    if (!timeString) return false;
+    return formatTimeTo12Hour(timeString) !== '';
   };
 
   // Handle image loading errors - generate title-based placeholder
@@ -177,6 +186,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   };
 
   const isEven = activity.id.charCodeAt(0) % 2 === 0;
+  const formattedTime = formatTimeTo12Hour(activity.time);
 
   return (
     <div 
@@ -271,10 +281,10 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
             </div>
           )}
           
-          {activity.time && (
+          {formattedTime && (
             <div className="flex items-center gap-1.5">
               <Clock className="h-4 w-4 text-amber-700" />
-              <span>{formatTimeTo12Hour(activity.time)}</span>
+              <span>{formattedTime}</span>
             </div>
           )}
         </div>
