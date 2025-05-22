@@ -20,8 +20,11 @@ const Header: React.FC<HeaderProps> = ({ toggleSearch }) => {
   return (
     <>
       <header className="flex items-center justify-between py-1 px-5 bg-[#FFF8F0] sticky top-0 z-40 shadow-sm border-b border-amber-100">
-        <div className="text-lg font-nunito font-bold text-[#323232]">
-          {/* App name removed from header */}
+        <div className="flex items-center gap-2 text-lg font-caveat font-bold text-[#323232]">
+          <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center">
+            <span className="text-amber-600 text-xs font-bold">W2D</span>
+          </div>
+          <span className="hidden sm:block">What2Do</span>
         </div>
         <div className="flex items-center gap-3">
           <TooltipProvider>
