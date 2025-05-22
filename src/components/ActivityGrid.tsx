@@ -77,9 +77,12 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       let hours = parseInt(timeParts[0], 10);
       let minutes = parseInt(timeParts[1], 10);
       
+      // Check for invalid time ranges (50:00 to 60:00)
+      if (hours >= 50 && hours < 60) return '';
+      
       // Validate hours and minutes
-      if (isNaN(hours) || hours < 0 || hours > 23) hours = 0;
-      if (isNaN(minutes) || minutes < 0 || minutes > 59) minutes = 0;
+      if (isNaN(hours) || hours < 0 || hours > 23) return '';
+      if (isNaN(minutes) || minutes < 0 || minutes > 59) return '';
       
       // AM/PM determination
       const ampm = hours >= 12 ? 'PM' : 'AM';
@@ -90,7 +93,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
     } catch (error) {
       console.error('Error formatting time:', error);
-      return '12:00 PM'; // Default fallback time on error
+      return ''; // Return empty string on error
     }
   };
 
@@ -106,6 +109,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
         // Random rotation between -2 and 2 degrees, but consistent for each activity
         const rotationDeg = activity.id.charCodeAt(0) % 2 === 0 ? 1 : -1;
         const isEven = activity.id.charCodeAt(0) % 2 === 0;
+        const formattedTime = formatTimeTo12Hour(activity.time);
         
         return (
           <Card 
@@ -209,10 +213,10 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
                   </div>
                 )}
                 
-                {activity.time && (
+                {formattedTime && (
                   <div className="flex items-center gap-1.5">
                     <Clock className="h-3 w-3 text-amber-700" />
-                    <span>{formatTimeTo12Hour(activity.time)}</span>
+                    <span>{formattedTime}</span>
                   </div>
                 )}
               </div>
