@@ -30,6 +30,12 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
     
     // Check if it's already in 12-hour format with AM/PM
     if (timeString.toLowerCase().includes('am') || timeString.toLowerCase().includes('pm')) {
+      // For times with AM/PM, check for invalid hours (50:00 PM - 59:00 PM)
+      const hourMatch = timeString.match(/^(\d{1,2}):/);
+      if (hourMatch) {
+        const hour = parseInt(hourMatch[1], 10);
+        if (hour >= 50 && hour <= 59) return false;
+      }
       return true;
     }
     
@@ -40,8 +46,8 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
     const hours = parseInt(timeParts[0], 10);
     const minutes = parseInt(timeParts[1], 10);
     
-    // Check for invalid time ranges (50:00 to 60:00)
-    if (hours >= 50 && hours < 60) return false;
+    // Check for invalid time ranges (50:00 to 59:00)
+    if (hours >= 50 && hours <= 59) return false;
     if (isNaN(hours) || isNaN(minutes)) return false;
     if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return false;
     
