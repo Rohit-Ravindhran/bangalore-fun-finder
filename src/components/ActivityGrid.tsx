@@ -64,8 +64,14 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
   const formatTimeTo12Hour = (timeString: string | undefined): string => {
     if (!timeString) return '';
     
-    // If it's already in 12-hour format with AM/PM, just return it
+    // If it's already in 12-hour format with AM/PM, check for invalid hours first
     if (timeString.toLowerCase().includes('am') || timeString.toLowerCase().includes('pm')) {
+      // For times with AM/PM, check for invalid hours (50:00 PM - 59:00 PM)
+      const hourMatch = timeString.match(/^(\d{1,2}):/);
+      if (hourMatch) {
+        const hour = parseInt(hourMatch[1], 10);
+        if (hour >= 50 && hour <= 59) return '';
+      }
       return timeString;
     }
     
@@ -77,8 +83,8 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       let hours = parseInt(timeParts[0], 10);
       let minutes = parseInt(timeParts[1], 10);
       
-      // Check for invalid time ranges (50:00 to 60:00)
-      if (hours >= 50 && hours < 60) return '';
+      // Check for invalid time ranges (50:00 to 59:00)
+      if (hours >= 50 && hours <= 59) return '';
       
       // Validate hours and minutes
       if (isNaN(hours) || hours < 0 || hours > 23) return '';
