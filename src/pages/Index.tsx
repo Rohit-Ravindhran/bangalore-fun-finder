@@ -443,7 +443,7 @@ const Index = () => {
     setSelectedQuickFilters(new Set());
   };
 
-  // Update the handleSwipeLeft function to maintain sort order
+  // Update the handleSwipeLeft function to go to the next item based on sort order
   const handleSwipeLeft = () => {
     if (currentActivityIndex < allActivities.length - 1) {
       setCurrentActivityIndex(currentActivityIndex + 1);
@@ -457,11 +457,12 @@ const Index = () => {
     }
   };
 
-  // Update the handleSwipeRight function to maintain sort order
+  // Update the handleSwipeRight function to go to the previous item based on sort order
   const handleSwipeRight = () => {
     if (currentActivityIndex > 0) {
       setCurrentActivityIndex(currentActivityIndex - 1);
     } else {
+      // If at the beginning, go to the last item
       setCurrentActivityIndex(allActivities.length - 1);
     }
   };
@@ -736,7 +737,7 @@ const Index = () => {
       <Header toggleSearch={toggleSearch} />
 
       <main className="container px-4 pt-6 pb-32">
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <div className="relative">
             <div className="absolute inset-0 flex justify-center opacity-5 pointer-events-none">
               <img 
@@ -745,7 +746,7 @@ const Index = () => {
                 className="h-24 object-contain"
               />
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-[#323232] mb-3 relative">
+            <h1 className="text-3xl md:text-4xl font-bold text-[#323232] mb-2 relative">
               Happenings <span className="text-amber-600">Bangalore</span>
             </h1>
           </div>
@@ -754,7 +755,8 @@ const Index = () => {
           </p>
         </div>
 
-        <SubscribeSection className="z-10 mb-8 shadow-md" />
+        {/* Reduced top margin to make subscribe section more compact */}
+        <SubscribeSection className="z-10 mb-6 shadow-sm" />
 
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
 

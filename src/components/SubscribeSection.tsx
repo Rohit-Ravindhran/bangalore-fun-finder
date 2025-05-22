@@ -39,33 +39,31 @@ const SubscribeSection: React.FC<SubscribeSectionProps> = ({ className = '' }) =
   };
 
   return (
-    <div className={`bg-gradient-to-r from-amber-50 to-amber-100 text-primary rounded-xl p-6 shadow-md border-t-2 border-amber-200 ${className}`}>
-      <div className="max-w-lg mx-auto">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
-          <div className="flex items-center gap-2">
-            <BellPlus className="h-5 w-5 text-amber-600" />
-            <span className="font-medium text-base">Get weekend plans every Friday 🔔</span>
-          </div>
-          
-          <form className="flex gap-2 w-full md:w-auto" onSubmit={handleContactSubscribe}>
-            <Input 
-              type="text" 
-              placeholder="Email or phone number" 
-              className="h-10 text-sm border-amber-200 focus-visible:ring-amber-500"
-              value={contact}
-              onChange={(e) => setContact(e.target.value)}
-              required
-            />
-            <Button 
-              type="submit" 
-              size="default" 
-              className="h-10 bg-amber-600 text-white hover:bg-amber-700"
-            >
-              Subscribe
-            </Button>
-          </form>
+    <div className={`bg-white text-primary rounded-lg p-4 shadow-sm ${className}`}>
+      <form className="flex flex-col md:flex-row items-center justify-between gap-3" onSubmit={handleContactSubscribe}>
+        <div className="flex items-center gap-2 text-sm whitespace-nowrap">
+          <BellPlus className="h-4 w-4 text-amber-600" />
+          <span className="font-medium">Weekend plans every Friday</span>
         </div>
-      </div>
+        
+        <div className="flex w-full md:w-auto gap-2">
+          <Input 
+            type="text" 
+            placeholder="Email or phone" 
+            className="h-9 text-xs border-amber-100 focus-visible:ring-amber-400"
+            value={contact}
+            onChange={(e) => setContact(e.target.value)}
+            required
+          />
+          <Button 
+            type="submit" 
+            size="sm"
+            className="h-9 bg-amber-500 hover:bg-amber-600 text-white text-xs px-3"
+          >
+            Subscribe
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };
