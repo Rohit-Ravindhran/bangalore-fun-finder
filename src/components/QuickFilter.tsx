@@ -27,13 +27,13 @@ const QuickFilter: React.FC<QuickFilterProps> = ({
 }) => {
   return (
     <ScrollArea className="w-full py-1 overflow-x-auto">
-      <div className="flex space-x-2.5 px-3 min-w-full sm:min-w-max items-center max-w-[300px] overflow-x-auto">
+      <div className="flex space-x-2.5 px-3 min-w-full sm:min-w-max items-center max-w-[300px] md:max-w-full overflow-x-auto">
         {selectedFilters.size > 0 && (
           <button
             onClick={onClearFilters}
-            className="rounded-full px-4 py-2 text-sm transition-all font-medium flex items-center gap-1.5 bg-gray-100 text-gray-600 hover:bg-gray-200"
+            className="rounded-full px-4 py-2 text-sm transition-all font-medium flex items-center gap-1.5 bg-gray-100 text-gray-600 hover:bg-gray-200 md:text-base"
           >
-            <X className="h-3 w-3" />
+            <X className="h-3 w-3 md:h-4 md:w-4" />
             Clear All
           </button>
         )}
@@ -43,7 +43,7 @@ const QuickFilter: React.FC<QuickFilterProps> = ({
             key={filter.id}
             onClick={() => onSelectFilter(filter.id)}
             className={cn(
-              "rounded-full px-4 py-2 text-sm transition-all uppercase tracking-wide font-medium",
+              "rounded-full px-4 py-2 text-sm transition-all uppercase tracking-wide font-medium md:text-base md:px-5 md:py-2.5",
               selectedFilters.has(filter.id) 
                 ? "bg-w2d-teal text-white shadow-sm"
                 : "bg-white text-primary hover:bg-gray-50 border border-gray-100"

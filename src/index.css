@@ -196,3 +196,29 @@
 .sticky-tab:hover {
   transform: translateY(1px);
 }
+
+/* Desktop layout improvements */
+@media (min-width: 1024px) {
+  .desktop-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .desktop-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .desktop-card {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .desktop-section {
+    padding: 2rem 3rem;
+  }
+  
+  .desktop-heading {
+    font-size: 3.5rem;
+  }
+}
