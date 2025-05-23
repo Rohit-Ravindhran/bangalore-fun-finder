@@ -58,7 +58,7 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
   const rotationDeg = activity.id.charCodeAt(0) % 2 === 0 ? 1 : -1;
 
   return (
-    <Card className="overflow-hidden sticky-note bg-w2d-sticky shadow-xl" style={{ transform: `rotate(${rotationDeg}deg)` }}>
+    <Card className="overflow-hidden sticky-note bg-w2d-sticky shadow-xl md:max-w-2xl md:mx-auto" style={{ transform: `rotate(${rotationDeg}deg)` }}>
       {/* Thumbtack/pin */}
       <div className="thumbtack" aria-hidden="true">
         <Pin className="h-4 w-4 text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
@@ -68,7 +68,7 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
         <img
           src={activity.image || '/placeholder.svg'}
           alt={activity.title}
-          className="w-full h-64 object-cover border-b-2 border-amber-200"
+          className="w-full h-64 md:h-80 object-cover border-b-2 border-amber-200"
           onError={handleImageError}
         />
         <div className="absolute top-4 left-4 flex flex-col gap-2">
@@ -84,8 +84,8 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
         </div>
       </div>
 
-      <CardContent className="p-6">
-        <h1 className="text-2xl font-caveat font-bold mb-4 sticky-title">{activity.title}</h1>
+      <CardContent className="p-6 md:p-8">
+        <h1 className="text-2xl md:text-3xl font-caveat font-bold mb-4 sticky-title">{activity.title}</h1>
 
         <div className="flex flex-wrap gap-2 mb-4">
           {activity.tags.map((tag, index) => (
@@ -98,7 +98,7 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
           ))}
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-6 text-sm text-gray-700">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm md:text-base text-gray-700">
           <div className="flex items-center gap-2">
             <MapPin className="h-4 w-4 text-amber-700" />
             <span>{activity.location}</span>
@@ -123,23 +123,23 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
         </div>
 
         <div className="mb-6">
-          <h2 className="text-lg font-bold mb-2">About this activity</h2>
-          <p className="text-gray-700 whitespace-pre-line">
+          <h2 className="text-lg md:text-xl font-bold mb-2">About this activity</h2>
+          <p className="text-gray-700 whitespace-pre-line md:text-base">
             {activity.description}
           </p>
         </div>
 
         {activity.contactInfo && (
           <div className="mb-6">
-            <h2 className="text-lg font-bold mb-2">Contact Information</h2>
-            <p className="text-gray-700">{activity.contactInfo}</p>
+            <h2 className="text-lg md:text-xl font-bold mb-2">Contact Information</h2>
+            <p className="text-gray-700 md:text-base">{activity.contactInfo}</p>
           </div>
         )}
 
         <div className="flex justify-center mt-6">
           <Button 
             onClick={handleKnowMore} 
-            className="sticky-tab bg-w2d-sticky-dark hover:bg-amber-200 border-t border-amber-200 text-amber-800 flex items-center gap-2 rounded-b-lg rounded-t-none"
+            className="sticky-tab bg-w2d-sticky-dark hover:bg-amber-200 border-t border-amber-200 text-amber-800 flex items-center gap-2 rounded-b-lg rounded-t-none md:text-base md:py-3 md:px-6"
             disabled={!hasExternalLink}
           >
             Know More <ExternalLink className="h-4 w-4" />

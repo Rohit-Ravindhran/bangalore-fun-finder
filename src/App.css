@@ -1,6 +1,6 @@
 
 #root {
-  max-width: 1280px;
+  max-width: 1600px; /* Increased max-width for desktop */
   margin: 0 auto;
   text-align: center;
 }
@@ -118,4 +118,23 @@
 .swipe-right {
   transform: translateX(100%);
   opacity: 0;
+}
+
+/* Desktop layout improvements */
+@media (min-width: 1024px) {
+  .desktop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .desktop-container {
+    max-width: 1400px;
+    padding: 0 2rem;
+    margin: 0 auto;
+  }
+  
+  .desktop-main {
+    padding: 2rem;
+  }
 }

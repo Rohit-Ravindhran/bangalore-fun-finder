@@ -736,17 +736,17 @@ const Index = () => {
     <div className="min-h-screen bg-[#FFF8F0] overflow-x-hidden">
       <Header toggleSearch={toggleSearch} />
 
-      <main className="container px-4 pt-6 pb-32">
-        <div className="text-center mb-6">
+      <main className="container px-4 pt-6 pb-32 md:pt-10 lg:max-w-7xl desktop-main">
+        <div className="text-center mb-6 md:mb-10">
           <div className="relative">
             <div className="absolute inset-0 flex justify-center opacity-5 pointer-events-none">
               <img 
                 src="/placeholder.svg" 
                 alt="Bangalore Skyline" 
-                className="h-24 object-contain"
+                className="h-24 md:h-32 object-contain"
               />
             </div>
-            <h1 className="text-3xl md:text-4xl font-caveat font-bold text-[#323232] mb-2 relative sticky-title">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-caveat font-bold text-[#323232] mb-2 md:mb-4 relative sticky-title">
               Happenings <span className="text-amber-600">Bangalore</span>
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-w2d-pin-red">
@@ -756,18 +756,20 @@ const Index = () => {
               </div>
             </h1>
           </div>
-          <p className="text-sm md:text-base text-gray-600 italic font-caveat">
+          <p className="text-sm md:text-lg text-gray-600 italic font-caveat">
             Curated with love from trusted local communities
           </p>
         </div>
 
         {/* Reduced top margin to make subscribe section more compact */}
-        <SubscribeSection className="z-10 mb-6 shadow-sm" />
+        <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
+          <SubscribeSection className="z-10 mb-6 shadow-sm" />
+        </div>
 
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
 
         {searchVisible && (
-          <div className="bg-white rounded-xl p-3 mb-6 shadow-md">
+          <div className="bg-white rounded-xl p-3 mb-6 shadow-md md:max-w-2xl md:mx-auto">
             <div className="flex items-center gap-2">
               <Search className="h-5 w-5 text-gray-400" />
               <Input 
@@ -781,13 +783,13 @@ const Index = () => {
             </div>
           </div>
         )}
-        <div className="flex justify-end text-xs text-gray-500 mb-3 items-center">
-          <Clock className="h-3 w-3 mr-1" />
+        <div className="flex justify-end text-xs text-gray-500 mb-3 items-center md:mb-6 md:text-sm">
+          <Clock className="h-3 w-3 mr-1 md:h-4 md:w-4" />
           <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
         </div>
         
-        <div className="mb-8">
-          <h2 className="text-xl font-bold mb-4 text-[#323232]">Categories</h2>
+        <div className="mb-8 md:max-w-6xl md:mx-auto">
+          <h2 className="text-xl md:text-2xl font-bold mb-4 text-[#323232]">Categories</h2>
           <CategoryFilter 
             categories={categories}
             selectedCategories={selectedCategories}
@@ -799,10 +801,10 @@ const Index = () => {
           />
         </div>
 
-        <Separator className="my-6 bg-amber-100" />
+        <Separator className="my-6 md:my-8 bg-amber-100" />
 
         {/* Position sort and switch controls above tab content */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-4 md:mb-6 md:max-w-6xl md:mx-auto">
           <SortSelector 
             options={sortOptions} 
             selectedOption={sortOption} 
@@ -815,7 +817,7 @@ const Index = () => {
           />
         </div>
         
-        <div className="mb-10">
+        <div className="mb-10 md:max-w-6xl md:mx-auto">
           <TabView 
             tabs={tabs} 
             defaultTabId="all" 
