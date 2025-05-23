@@ -21,10 +21,14 @@ const Header: React.FC<HeaderProps> = ({ toggleSearch }) => {
     <>
       <header className="flex items-center justify-between py-1 px-5 md:px-10 bg-[#FFF8F0] sticky top-0 z-40 shadow-sm border-b border-amber-100">
         <div className="flex items-center gap-2 text-2xl md:text-3xl font-caveat font-bold text-[#323232]">
-          <div className="w-7 h-7 md:w-9 md:h-9 rounded-full bg-amber-100 flex items-center justify-center">
-            <span className="text-amber-600 text-sm md:text-base font-bold">W2D</span>
+          <div className="w-7 h-7 md:w-9 md:h-9 flex items-center justify-center">
+            <img 
+              src="/lovable-uploads/6dacec0d-a286-4f09-ae43-9cb52365856b.png" 
+              alt="H Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
-          <span className="hidden sm:block">What2Do</span>
+          <span className="hidden sm:block">Happenings</span>
         </div>
         <div className="flex items-center gap-3">
           <TooltipProvider>
