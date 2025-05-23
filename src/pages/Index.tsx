@@ -663,7 +663,7 @@ const Index = () => {
         onLike={handleLike}
         likedActivities={likedActivities}
         onShare={handleShare}
-        columns={1}
+        columns={2} // Explicitly set to 2 columns for desktop
         sectionType={sectionType}
       />
     );

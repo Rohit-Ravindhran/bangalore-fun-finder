@@ -110,7 +110,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="md:grid md:grid-cols-2 md:gap-6 space-y-4 md:space-y-0">
       {activities.map((activity) => {
         // Random rotation between -2 and 2 degrees, but consistent for each activity
         const rotationDeg = activity.id.charCodeAt(0) % 2 === 0 ? 1 : -1;
@@ -243,7 +243,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       
       {/* End of list message */}
       {activities.length > 0 && (
-        <div className="text-center py-8 px-4 end-of-list">
+        <div className="text-center py-8 px-4 end-of-list md:col-span-2">
           <p className="text-gray-600 font-medium">✨ That's all for now. More coming soon!</p>
         </div>
       )}
