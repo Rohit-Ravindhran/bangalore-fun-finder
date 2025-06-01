@@ -1,7 +1,7 @@
 
 {
-  "name": "What2Do Bangalore",
-  "short_name": "What2Do",
+  "name": "Happenings Bangalore",
+  "short_name": "Happenings",
   "description": "Discover fun activities in Bangalore - your local city guide",
   "start_url": "/",
   "display": "standalone",
@@ -32,7 +32,7 @@
     {
       "name": "Contact Us",
       "short_name": "Contact",
-      "description": "Get in touch with the What2Do team",
+      "description": "Get in touch with the Happenings team",
       "url": "/contact"
     }
   ]

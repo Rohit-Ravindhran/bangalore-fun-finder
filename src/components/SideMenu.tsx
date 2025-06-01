@@ -19,7 +19,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="font-nunito font-bold text-2xl text-primary">What2Do</h2>
+          <h2 className="font-nunito font-bold text-2xl text-primary">Happenings</h2>
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="h-6 w-6" />
           </Button>
@@ -87,8 +87,8 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
 
         <div className="absolute bottom-8 left-4 right-4">
           <div className="text-sm text-gray-500">
-            <p className="mb-4">What2Do in Bangalore is your personal city guide to hidden and trending things to do – curated just for you.</p>
-            <p>© {new Date().getFullYear()} What2Do</p>
+            <p className="mb-4">Happenings in Bangalore is your personal city guide to hidden and trending things to do – curated just for you.</p>
+            <p>© {new Date().getFullYear()} Happenings</p>
           </div>
         </div>
       </div>
