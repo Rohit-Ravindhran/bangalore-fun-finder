@@ -12,9 +12,9 @@ const About = () => {
         <h1 className="text-3xl font-bold mb-6 text-primary">About Us</h1>
         
         <div className="bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="text-xl font-bold mb-4">What is What2Do Bangalore?</h2>
+          <h2 className="text-xl font-bold mb-4">What is Happenings Bangalore?</h2>
           <p className="mb-4">
-            What2Do Bangalore is your personal city guide to discover hidden gems and trending experiences in Bangalore. 
+            Happenings Bangalore is your personal city guide to discover hidden gems and trending experiences in Bangalore. 
             We curate unique activities, events, and places that locals love but tourists often miss.
           </p>
           

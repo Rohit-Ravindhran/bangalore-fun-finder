@@ -17,7 +17,7 @@ const Privacy = () => {
           <section className="mb-6">
             <h2 className="text-xl font-bold mb-3">1. Introduction</h2>
             <p>
-              What2Do Bangalore ("we", "our", or "us") is committed to protecting your privacy. 
+              Happenings Bangalore ("we", "our", or "us") is committed to protecting your privacy. 
               This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website and services.
             </p>
           </section>
@@ -48,7 +48,7 @@ const Privacy = () => {
           <section>
             <h2 className="text-xl font-bold mb-3">9. Contact Us</h2>
             <p>
-              If you have questions or concerns about this Privacy Policy, please contact us at privacy@what2dobangalore.com.
+              If you have questions or concerns about this Privacy Policy, please contact us at privacy@happeningsbangalore.com.
             </p>
           </section>
         </div>

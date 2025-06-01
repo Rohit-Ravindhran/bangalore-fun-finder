@@ -82,7 +82,7 @@ const Favorites: React.FC = () => {
       if (!activityData) return;
       
       const shareData = {
-        title: `Check out ${activityData.title} on What2Do Bangalore`,
+        title: `Check out ${activityData.title} on Happenings Bangalore`,
         text: activityData.description || 'Discover fun activities in Bangalore',
         url: window.location.origin + `/activity/${id}`
       };

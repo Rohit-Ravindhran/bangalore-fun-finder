@@ -17,7 +17,7 @@ const Terms = () => {
           <section className="mb-6">
             <h2 className="text-xl font-bold mb-3">1. Acceptance of Terms</h2>
             <p>
-              By accessing or using What2Do Bangalore's website and services, you agree to be bound by these Terms and Conditions. 
+              By accessing or using Happenings Bangalore's website and services, you agree to be bound by these Terms and Conditions. 
               If you do not agree to these terms, please do not use our services.
             </p>
           </section>
@@ -49,7 +49,7 @@ const Terms = () => {
           <section>
             <h2 className="text-xl font-bold mb-3">10. Contact Us</h2>
             <p>
-              If you have any questions about these Terms and Conditions, please contact us at terms@what2dobangalore.com.
+              If you have any questions about these Terms and Conditions, please contact us at terms@happeningsbangalore.com.
             </p>
           </section>
         </div>
