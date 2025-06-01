@@ -72,7 +72,7 @@ const Contact = () => {
           {isSubmitted ? (
             <div className="text-center py-8">
               <h2 className="text-2xl font-bold text-w2d-teal mb-4">Thank You!</h2>
-              <p className="mb-4">Your message has been submitted and we've opened your email app. Feel free to edit and send your message.</p>
+              <p className="mb-4">We have received your message and will get back to you soon.</p>
               <Button onClick={() => setIsSubmitted(false)}>Send Another Message</Button>
             </div>
           ) : (
