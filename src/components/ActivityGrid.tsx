@@ -120,36 +120,32 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
         return (
           <Card 
             key={activity.id}
-            className={cn(
-              "overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer border-0 shadow-lg rounded-xl bg-w2d-sticky relative",
-              "sticky-note transform hover:-translate-y-1",
-              isEven ? "sticky-note-even" : "sticky-note-odd"
-            )}
+            className="glass-floating overflow-hidden elegant-transition hover:scale-[1.01] cursor-pointer border border-white/20 relative animate-in fade-in slide-in-from-bottom-4 duration-500"
             onClick={() => handleCardClick(activity.id)}
-            style={{ transform: `rotate(${rotationDeg}deg)` }}
+            style={{ animationDelay: `${(activities.indexOf(activity) % 6) * 50}ms` }}
           >
-            {/* Thumbtack/pin */}
-            <div className="thumbtack" aria-hidden="true">
-              <Pin className="h-4 w-4 text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-            </div>
+            {/* Soft glass accent decorations */}
+            <div className="absolute top-4 left-4 w-1.5 h-12 bg-gradient-to-b from-white/25 via-white/15 to-transparent rounded-full z-10"></div>
+            <div className="absolute bottom-4 right-4 w-8 h-0.5 bg-gradient-to-r from-transparent via-white/15 to-transparent rounded-full z-10"></div>
             
-            <div className="relative">
+            <div className="relative border-b border-white/10">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent z-[1] rounded-t-3xl"></div>
               <img 
                 src={activity.image || '/placeholder.svg'} 
                 alt={activity.title} 
-                className="w-full h-48 object-cover border-b-2 border-amber-200"
+                className="w-full h-48 object-cover rounded-t-3xl shadow-inner"
                 loading="lazy"
                 onError={(e) => handleImageError(e, activity.title)}
               />
-              <div className="absolute top-2 right-2 flex gap-1.5">
+              <div className="absolute top-3 right-3 flex gap-2 z-[2]">
                 <Button
                   variant="ghost"
                   size="icon"
                   className={cn(
-                    "rounded-full backdrop-blur-sm w-8 h-8 transition-all",
+                    "glass-pill w-10 h-10 smooth-hover",
                     likedActivities.has(activity.id) 
-                      ? "bg-red-500/90 text-white" 
-                      : "bg-white/80 text-gray-600 hover:bg-white/90"
+                      ? "bg-gradient-to-r from-red-500/80 to-pink-500/70 text-white premium-shadow" 
+                      : "text-gray-700 hover:text-red-500"
                   )}
                   onClick={(e) => handleLike(e, activity.id)}
                 >
@@ -160,7 +156,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="bg-white/80 rounded-full backdrop-blur-sm w-8 h-8 text-gray-600 hover:bg-white/90 transition-all"
+                    className="glass-pill text-gray-700 hover:text-blue-600 w-10 h-10 smooth-hover"
                     onClick={(e) => handleShare(e, activity.id)}
                   >
                     <Share2 className="h-4 w-4" />
@@ -168,26 +164,26 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
                 )}
               </div>
               
-              <div className="absolute top-2 left-2 flex flex-col gap-1">
+              <div className="absolute top-3 left-3 flex flex-col gap-2 z-[2]">
                 {activity.tags && activity.tags.includes('trending') && (
-                  <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-md">🔥 Pinned</Badge>
+                  <Badge variant="secondary" className="glass-strong bg-red-500/80 text-white text-xs py-1 px-3 font-semibold border-0">🔥 Pinned</Badge>
                 )}
                 
                 {activity.lastUpdated && activity.lastUpdated.includes("today") && (
-                  <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0 shadow-md">🆕 New</Badge>
+                  <Badge variant="secondary" className="glass-strong bg-green-500/80 text-white text-xs py-1 px-3 font-semibold border-0">🆕 New</Badge>
                 )}
                 
                 {sectionType === 'All' && activity.tags && activity.tags.includes('ourpick') && (
-                  <Badge variant="secondary" className="bg-amber-500 text-white text-xs py-0 shadow-md">✨ Our Pick</Badge>
+                  <Badge variant="secondary" className="glass-strong bg-amber-500/80 text-white text-xs py-1 px-3 font-semibold border-0">✨ Our Pick</Badge>
                 )}
               </div>
             </div>
             
-            <CardContent className="p-5">
-              <h3 className="font-caveat text-xl mb-2 line-clamp-2 sticky-title">{activity.title}</h3>
+            <CardContent className="p-6">
+              <h3 className="font-nunito font-bold text-xl mb-3 line-clamp-2 text-gray-800 leading-tight">{activity.title}</h3>
               
               {activity.description && (
-                <p className="text-sm text-gray-700 mb-3 line-clamp-2">
+                <p className="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed">
                   {truncateText(activity.description, 100)}
                 </p>
               )}
@@ -196,42 +192,55 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
                 {activity.categoryNames && activity.categoryNames.slice(0, 3).map((category, idx) => (
                   <span 
                     key={idx} 
-                    className="inline-block text-xs bg-amber-100 text-amber-800 rounded-full px-3 py-1 font-medium"
+                    className="glass-pill text-xs text-gray-700 px-3 py-1.5 font-medium smooth-hover"
                   >
                     {category}
                   </span>
                 ))}
               </div>
               
-              <div className="grid grid-cols-2 gap-2.5 text-sm text-gray-700">
-                <div className="flex items-center gap-1.5">
-                  <MapPin className="h-3 w-3 text-amber-700" />
-                  <span>{activity.location}</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="font-medium">{activity.priceRange}</span>
-                </div>
-                
-                {activity.date && (
-                  <div className="flex items-center gap-1.5">
-                    <Calendar className="h-3 w-3 text-amber-700" />
-                    <span>{activity.date}</span>
+              <div className="glass-subtle rounded-3xl p-4 mb-4 border border-white/15 relative overflow-hidden">
+                <div className="relative z-10">
+                  <div className="grid grid-cols-2 gap-3 text-sm text-gray-700">
+                    <div className="flex items-center gap-2">
+                      <div className="glass-pill w-6 h-6 flex items-center justify-center p-1">
+                        <MapPin className="h-3 w-3 text-orange-600" />
+                      </div>
+                      <span className="font-medium">{activity.location}</span>
+                    </div>
+                    <div className="flex items-center font-semibold text-orange-600">
+                      <span>{activity.priceRange}</span>
+                    </div>
+                    
+                    {activity.date && (
+                      <div className="flex items-center gap-2">
+                        <div className="glass-pill w-6 h-6 flex items-center justify-center p-1">
+                          <Calendar className="h-3 w-3 text-orange-600" />
+                        </div>
+                        <span className="font-medium">{activity.date}</span>
+                      </div>
+                    )}
+                    
+                    {formattedTime && (
+                      <div className="flex items-center gap-2">
+                        <div className="glass-pill w-6 h-6 flex items-center justify-center p-1">
+                          <Clock className="h-3 w-3 text-orange-600" />
+                        </div>
+                        <span className="font-medium">{formattedTime}</span>
+                      </div>
+                    )}
                   </div>
-                )}
-                
-                {formattedTime && (
-                  <div className="flex items-center gap-1.5">
-                    <Clock className="h-3 w-3 text-amber-700" />
-                    <span>{formattedTime}</span>
-                  </div>
-                )}
+                </div>
               </div>
               
               <div className="flex justify-center mt-4">
                 <Button 
-                  variant="ghost"
                   size="sm"
-                  className="rounded-b-lg text-xs px-3.5 py-1.5 h-auto sticky-tab bg-w2d-sticky-dark hover:bg-amber-200 border-t border-amber-200 text-amber-800 -mx-1"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCardClick(activity.id);
+                  }}
+                  className="glass-pill text-sm px-5 py-2.5 h-auto font-medium bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:from-orange-600 hover:to-pink-600 smooth-hover shadow-md hover:shadow-lg border-0 w-full"
                 >
                   Show me more
                 </Button>
@@ -243,8 +252,10 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
       
       {/* End of list message */}
       {activities.length > 0 && (
-        <div className="text-center py-8 px-4 end-of-list md:col-span-2">
-          <p className="text-gray-600 font-medium">✨ That's all for now. More coming soon!</p>
+        <div className="glass-floating scale-in text-center py-8 px-6 end-of-list md:col-span-2 mx-4 relative overflow-hidden">
+          <div className="relative z-10">
+            <p className="text-gray-700 font-semibold text-lg">✨ That's all for now. More coming soon!</p>
+          </div>
         </div>
       )}
     </div>

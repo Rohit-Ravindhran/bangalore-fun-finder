@@ -197,34 +197,32 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   return (
     <div 
       className={cn(
-        "activity-card w-full max-w-sm mx-auto rounded-xl overflow-hidden transition-all duration-300 sticky-note",
-        isEven ? "sticky-note-even" : "sticky-note-odd",
+        "activity-card w-full max-w-sm mx-auto glass-floating overflow-hidden elegant-transition hover:scale-[1.01] relative",
         isLeaving === 'left' ? 'swipe-left' : isLeaving === 'right' ? 'swipe-right' : ''
       )}
-      style={{ transform: `rotate(${rotationAngle}deg)` }}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
     >
-      {/* Thumbtack/pin */}
-      <div className="thumbtack" aria-hidden="true">
-        <Pin className="h-4 w-4 text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-      </div>
+      {/* Soft glass accent decorations */}
+      <div className="absolute top-4 left-4 w-1.5 h-12 bg-gradient-to-b from-white/25 via-white/15 to-transparent rounded-full z-10"></div>
+      <div className="absolute bottom-4 right-4 w-8 h-0.5 bg-gradient-to-r from-transparent via-white/15 to-transparent rounded-full z-10"></div>
       
       <div className="relative">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent z-[1] rounded-t-3xl"></div>
         <img 
           src={activity.image} 
           alt={activity.title} 
-          className="w-full h-52 object-cover border-b-2 border-amber-200"
+          className="w-full h-52 object-cover rounded-t-3xl"
           loading="lazy"
           onError={handleImageError}
         />
-        <div className="absolute top-2 right-2 flex gap-1.5">
+        <div className="absolute top-3 right-3 flex gap-2 z-[2]">
           <Button 
             variant="ghost" 
             size="icon" 
             className={cn(
-              "rounded-full backdrop-blur-sm w-8 h-8 transition-all",
-              liked ? "bg-red-500/90 text-white" : "bg-white/80 text-gray-600 hover:bg-white/90"
+              "glass-pill w-10 h-10 smooth-hover",
+              liked ? "bg-gradient-to-r from-red-500/80 to-pink-500/70 text-white premium-shadow" : "text-gray-700 hover:text-red-500"
             )}
             onClick={handleLike}
           >
@@ -233,94 +231,103 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           <Button 
             variant="ghost" 
             size="icon" 
-            className="rounded-full bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-white/90 w-8 h-8 transition-all"
+            className="glass-pill text-gray-700 hover:text-blue-600 w-10 h-10 smooth-hover"
             onClick={handleShare}
           >
             <Share2 className="h-4 w-4" />
           </Button>
         </div>
         
-        <div className="absolute top-2 left-2 flex flex-col gap-1.5">
+        <div className="absolute top-3 left-3 flex flex-col gap-2 z-[2]">
           {activity.tags && activity.tags.includes('trending') && (
-            <Badge variant="secondary" className="bg-red-500 text-white text-xs py-0 shadow-md">🔥 Pinned</Badge>
+            <Badge variant="secondary" className="glass-strong bg-red-500/80 text-white text-xs py-1 px-3 font-semibold border-0">🔥 Pinned</Badge>
           )}
           
           {activity.lastUpdated && activity.lastUpdated.includes("today") && (
-            <Badge variant="secondary" className="bg-green-500 text-white text-xs py-0 shadow-md">🆕 New</Badge>
+            <Badge variant="secondary" className="glass-strong bg-green-500/80 text-white text-xs py-1 px-3 font-semibold border-0">🆕 New</Badge>
           )}
         </div>
       </div>
       
-      <div className="p-5">
-        <h3 className="text-lg font-caveat font-semibold mb-3 sticky-title text-xl">{activity.title}</h3>
+      <div className="p-6">
+        <h3 className="text-xl font-nunito font-bold mb-3 text-gray-800 leading-tight">{activity.title}</h3>
         
         {activity.description && (
-          <p className="text-sm text-gray-700 mb-3 line-clamp-2">
+          <p className="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed">
             {truncateText(activity.description, 120)}
           </p>
         )}
         
-        <div className="flex flex-wrap gap-2 mb-3">
+        <div className="flex flex-wrap gap-2 mb-4">
           {activity.categoryNames && activity.categoryNames.slice(0, 3).map((category, index) => (
             <span 
               key={index} 
-              className="inline-block text-xs bg-amber-100 text-amber-800 rounded-full px-3 py-1 font-medium"
+              className="glass-pill text-xs text-gray-700 px-3 py-1.5 font-medium smooth-hover"
             >
               {category}
             </span>
           ))}
         </div>
         
-        <div className="grid grid-cols-2 gap-2.5 text-sm text-gray-700 mb-4">
-          <div className="flex items-center gap-1.5">
-            <MapPin className="h-4 w-4 text-amber-700" />
-            <span>{activity.location}</span>
-          </div>
-          <div className="flex items-center font-medium">
-            <span>{activity.priceRange}</span>
-          </div>
-          
-          {activity.date && (
-            <div className="flex items-center gap-1.5">
-              <Calendar className="h-4 w-4 text-amber-700" />
-              <span>{activity.date}</span>
+        <div className="glass-subtle rounded-3xl p-4 mb-4 border border-white/15 relative overflow-hidden">
+          <div className="relative z-10">
+            <div className="grid grid-cols-2 gap-3 text-sm text-gray-700">
+              <div className="flex items-center gap-2">
+                <div className="glass-pill w-6 h-6 flex items-center justify-center p-1">
+                  <MapPin className="h-3 w-3 text-orange-600" />
+                </div>
+                <span className="font-medium">{activity.location}</span>
+              </div>
+              <div className="flex items-center font-semibold text-orange-600">
+                <span>{activity.priceRange}</span>
+              </div>
+              
+              {activity.date && (
+                <div className="flex items-center gap-2">
+                  <div className="glass-pill w-6 h-6 flex items-center justify-center p-1">
+                    <Calendar className="h-3 w-3 text-orange-600" />
+                  </div>
+                  <span className="font-medium">{activity.date}</span>
+                </div>
+              )}
+              
+              {formattedTime && (
+                <div className="flex items-center gap-2">
+                  <div className="glass-pill w-6 h-6 flex items-center justify-center p-1">
+                    <Clock className="h-3 w-3 text-orange-600" />
+                  </div>
+                  <span className="font-medium">{formattedTime}</span>
+                </div>
+              )}
             </div>
-          )}
-          
-          {formattedTime && (
-            <div className="flex items-center gap-1.5">
-              <Clock className="h-4 w-4 text-amber-700" />
-              <span>{formattedTime}</span>
-            </div>
-          )}
+          </div>
         </div>
         
         <div className="flex justify-between items-center">
           <Button 
-            variant="ghost" 
             size="sm" 
-            className="rounded-b-lg text-xs px-3.5 py-1.5 h-auto sticky-tab bg-w2d-sticky-dark hover:bg-amber-200 border-t border-amber-200 text-amber-800 -mx-1"
+            className="glass-pill text-sm px-5 py-2 h-auto font-medium bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:from-orange-600 hover:to-pink-600 smooth-hover shadow-md hover:shadow-lg border-0"
             onClick={handleViewDetails}
           >
             Show me more
           </Button>
           
-          <div className="flex gap-1.5">
+          <div className="flex gap-2">
             <Button 
               variant="ghost" 
               size="icon" 
-              className="rounded-full bg-gray-100 w-8 h-8 hover:bg-gray-200 transition-all" 
+              className="glass-pill w-9 h-9 smooth-hover" 
               onClick={handleSwipeLeft}
             >
-              <ArrowLeft className="h-3.5 w-3.5" />
+              <ArrowLeft className="h-4 w-4 text-gray-700" />
             </Button>
             <Button 
               variant="ghost" 
               size="icon" 
-              className="rounded-full bg-gray-100 w-8 h-8 hover:bg-gray-200 transition-all" 
+              className="glass-pill w-9 h-9 smooth-hover" 
               onClick={handleSwipeRight}
             >
-              <ArrowRight className="h-3.5 w-3.5" />
+              <ArrowRight className="h-4 w-4 text-gray-700" />
             </Button>
           </div>
         </div>

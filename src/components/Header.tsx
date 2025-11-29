@@ -19,31 +19,33 @@ const Header: React.FC<HeaderProps> = ({ toggleSearch }) => {
 
   return (
     <>
-      <header className="flex items-center justify-between py-1 px-5 md:px-10 bg-[#FFF8F0] sticky top-0 z-40 shadow-sm border-b border-amber-100">
-        <div className="flex items-center gap-2 text-2xl md:text-3xl font-caveat font-bold text-[#323232]">
-          <div className="w-7 h-7 md:w-9 md:h-9 flex items-center justify-center">
+      <header className="glass-header flex items-center justify-between py-2 px-4 md:px-8 sticky top-0 z-40 transition-all duration-300">
+        <div className="flex items-center gap-3 text-xl md:text-2xl font-semibold text-[#323232]">
+          <div className="glass-pill w-8 h-8 md:w-9 md:h-9 flex items-center justify-center p-1 smooth-hover">
             <img 
               src="/lovable-uploads/6dacec0d-a286-4f09-ae43-9cb52365856b.png" 
               alt="H Logo" 
               className="w-full h-full object-contain"
             />
           </div>
-          <span className="hidden sm:block">Happenings</span>
+          <span className="hidden sm:block bg-gradient-to-r from-gray-800 via-orange-600 to-pink-600 bg-clip-text text-transparent">
+            Happenings
+          </span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button 
-                  variant="outline" 
+                  variant="ghost" 
                   size="icon" 
                   onClick={toggleSearch}
-                  className="h-7 w-7 md:h-9 md:w-9 rounded-full bg-white border-none shadow-sm hover:bg-amber-50 hover:shadow-md transition-all"
+                  className="glass-pill h-8 w-8 md:h-9 md:w-9 border-0 smooth-hover"
                 >
-                  <Search className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                  <Search className="h-4.5 w-4.5 text-[#323232]" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent className="glass-subtle">
                 <p>Search activities</p>
               </TooltipContent>
             </Tooltip>
@@ -53,15 +55,15 @@ const Header: React.FC<HeaderProps> = ({ toggleSearch }) => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button 
-                  variant="outline" 
+                  variant="ghost" 
                   size="icon" 
                   onClick={handleToggleMenu} 
-                  className="h-7 w-7 md:h-9 md:w-9 rounded-full bg-white border-none shadow-sm hover:bg-amber-50 hover:shadow-md transition-all"
+                  className="glass-pill h-8 w-8 md:h-9 md:w-9 border-0 smooth-hover"
                 >
-                  <Menu className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary" />
+                  <Menu className="h-4.5 w-4.5 text-[#323232]" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent className="glass-subtle">
                 <p>Open menu</p>
               </TooltipContent>
             </Tooltip>

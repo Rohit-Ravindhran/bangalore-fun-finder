@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
 import ActivityCard from '@/components/ActivityCard';
@@ -639,9 +640,11 @@ const Index = () => {
 
     if (activities.length === 0) {
       return (
-        <div className="bg-white rounded-2xl p-8 text-center shadow-sm">
-          <h3 className="text-xl font-bold mb-2">No activities found</h3>
-          <p className="text-gray-600">Try a different filter</p>
+        <div className="glass-floating scale-in p-8 text-center mx-4 relative overflow-hidden">
+          <div className="relative z-10">
+            <h3 className="text-2xl font-semibold mb-3 text-gray-800">No activities found</h3>
+            <p className="text-gray-600 font-medium">Try a different filter</p>
+          </div>
         </div>
       );
     }
@@ -707,9 +710,11 @@ const Index = () => {
       content: dateIdeas.length > 0 
         ? renderTabContent(dateIdeas, 'Date Ideas')
         : (
-          <div className="bg-white rounded-2xl p-8 text-center shadow-sm border-dashed border-2 border-gray-300">
-            <h3 className="text-xl font-bold mb-2">Coming Soon</h3>
-            <p className="text-gray-600">Sign up to get updates!</p>
+          <div className="glass-floating scale-in p-8 text-center border-dashed border-2 border-white/20 relative overflow-hidden">
+            <div className="relative z-10">
+              <h3 className="text-xl font-semibold mb-2 text-gray-800">Coming Soon</h3>
+              <p className="text-gray-600">Sign up to get updates!</p>
+            </div>
           </div>
         ),
       count: dateIdeas.length > 0 ? {
@@ -733,78 +738,93 @@ const Index = () => {
   const lastUpdatedDate = yesterday.toLocaleDateString();
 
   return (
-    <div className="min-h-screen bg-[#FFF8F0] overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden">
       <Header toggleSearch={toggleSearch} />
 
-      <main className="container px-4 pt-6 pb-32 md:pt-10 lg:max-w-7xl desktop-main">
-        <div className="text-center mb-6 md:mb-10">
-          <div className="relative">
-            <div className="absolute inset-0 flex justify-center opacity-5 pointer-events-none">
-              <img 
-                src="/placeholder.svg" 
-                alt="Bangalore Skyline" 
-                className="h-24 md:h-32 object-contain"
-              />
-            </div>
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-caveat font-bold text-[#323232] mb-2 md:mb-4 relative sticky-title">
-              Happenings <span className="text-amber-600">Bangalore</span>
-              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-w2d-pin-red">
-                  <path d="M12 2C10.0222 2 8.08879 2.58649 6.4443 3.6853C4.79981 4.78412 3.51809 6.3459 2.76121 8.17317C2.00433 10.0004 1.8063 12.0111 2.19215 13.9509C2.578 15.8907 3.53041 17.6725 4.92894 19.0711C6.32746 20.4696 8.10929 21.422 10.0491 21.8079C11.9889 22.1937 13.9996 21.9957 15.8268 21.2388C17.6541 20.4819 19.2159 19.2002 20.3147 17.5557C21.4135 15.9112 22 13.9778 22 12C22 9.34784 20.9464 6.8043 19.0711 4.92893C17.1957 3.05357 14.6522 2 12 2ZM12 20C10.4178 20 8.87104 19.5308 7.55544 18.6518C6.23985 17.7727 5.21447 16.5233 4.60897 15.0615C4.00347 13.5997 3.84504 11.9911 4.15372 10.4393C4.4624 8.88743 5.22433 7.46197 6.34315 6.34315C7.46197 5.22433 8.88743 4.4624 10.4393 4.15372C11.9911 3.84504 13.5997 4.00346 15.0615 4.60896C16.5233 5.21447 17.7727 6.23984 18.6518 7.55544C19.5308 8.87103 20 10.4177 20 12C20 14.1217 19.1572 16.1566 17.6569 17.6569C16.1566 19.1571 14.1217 20 12 20Z" fill="currentColor"/>
-                  <path d="M12 7C11.2044 7 10.4413 7.31607 9.87868 7.87868C9.31607 8.44129 9 9.20435 9 10C9 10.7956 9.31607 11.5587 9.87868 12.1213C10.4413 12.6839 11.2044 13 12 13C12.7956 13 13.5587 12.6839 14.1213 12.1213C14.6839 11.5587 15 10.7956 15 10C15 9.20435 14.6839 8.44129 14.1213 7.87868C13.5587 7.31607 12.7956 7 12 7Z" fill="currentColor"/>
-                </svg>
+      <main className="container px-4 pt-4 pb-32 md:pt-6 lg:max-w-7xl desktop-main">
+        <div className="text-center mb-4 md:mb-5">
+          <div className="glass-floating scale-in p-1.5 md:p-2 mx-2 md:mx-4 relative overflow-hidden">
+            <div className="relative z-10">
+              <div className="absolute inset-0 flex justify-center opacity-12 pointer-events-none">
+                <div className="w-20 h-20 md:w-28 md:h-28 bg-gradient-to-br from-orange-400/25 to-purple-400/25 rounded-full blur-3xl soft-glow"></div>
               </div>
-            </h1>
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold mb-1 md:mb-1.5 relative flex flex-row items-center justify-center gap-2 md:gap-2">
+                <span className="bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
+                  Happ'nin
+                </span>
+                {/* <br className="md:hidden" /> */}
+                <span className="bg-gradient-to-r from-purple-600 to-purple-500 bg-clip-text text-transparent">
+                  Bangalore
+                </span>
+                <div className="absolute -top-2 right-0 md:-top-4 md:right-4">
+                  <div className="glass-pill w-6 h-6 md:w-8 md:h-8 flex items-center justify-center animate-bounce soft-glow">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-red-500 md:w-5 md:h-5">
+                      <path d="M12 2C10.0222 2 8.08879 2.58649 6.4443 3.6853C4.79981 4.78412 3.51809 6.3459 2.76121 8.17317C2.00433 10.0004 1.8063 12.0111 2.19215 13.9509C2.578 15.8907 3.53041 17.6725 4.92894 19.0711C6.32746 20.4696 8.10929 21.422 10.0491 21.8079C11.9889 22.1937 13.9996 21.9957 15.8268 21.2388C17.6541 20.4819 19.2159 19.2002 20.3147 17.5557C21.4135 15.9112 22 13.9778 22 12C22 9.34784 20.9464 6.8043 19.0711 4.92893C17.1957 3.05357 14.6522 2 12 2ZM12 20C10.4178 20 8.87104 19.5308 7.55544 18.6518C6.23985 17.7727 5.21447 16.5233 4.60897 15.0615C4.00347 13.5997 3.84504 11.9911 4.15372 10.4393C4.4624 8.88743 5.22433 7.46197 6.34315 6.34315C7.46197 5.22433 8.88743 4.4624 10.4393 4.15372C11.9911 3.84504 13.5997 4.00346 15.0615 4.60896C16.5233 5.21447 17.7727 6.23984 18.6518 7.55544C19.5308 8.87103 20 10.4177 20 12C20 14.1217 19.1572 16.1566 17.6569 17.6569C16.1566 19.1571 14.1217 20 12 20Z" fill="currentColor"/>
+                      <path d="M12 7C11.2044 7 10.4413 7.31607 9.87868 7.87868C9.31607 8.44129 9 9.20435 9 10C9 10.7956 9.31607 11.5587 9.87868 12.1213C10.4413 12.6839 11.2044 13 12 13C12.7956 13 13.5587 12.6839 14.1213 12.1213C14.6839 11.5587 15 10.7956 15 10C15 9.20435 14.6839 8.44129 14.1213 7.87868C13.5587 7.31607 12.7956 7 12 7Z" fill="currentColor"/>
+                    </svg>
+                  </div>
+                </div>
+              </h1>
+            </div>
+            <p className="text-xs md:text-sm text-gray-600 font-medium relative z-10 leading-relaxed">
+             A Bangalore outing guide — shaped by a growing community.
+            </p>
           </div>
-          <p className="text-sm md:text-lg text-gray-600 italic font-caveat">
-            Curated with love from trusted local communities
-          </p>
-        </div>
-
-        {/* Reduced top margin to make subscribe section more compact */}
-        <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
-          <SubscribeSection className="z-10 mb-6 shadow-sm" />
         </div>
 
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
 
         {searchVisible && (
-          <div className="bg-white rounded-xl p-3 mb-6 shadow-md md:max-w-2xl md:mx-auto">
-            <div className="flex items-center gap-2">
-              <Search className="h-5 w-5 text-gray-400" />
+          <div className="glass-nav scale-in p-4 mb-6 mx-4 md:max-w-2xl md:mx-auto">
+            <div className="flex items-center gap-3">
+              <div className="glass-pill w-10 h-10 flex items-center justify-center smooth-hover">
+                <Search className="h-5 w-5 text-gray-600" />
+              </div>
               <Input 
                 id="search-input"
                 type="text" 
                 placeholder="Search activities..." 
-                className="border-0 focus-visible:ring-0"
+                className="glass-subtle elegant-transition border-white/20 focus-visible:ring-orange-400/40 placeholder:text-gray-500 font-medium bg-white/8 backdrop-blur-sm rounded-2xl"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
           </div>
         )}
-        <div className="flex justify-end text-xs text-gray-500 mb-3 items-center md:mb-6 md:text-sm">
-          <Clock className="h-3 w-3 mr-1 md:h-4 md:w-4" />
-          <span>Activities last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
-        </div>
-        
-        <div className="mb-8 md:max-w-6xl md:mx-auto">
-          <h2 className="text-xl md:text-2xl font-bold mb-4 text-[#323232]">Categories</h2>
-          <CategoryFilter 
-            categories={categories}
-            selectedCategories={selectedCategories}
-            onSelectCategory={handleCategorySelect}
-            onSelectAll={handleSelectAllCategories}
-            quickFilters={customQuickFilters}
-            selectedQuickFilters={selectedQuickFilters}
-            onSelectQuickFilter={handleQuickFilterSelect}
-          />
+
+        {/* Compact horizontal scroll categories section - moved to top */}
+        <div className="mb-5 mx-4 md:max-w-6xl md:mx-auto">
+          <details className="glass-floating relative overflow-hidden group">
+            <summary className="cursor-pointer p-3 font-semibold text-sm text-gray-800 list-none flex justify-between items-center hover:bg-white/30 transition-all rounded-t-3xl">
+              <div className="flex items-center gap-2">
+                <span className="text-base">🎯</span>
+                <span>Categories</span>
+              </div>
+              <svg 
+                className="w-4 h-4 text-gray-600 transition-transform duration-300 group-open:rotate-180" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </summary>
+            <div className="p-4 pt-2 relative z-10 animate-in slide-in-from-top-2 duration-300">
+              <CategoryFilter 
+                categories={categories}
+                selectedCategories={selectedCategories}
+                onSelectCategory={handleCategorySelect}
+                onSelectAll={handleSelectAllCategories}
+                quickFilters={customQuickFilters}
+                selectedQuickFilters={selectedQuickFilters}
+                onSelectQuickFilter={handleQuickFilterSelect}
+              />
+            </div>
+          </details>
         </div>
 
-        <Separator className="my-6 md:my-8 bg-amber-100" />
-
-        {/* Position sort and switch controls above tab content */}
-        <div className="flex justify-between items-center mb-4 md:mb-6 md:max-w-6xl md:mx-auto">
+        {/* Position sort and switch controls */}
+        <div className="flex justify-between items-center mb-5 md:mb-6 md:max-w-6xl md:mx-auto">
           <SortSelector 
             options={sortOptions} 
             selectedOption={sortOption} 
@@ -817,7 +837,8 @@ const Index = () => {
           />
         </div>
         
-        <div className="mb-10 md:max-w-6xl md:mx-auto">
+        {/* Activities listing */}
+        <div className="mb-8 md:max-w-6xl md:mx-auto">
           <TabView 
             tabs={tabs} 
             defaultTabId="all" 
@@ -826,16 +847,19 @@ const Index = () => {
             sortOptions={sortOptions}
             sortOption={sortOption}
             handleSortChange={handleSortChange}
-            hideControls={true} // Hide controls since we moved them above
+            hideControls={true}
           />
         </div>
 
-        <div className="fixed bottom-32 right-6 z-20">
-          <ShuffleButton onShuffle={handleShuffle} />
+        <div className="flex justify-end mb-3 md:mb-4 mx-4">
+          <div className="glass-pill px-3 py-1.5 flex items-center gap-2 text-xs text-gray-600 font-medium smooth-hover">
+            <Clock className="h-3 w-3" />
+            <span>Last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
+          </div>
         </div>
       </main>
       
-      <InstallPrompt />
+      {/* <InstallPrompt /> */}
       <Footer />
     </div>
   );

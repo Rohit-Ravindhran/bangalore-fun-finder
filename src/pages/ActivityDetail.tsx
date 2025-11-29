@@ -1,59 +1,127 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Clock, Calendar, Share2, Phone, ExternalLink, Heart } from 'lucide-react';
+import { ArrowLeft, MapPin, Clock, Calendar, Share2, Phone, ExternalLink, Heart, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getActivityById } from '@/services/activityService';
 import { useToast } from '@/components/ui/use-toast';
 import { Activity } from '@/components/ActivityCard';
-import { Loader2 } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+
+const funLoadingTexts = [
+  "🎨 Painting your adventure...",
+  "🎭 Setting up the stage...",
+  "🎪 Rolling out the red carpet...",
+  "✨ Sprinkling some magic...",
+  "🎉 Getting the party ready...",
+  "🎸 Tuning the experience...",
+  "🎬 Action! Loading scene...",
+  "🎯 Aiming for perfection...",
+  "🎨 Crafting your moment...",
+  "🌟 Making it special...",
+];
+
+const CoolLoadingAnimation = () => {
+  const [textIndex, setTextIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTextIndex((prev) => (prev + 1) % funLoadingTexts.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-pink-50 to-purple-50">
+      <div className="text-center space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="relative">
+          <div className="glass-floating p-12 rounded-3xl">
+            <div className="relative">
+              {/* Animated circles */}
+              <div className="flex justify-center items-center space-x-3">
+                <div className="w-4 h-4 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                <div className="w-4 h-4 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                <div className="w-4 h-4 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+              </div>
+              
+              {/* Sparkle animation */}
+              <div className="absolute -top-6 -right-6 animate-spin" style={{ animationDuration: '3s' }}>
+                <Sparkles className="w-8 h-8 text-orange-400" />
+              </div>
+              <div className="absolute -bottom-6 -left-6 animate-spin" style={{ animationDuration: '4s', animationDirection: 'reverse' }}>
+                <Sparkles className="w-6 h-6 text-purple-400" />
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="space-y-4">
+          <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-600 to-purple-600 bg-clip-text text-transparent animate-in fade-in duration-500">
+            {funLoadingTexts[textIndex]}
+          </h2>
+          <p className="text-gray-600 text-sm md:text-base animate-pulse">
+            Hold tight, something awesome is coming up!
+          </p>
+        </div>
+        
+        {/* Decorative elements */}
+        <div className="flex justify-center gap-2">
+          <div className="w-2 h-2 bg-orange-400 rounded-full animate-ping"></div>
+          <div className="w-2 h-2 bg-pink-400 rounded-full animate-ping" style={{ animationDelay: '200ms' }}></div>
+          <div className="w-2 h-2 bg-purple-400 rounded-full animate-ping" style={{ animationDelay: '400ms' }}></div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const ActivityDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [activity, setActivity] = useState<Activity | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [liked, setLiked] = useState(false);
+  
+  // Use React Query for data fetching with caching
+  const { data: activity, isLoading, error } = useQuery({
+    queryKey: ['activity', id],
+    queryFn: () => getActivityById(id!),
+    enabled: !!id,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 10 * 60 * 1000, // 10 minutes
+  });
   
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = '/placeholder.svg';
   };
   
   useEffect(() => {
-    const fetchActivity = async () => {
-      if (!id) return;
-      
-      try {
-        setIsLoading(true);
-        const fetchedActivity = await getActivityById(id);
-        console.log("Fetched activity:", fetchedActivity);
-        setActivity(fetchedActivity);
-        
-        // Check if this activity is in liked items
-        const savedLiked = localStorage.getItem('likedActivities');
-        if (savedLiked && id) {
-          try {
-            const likedActivities = JSON.parse(savedLiked);
-            setLiked(likedActivities.includes(id));
-          } catch (error) {
-            console.error('Error parsing liked activities:', error);
-          }
+    // Check if this activity is in liked items
+    if (id) {
+      const savedLiked = localStorage.getItem('likedActivities');
+      if (savedLiked) {
+        try {
+          const likedActivities = JSON.parse(savedLiked);
+          setLiked(likedActivities.includes(id));
+        } catch (error) {
+          console.error('Error parsing liked activities:', error);
         }
-      } catch (error) {
-        console.error("Error fetching activity:", error);
-        toast({
-          title: "Error loading activity",
-          description: "Could not load the activity details",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
       }
-    };
-    
-    fetchActivity();
-  }, [id, toast]);
+    }
+  }, [id]);
+  
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Error loading activity",
+        description: "Could not load the activity details",
+        variant: "destructive",
+      });
+    }
+  }, [error, toast]);
+  
+  if (isLoading) {
+    return <CoolLoadingAnimation />;
+  }
   
   const toggleLike = () => {
     if (!id) return;
