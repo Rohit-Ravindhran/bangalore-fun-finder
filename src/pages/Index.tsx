@@ -793,38 +793,56 @@ const Index = () => {
         )}
 
         {/* Compact horizontal scroll categories section - moved to top */}
-        <div className="mb-5 mx-4 md:max-w-6xl md:mx-auto">
-          <details className="glass-floating relative overflow-hidden group">
-            <summary className="cursor-pointer p-3 font-semibold text-sm text-gray-800 list-none flex justify-between items-center hover:bg-white/30 transition-all rounded-t-3xl">
-              <div className="flex items-center gap-2">
-                <span className="text-base">🎯</span>
-                <span>Categories</span>
+        <div className="mb-3 mx-4 md:max-w-6xl md:mx-auto">
+          <div className="glass-floating p-4 relative overflow-hidden rounded-3xl py-2">
+            <div className="relative z-10">
+              <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-hide -mx-2 px-1" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                <button
+                  onClick={handleSelectAllCategories}
+                  className={`flex-shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 active:scale-95 hover:scale-105 ${
+                    selectedCategories.size === 0
+                      ? "bg-orange-500 text-white shadow-lg"
+                      : "bg-white/80 text-gray-700 hover:bg-white shadow-md"
+                  }`}
+                >
+                  All
+                </button>
+
+                {customQuickFilters.map((filter) => (
+                  <button
+                    key={filter.id}
+                    onClick={() => handleQuickFilterSelect(filter.id)}
+                    className={`flex-shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 active:scale-95 hover:scale-105 ${
+                      selectedQuickFilters.has(filter.id)
+                        ? "bg-pink-500 text-white shadow-lg"
+                        : "bg-white/80 text-gray-700 hover:bg-white shadow-md"
+                    }`}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+
+                {categories.map((category) => (
+                  <button
+                    key={category.id}
+                    onClick={() => handleCategorySelect(category.id)}
+                    className={`flex-shrink-0 rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 transition-all duration-200 active:scale-95 hover:scale-105 ${
+                      selectedCategories.has(category.id)
+                        ? "bg-purple-500 text-white shadow-lg"
+                        : "bg-white/80 text-gray-700 hover:bg-white shadow-md"
+                    }`}
+                  >
+                    <span>{category.emoji}</span>
+                    <span>{category.name}</span>
+                  </button>
+                ))}
               </div>
-              <svg 
-                className="w-4 h-4 text-gray-600 transition-transform duration-300 group-open:rotate-180" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </summary>
-            <div className="p-4 pt-2 relative z-10 animate-in slide-in-from-top-2 duration-300">
-              <CategoryFilter 
-                categories={categories}
-                selectedCategories={selectedCategories}
-                onSelectCategory={handleCategorySelect}
-                onSelectAll={handleSelectAllCategories}
-                quickFilters={customQuickFilters}
-                selectedQuickFilters={selectedQuickFilters}
-                onSelectQuickFilter={handleQuickFilterSelect}
-              />
             </div>
-          </details>
+          </div>
         </div>
 
         {/* Position sort and switch controls */}
-        <div className="flex justify-between items-center mb-5 md:mb-6 md:max-w-6xl md:mx-auto">
+        <div className="flex justify-between bg-black-200 items-center mb-4 md:mb-5 md:max-w-6xl md:mx-auto">
           <SortSelector 
             options={sortOptions} 
             selectedOption={sortOption} 

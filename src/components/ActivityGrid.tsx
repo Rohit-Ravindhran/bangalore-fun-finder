@@ -240,7 +240,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
                     e.stopPropagation();
                     handleCardClick(activity.id);
                   }}
-                  className="glass-pill text-sm px-5 py-2.5 h-auto font-medium bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:from-orange-600 hover:to-pink-600 smooth-hover shadow-md hover:shadow-lg border-0 w-full"
+                  className="text-sm px-5 py-2.5 h-auto font-semibold bg-gray-900 text-white hover:bg-gray-800 smooth-hover shadow-lg hover:shadow-xl border-0 w-full rounded-xl"
                 >
                   Show me more
                 </Button>
