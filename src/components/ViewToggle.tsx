@@ -17,7 +17,7 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange, disa
         type="single" 
         value={currentView} 
         onValueChange={(value) => value && onViewChange(value as 'card' | 'grid')}
-        className="bg-[#fff8ea] rounded-full px-1 py-1 shadow-md"
+        className="glass-subtle rounded-full px-1 py-1 border-white/30"
         disabled={disabled}
       >
         <ToggleGroupItem 

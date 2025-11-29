@@ -8,6 +8,9 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    hmr: {
+      overlay: true,
+    },
   },
   plugins: [
     react(),
@@ -17,6 +20,14 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  // Disable caching in development
+  cacheDir: mode === 'development' ? undefined : 'node_modules/.vite',
+  build: {
+    // Disable build cache
+    rollupOptions: {
+      cache: false,
     },
   },
 }));

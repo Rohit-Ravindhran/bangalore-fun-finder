@@ -32,19 +32,19 @@ const SortSelector: React.FC<SortSelectorProps> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="h-8 text-xs rounded-full px-3 flex gap-1">
-          <ArrowDownNarrowWide className="h-3 w-3" />
+        <Button variant="outline" size="sm" className="glass-button h-9 text-sm px-4 flex gap-2 font-semibold text-gray-700 border-white/30 hover:scale-105 transition-all duration-300">
+          <ArrowDownNarrowWide className="h-4 w-4" />
           <span>{selectedOptionLabel}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48 bg-white">
+      <DropdownMenuContent align="end" className="glass-strong w-48 border-white/30">
         <DropdownMenuLabel>Sort by</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {options.map(option => (
           <DropdownMenuItem 
             key={option.id} 
             onClick={() => onSelectOption(option.id)}
-            className={selectedOption === option.id ? "bg-muted" : ""}
+            className={selectedOption === option.id ? "bg-amber-500/20 text-amber-700 font-semibold" : "hover:bg-white/30"}
           >
             {option.label}
           </DropdownMenuItem>

@@ -39,18 +39,20 @@ const SubscribeSection: React.FC<SubscribeSectionProps> = ({ className = '' }) =
   };
 
   return (
-    <div className={`bg-white text-primary rounded-lg p-4 shadow-sm ${className}`}>
-      <form className="flex flex-col md:flex-row items-center justify-between gap-3" onSubmit={handleContactSubscribe}>
-        <div className="flex items-center gap-2 text-sm whitespace-nowrap">
-          <BellPlus className="h-4 w-4 text-amber-600" />
-          <span className="font-medium">Weekend plans every Friday</span>
+    <div className={`glass-card text-primary p-6 ${className}`}>
+      <form className="flex flex-col md:flex-row items-center justify-between gap-4" onSubmit={handleContactSubscribe}>
+        <div className="flex items-center gap-3 text-sm whitespace-nowrap">
+          <div className="glass-button w-8 h-8 flex items-center justify-center p-1">
+            <BellPlus className="h-4 w-4 text-amber-600" />
+          </div>
+          <span className="font-semibold text-gray-700">Weekend plans every Friday</span>
         </div>
         
-        <div className="flex w-full md:w-auto gap-2">
+        <div className="flex w-full md:w-auto gap-3">
           <Input 
             type="text" 
             placeholder="Email or phone" 
-            className="h-9 text-xs border-amber-100 focus-visible:ring-amber-400"
+            className="glass-subtle h-10 text-sm border-white/30 focus-visible:ring-amber-400/50 placeholder:text-gray-500 font-medium"
             value={contact}
             onChange={(e) => setContact(e.target.value)}
             required
@@ -58,7 +60,7 @@ const SubscribeSection: React.FC<SubscribeSectionProps> = ({ className = '' }) =
           <Button 
             type="submit" 
             size="sm"
-            className="h-9 bg-amber-500 hover:bg-amber-600 text-white text-xs px-3"
+            className="glass-button h-10 bg-amber-500/80 hover:bg-amber-600/90 text-white text-sm px-4 font-semibold border-amber-400/50 hover:scale-105 transition-all duration-300"
           >
             Subscribe
           </Button>

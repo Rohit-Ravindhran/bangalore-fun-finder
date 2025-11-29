@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'what2do-cache-v2';
+const CACHE_NAME = 'what2do-cache-v3-' + Date.now();
 
 const urlsToCache = [
   '/',

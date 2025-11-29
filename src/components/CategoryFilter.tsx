@@ -33,16 +33,15 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
 
   return (
     <div className="relative">
-      <ScrollArea className="w-full py-2 pb-4 overflow-x-auto">
-        <div className="flex flex-wrap gap-2 px-3 min-w-full items-center">
+      <ScrollArea className="w-full py-1 pb-2 overflow-x-auto">
+        <div className="flex flex-wrap gap-1.5 px-2 min-w-full items-center">
           <button
             onClick={onSelectAll}
             className={cn(
-              "rounded-full py-1.5 px-4 text-sm transition-all whitespace-nowrap flex items-center gap-1.5",
-              "transform hover:scale-105 active:scale-95 duration-150 shadow-sm",
+              "glass-pill smooth-hover py-1.5 px-3 text-xs whitespace-nowrap flex items-center gap-1 font-medium transition-all duration-200 active:scale-95 hover:scale-105",
               allSelected
-                ? "bg-amber-600 text-white font-medium"
-                : "bg-white text-primary font-normal hover:bg-amber-50 border border-amber-100"
+                ? "bg-gradient-to-r from-orange-500/70 to-pink-500/60 text-white border-orange-400/30 shadow-md"
+                : "text-gray-700 hover:text-orange-600 shadow-sm"
             )}
           >
             <span>All</span>
@@ -54,11 +53,10 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
               key={filter.id}
               onClick={() => onSelectQuickFilter(filter.id)}
               className={cn(
-                "rounded-full py-1.5 px-4 text-sm transition-all whitespace-nowrap",
-                "transform hover:scale-105 active:scale-95 duration-150 shadow-sm",
+                "glass-pill smooth-hover py-1.5 px-3 text-xs whitespace-nowrap font-medium transition-all duration-200 active:scale-95 hover:scale-105",
                 selectedQuickFilters.has(filter.id)
-                  ? "bg-amber-600 text-white font-medium"
-                  : "bg-white text-primary font-normal hover:bg-amber-50 border border-amber-100"
+                  ? "bg-gradient-to-r from-pink-500/70 to-violet-500/60 text-white border-pink-400/30 shadow-md"
+                  : "text-gray-700 hover:text-pink-600 shadow-sm"
               )}
             >
               <span>{filter.label}</span>
@@ -71,14 +69,13 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
               key={category.id}
               onClick={() => onSelectCategory(category.id)}
               className={cn(
-                "rounded-full py-1.5 px-4 text-sm transition-all whitespace-nowrap flex items-center gap-1.5",
-                "transform hover:scale-105 active:scale-95 duration-150 shadow-sm",
+                "glass-pill smooth-hover py-1.5 px-3 text-xs whitespace-nowrap flex items-center gap-1 font-medium transition-all duration-200 active:scale-95 hover:scale-105",
                 selectedCategories.has(category.id)
-                  ? "bg-amber-600 text-white font-medium"
-                  : "bg-white text-primary font-normal hover:bg-amber-50 border border-amber-100"
+                  ? "bg-gradient-to-r from-violet-500/70 to-indigo-500/60 text-white border-violet-400/30 shadow-md"
+                  : "text-gray-700 hover:text-violet-600 shadow-sm"
               )}
             >
-              <span className="text-lg">{category.emoji}</span>
+              <span className="text-sm filter drop-shadow-sm">{category.emoji}</span>
               <span>{category.name}</span>
             </button>
           ))}
