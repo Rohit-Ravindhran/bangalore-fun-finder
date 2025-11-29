@@ -306,7 +306,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         <div className="flex justify-between items-center">
           <Button 
             size="sm" 
-            className="glass-pill text-sm px-5 py-2 h-auto font-medium bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:from-orange-600 hover:to-pink-600 smooth-hover shadow-md hover:shadow-lg border-0"
+            className="glass-pill text-sm px-5 py-2 h-auto font-medium bg-gradient-to-r from-orange-500 to-pink-500 text-black hover:from-orange-600 hover:to-pink-600 smooth-hover shadow-md hover:shadow-lg border-0"
             onClick={handleViewDetails}
           >
             Show me more
