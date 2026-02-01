@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
-import { Menu, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import SideMenu from './SideMenu';
+import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   toggleMenu?: () => void;
@@ -12,62 +12,31 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ toggleSearch }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const handleToggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const navigate = useNavigate();
 
   return (
     <>
-      <header className="glass-header flex items-center justify-between py-2 px-4 md:px-8 sticky top-0 z-40 transition-all duration-300">
-        <div className="flex items-center gap-3 text-xl md:text-2xl font-semibold text-[#323232]">
-          <div className="glass-pill w-8 h-8 md:w-9 md:h-9 flex items-center justify-center p-1 smooth-hover">
-            <img 
-              src="/lovable-uploads/6dacec0d-a286-4f09-ae43-9cb52365856b.png" 
-              alt="H Logo" 
-              className="w-full h-full object-contain"
-            />
-          </div>
-          <span className="hidden sm:block bg-gradient-to-r from-gray-800 via-orange-600 to-pink-600 bg-clip-text text-transparent">
-            Happenings
+      <header className="bg-white flex items-center justify-between py-4 px-4 md:px-8 sticky top-0 z-40 border-b border-gray-100">
+        <div 
+          className="flex items-center gap-1 cursor-pointer" 
+          onClick={() => navigate('/')}
+        >
+          <span className="text-xl md:text-2xl font-bold text-gray-900">
+            Happ'nin
+          </span>
+          <span className="text-xl md:text-2xl font-bold text-orange-500">
+            Bangalore
           </span>
         </div>
-        <div className="flex items-center gap-4">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  onClick={toggleSearch}
-                  className="glass-pill h-8 w-8 md:h-9 md:w-9 border-0 smooth-hover"
-                >
-                  <Search className="h-4.5 w-4.5 text-[#323232]" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className="glass-subtle">
-                <p>Search activities</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  onClick={handleToggleMenu} 
-                  className="glass-pill h-8 w-8 md:h-9 md:w-9 border-0 smooth-hover"
-                >
-                  <Menu className="h-4.5 w-4.5 text-[#323232]" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className="glass-subtle">
-                <p>Open menu</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+        <div className="flex items-center">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={toggleSearch}
+            className="h-10 w-10 hover:bg-gray-100 rounded-full"
+          >
+            <Search className="h-5 w-5 text-gray-600" />
+          </Button>
         </div>
       </header>
 
