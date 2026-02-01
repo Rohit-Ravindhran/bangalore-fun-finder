@@ -24,6 +24,7 @@ import { Input } from '@/components/ui/input';
 import { Activity } from '@/components/ActivityCard';
 import { Category } from '@/components/CategoryFilter';
 import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -738,53 +739,31 @@ const Index = () => {
   const lastUpdatedDate = yesterday.toLocaleDateString();
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="min-h-screen bg-white">
       <Header toggleSearch={toggleSearch} />
 
-      <main className="container px-4 pt-4 pb-32 md:pt-6 lg:max-w-7xl desktop-main">
-        <div className="text-center mb-4 md:mb-5">
-          <div className="glass-floating scale-in p-1.5 md:p-2 mx-2 md:mx-4 relative overflow-hidden">
-            <div className="relative z-10">
-              <div className="absolute inset-0 flex justify-center opacity-12 pointer-events-none">
-                <div className="w-20 h-20 md:w-28 md:h-28 bg-gradient-to-br from-orange-400/25 to-purple-400/25 rounded-full blur-3xl soft-glow"></div>
-              </div>
-              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold mb-1 md:mb-1.5 relative flex flex-row items-center justify-center gap-2 md:gap-2">
-                <span className="bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
-                  Happ'nin
-                </span>
-                {/* <br className="md:hidden" /> */}
-                <span className="bg-gradient-to-r from-purple-600 to-purple-500 bg-clip-text text-transparent">
-                  Bangalore
-                </span>
-                <div className="absolute -top-2 right-0 md:-top-4 md:right-4">
-                  <div className="glass-pill w-6 h-6 md:w-8 md:h-8 flex items-center justify-center animate-bounce soft-glow">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-red-500 md:w-5 md:h-5">
-                      <path d="M12 2C10.0222 2 8.08879 2.58649 6.4443 3.6853C4.79981 4.78412 3.51809 6.3459 2.76121 8.17317C2.00433 10.0004 1.8063 12.0111 2.19215 13.9509C2.578 15.8907 3.53041 17.6725 4.92894 19.0711C6.32746 20.4696 8.10929 21.422 10.0491 21.8079C11.9889 22.1937 13.9996 21.9957 15.8268 21.2388C17.6541 20.4819 19.2159 19.2002 20.3147 17.5557C21.4135 15.9112 22 13.9778 22 12C22 9.34784 20.9464 6.8043 19.0711 4.92893C17.1957 3.05357 14.6522 2 12 2ZM12 20C10.4178 20 8.87104 19.5308 7.55544 18.6518C6.23985 17.7727 5.21447 16.5233 4.60897 15.0615C4.00347 13.5997 3.84504 11.9911 4.15372 10.4393C4.4624 8.88743 5.22433 7.46197 6.34315 6.34315C7.46197 5.22433 8.88743 4.4624 10.4393 4.15372C11.9911 3.84504 13.5997 4.00346 15.0615 4.60896C16.5233 5.21447 17.7727 6.23984 18.6518 7.55544C19.5308 8.87103 20 10.4177 20 12C20 14.1217 19.1572 16.1566 17.6569 17.6569C16.1566 19.1571 14.1217 20 12 20Z" fill="currentColor"/>
-                      <path d="M12 7C11.2044 7 10.4413 7.31607 9.87868 7.87868C9.31607 8.44129 9 9.20435 9 10C9 10.7956 9.31607 11.5587 9.87868 12.1213C10.4413 12.6839 11.2044 13 12 13C12.7956 13 13.5587 12.6839 14.1213 12.1213C14.6839 11.5587 15 10.7956 15 10C15 9.20435 14.6839 8.44129 14.1213 7.87868C13.5587 7.31607 12.7956 7 12 7Z" fill="currentColor"/>
-                    </svg>
-                  </div>
-                </div>
-              </h1>
-            </div>
-            <p className="text-xs md:text-sm text-gray-600 font-medium relative z-10 leading-relaxed">
-             A Bangalore outing guide — shaped by a growing community.
-            </p>
-          </div>
+      <main className="container px-4 pt-6 pb-32 lg:max-w-6xl mx-auto">
+        {/* Hero Section */}
+        <div className="bg-gray-50 rounded-2xl p-6 mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+            Happ'nin Bangalore
+          </h1>
+          <p className="text-gray-600">
+            A Bangalore outing guide — shaped by a growing community.
+          </p>
         </div>
 
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
 
         {searchVisible && (
-          <div className="glass-nav scale-in p-4 mb-6 mx-4 md:max-w-2xl md:mx-auto">
+          <div className="bg-white border border-gray-200 rounded-xl p-4 mb-6">
             <div className="flex items-center gap-3">
-              <div className="glass-pill w-10 h-10 flex items-center justify-center smooth-hover">
-                <Search className="h-5 w-5 text-gray-600" />
-              </div>
+              <Search className="h-5 w-5 text-gray-400" />
               <Input 
                 id="search-input"
                 type="text" 
                 placeholder="Search activities..." 
-                className="glass-subtle elegant-transition border-white/20 focus-visible:ring-orange-400/40 placeholder:text-gray-500 font-medium bg-white/8 backdrop-blur-sm rounded-2xl"
+                className="border-0 focus-visible:ring-0 text-base"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -792,92 +771,97 @@ const Index = () => {
           </div>
         )}
 
-        {/* Compact horizontal scroll categories section - moved to top */}
-        <div className="mb-3 mx-4 md:max-w-6xl md:mx-auto">
-          <div className="glass-floating p-4 relative overflow-hidden rounded-3xl py-2">
-            <div className="relative z-10">
-              <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-hide -mx-2 px-1" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        {/* Quick Filters */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex gap-2 overflow-x-auto pb-2 flex-1">
+              {customQuickFilters.map((filter) => (
                 <button
-                  onClick={handleSelectAllCategories}
-                  className={`flex-shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 active:scale-95 hover:scale-105 ${
-                    selectedCategories.size === 0
-                      ? "bg-orange-500 text-white shadow-lg"
-                      : "bg-white/80 text-gray-700 hover:bg-white shadow-md"
-                  }`}
+                  key={filter.id}
+                  onClick={() => handleQuickFilterSelect(filter.id)}
+                  className={cn(
+                    "flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all border",
+                    selectedQuickFilters.has(filter.id)
+                      ? "bg-gray-900 text-white border-gray-900"
+                      : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
+                  )}
                 >
-                  All
+                  {filter.label}
                 </button>
-
-                {customQuickFilters.map((filter) => (
-                  <button
-                    key={filter.id}
-                    onClick={() => handleQuickFilterSelect(filter.id)}
-                    className={`flex-shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 active:scale-95 hover:scale-105 ${
-                      selectedQuickFilters.has(filter.id)
-                        ? "bg-pink-500 text-white shadow-lg"
-                        : "bg-white/80 text-gray-700 hover:bg-white shadow-md"
-                    }`}
-                  >
-                    {filter.label}
-                  </button>
-                ))}
-
-                {categories.map((category) => (
-                  <button
-                    key={category.id}
-                    onClick={() => handleCategorySelect(category.id)}
-                    className={`flex-shrink-0 rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 transition-all duration-200 active:scale-95 hover:scale-105 ${
-                      selectedCategories.has(category.id)
-                        ? "bg-purple-500 text-white shadow-lg"
-                        : "bg-white/80 text-gray-700 hover:bg-white shadow-md"
-                    }`}
-                  >
-                    <span>{category.emoji}</span>
-                    <span>{category.name}</span>
-                  </button>
-                ))}
-              </div>
+              ))}
+            </div>
+            <div className="ml-4">
+              <ViewToggle 
+                selectedMode={viewMode} 
+                onSelect={setViewMode} 
+                disabled={currentTab !== 'all'} 
+              />
             </div>
           </div>
         </div>
 
-        {/* Position sort and switch controls */}
-        <div className="flex justify-between bg-black-200 items-center mb-4 md:mb-5 md:max-w-6xl md:mx-auto">
-          <SortSelector 
-            options={sortOptions} 
-            selectedOption={sortOption} 
-            onSelect={handleSortChange} 
-          />
-          <ViewToggle 
-            selectedMode={viewMode} 
-            onSelect={setViewMode} 
-            disabled={currentTab !== 'all'} 
-          />
+        {/* Category Filters */}
+        <div className="mb-6">
+          <div className="flex gap-2 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => handleCategorySelect(category.id)}
+                className={cn(
+                  "flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium flex items-center gap-2 transition-all border",
+                  selectedCategories.has(category.id)
+                    ? "bg-gray-900 text-white border-gray-900"
+                    : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
+                )}
+              >
+                <span>{category.emoji}</span>
+                <span>{category.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* All Events Header */}
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-gray-900">All Events</h2>
+          <span className="text-sm text-gray-500">{allActivitiesTotal} events</span>
         </div>
         
         {/* Activities listing */}
-        <div className="mb-8 md:max-w-6xl md:mx-auto">
-          <TabView 
-            tabs={tabs} 
-            defaultTabId="all" 
-            viewMode={viewMode}
-            setViewMode={setViewMode}
-            sortOptions={sortOptions}
-            sortOption={sortOption}
-            handleSortChange={handleSortChange}
-            hideControls={true}
-          />
-        </div>
-
-        <div className="flex justify-end mb-3 md:mb-4 mx-4">
-          <div className="glass-pill px-3 py-1.5 flex items-center gap-2 text-xs text-gray-600 font-medium smooth-hover">
-            <Clock className="h-3 w-3" />
-            <span>Last updated: {lastUpdatedTime} - {lastUpdatedDate}</span>
-          </div>
+        <div className="mb-8">
+          {isLoading ? (
+            <div className="flex justify-center items-center py-20">
+              <Loader2 className="h-10 w-10 animate-spin text-orange-500" />
+            </div>
+          ) : allActivities.length === 0 ? (
+            <div className="bg-gray-50 rounded-2xl p-8 text-center">
+              <h3 className="text-xl font-semibold mb-2 text-gray-900">No activities found</h3>
+              <p className="text-gray-600">Try a different filter</p>
+            </div>
+          ) : viewMode === 'card' ? (
+            currentActivity && (
+              <ActivityCard 
+                activity={currentActivity}
+                onSwipeLeft={handleSwipeLeft}
+                onSwipeRight={handleSwipeRight}
+                onLike={handleLike}
+                onShare={handleShare}
+                liked={likedActivities.has(currentActivity.id)}
+              />
+            )
+          ) : (
+            <ActivityGrid 
+              activities={allActivities}
+              onLike={handleLike}
+              likedActivities={likedActivities}
+              onShare={handleShare}
+              columns={2}
+              sectionType="All"
+            />
+          )}
         </div>
       </main>
       
-      {/* <InstallPrompt /> */}
       <Footer />
     </div>
   );

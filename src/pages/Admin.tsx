@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import React, { useState, useEffect } from "react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Table,
   TableBody,
@@ -11,20 +11,38 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { useToast } from '@/components/ui/use-toast';
-import { Activity } from '@/components/ActivityCard';
-import { Plus, Edit, Trash, Loader2, Check, FileText } from 'lucide-react';
-import { createActivity, deleteActivity, fetchActivities, updateActivity, fetchCategoriesFromTable, fetchTagsFromTable } from '@/services/activityService';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '@/components/ui/select';
+} from "@/components/ui/table";
+import { useToast } from "@/components/ui/use-toast";
+import { Activity } from "@/components/ActivityCard";
+import {
+  Plus,
+  Edit,
+  Trash,
+  Loader2,
+  Check,
+  FileText,
+  Upload,
+  Sparkles,
+} from "lucide-react";
+import {
+  createActivity,
+  deleteActivity,
+  fetchActivities,
+  updateActivity,
+  fetchCategoriesFromTable,
+  fetchTagsFromTable,
+} from "@/services/activityService";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 type CategoryItem = {
   id: number;
@@ -46,6 +64,13 @@ const Admin = () => {
   const [tags, setTags] = useState<TagItem[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
+  const [jsonInput, setJsonInput] = useState("");
+  const [isImporting, setIsImporting] = useState(false);
+  const [importResults, setImportResults] = useState<{
+    success: number;
+    failed: number;
+    errors: string[];
+  } | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -59,7 +84,7 @@ const Admin = () => {
       const data = await fetchActivities();
       setActivities(data);
     } catch (error) {
-      console.error('Failed to load activities:', error);
+      console.error("Failed to load activities:", error);
       toast({
         title: "Error loading activities",
         description: "Please check your connection and try again",
@@ -77,7 +102,7 @@ const Admin = () => {
       setCategories(categoriesData);
       setTags(tagsData);
     } catch (error) {
-      console.error('Failed to load categories or tags:', error);
+      console.error("Failed to load categories or tags:", error);
       toast({
         title: "Error loading categories or tags",
         description: "Please check your connection and try again",
@@ -86,7 +111,9 @@ const Admin = () => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setCurrentActivity({
       ...currentActivity,
@@ -97,72 +124,72 @@ const Admin = () => {
   const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentActivity({
       ...currentActivity,
-      tags: e.target.value.split(',').map(tag => tag.trim()),
+      tags: e.target.value.split(",").map((tag) => tag.trim()),
     });
   };
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentActivity({
       ...currentActivity,
-      categoryIds: e.target.value.split(',').map(id => id.trim()),
+      categoryIds: e.target.value.split(",").map((id) => id.trim()),
     });
   };
 
   const updateCategoryIds = () => {
-    const categoryIds = selectedCategories.map(id => id.toString());
+    const categoryIds = selectedCategories.map((id) => id.toString());
     setCurrentActivity({
       ...currentActivity,
-      categoryIds
+      categoryIds,
     });
     return categoryIds;
   };
 
   const updateTagIds = () => {
-    const tagIds = selectedTags.map(id => id.toString());
+    const tagIds = selectedTags.map((id) => id.toString());
     setCurrentActivity({
       ...currentActivity,
-      tags: tagIds
+      tags: tagIds,
     });
     return tagIds;
   };
 
   const handleCategorySelect = (categoryId: number) => {
-    setSelectedCategories(prevSelected => {
+    setSelectedCategories((prevSelected) => {
       const isSelected = prevSelected.includes(categoryId);
       const newSelected = isSelected
-        ? prevSelected.filter(id => id !== categoryId)
+        ? prevSelected.filter((id) => id !== categoryId)
         : [...prevSelected, categoryId];
-      
+
       // Update the currentActivity.categoryIds
-      setCurrentActivity(prev => ({
+      setCurrentActivity((prev) => ({
         ...prev,
-        categoryIds: newSelected.map(id => id.toString())
+        categoryIds: newSelected.map((id) => id.toString()),
       }));
-      
+
       return newSelected;
     });
   };
 
   const handleTagSelect = (tagId: number) => {
-    setSelectedTags(prevSelected => {
+    setSelectedTags((prevSelected) => {
       const isSelected = prevSelected.includes(tagId);
       const newSelected = isSelected
-        ? prevSelected.filter(id => id !== tagId)
+        ? prevSelected.filter((id) => id !== tagId)
         : [...prevSelected, tagId];
-      
+
       // Update the currentActivity.tags
-      setCurrentActivity(prev => ({
+      setCurrentActivity((prev) => ({
         ...prev,
-        tags: newSelected.map(id => id.toString())
+        tags: newSelected.map((id) => id.toString()),
       }));
-      
+
       return newSelected;
     });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!currentActivity.title || !currentActivity.image) {
       toast({
         title: "Missing required fields",
@@ -173,30 +200,36 @@ const Admin = () => {
     }
 
     setIsSaving(true);
-    
+
     try {
       let activityToSave = { ...currentActivity };
-      
+
       // Make sure categoryIds and tags are set properly
-      if (!activityToSave.categoryIds || activityToSave.categoryIds.length === 0) {
-        activityToSave.categoryIds = selectedCategories.map(id => id.toString());
+      if (
+        !activityToSave.categoryIds ||
+        activityToSave.categoryIds.length === 0
+      ) {
+        activityToSave.categoryIds = selectedCategories.map((id) =>
+          id.toString()
+        );
       }
-      
+
       if (!activityToSave.tags || activityToSave.tags.length === 0) {
-        activityToSave.tags = selectedTags.map(id => id.toString());
+        activityToSave.tags = selectedTags.map((id) => id.toString());
       }
 
       if (currentActivity.id) {
         // Update existing activity
 
-        
         const updated = await updateActivity(
-          currentActivity.id, 
-          activityToSave as Omit<Activity, 'id' | 'lastUpdated'>
+          currentActivity.id,
+          activityToSave as Omit<Activity, "id" | "lastUpdated">
         );
-        setActivities(activities.map(activity => 
-          activity.id === currentActivity.id ? updated : activity
-        ));
+        setActivities(
+          activities.map((activity) =>
+            activity.id === currentActivity.id ? updated : activity
+          )
+        );
         toast({
           title: "Activity updated",
           description: `${currentActivity.title} has been updated`,
@@ -204,9 +237,10 @@ const Admin = () => {
       } else {
         // Add new activity
         const { id, lastUpdated, ...activityData } = currentActivity;
-const created = await createActivity(activityData as Omit<Activity, 'id' | 'lastUpdated'>);
+        const created = await createActivity(
+          activityData as Omit<Activity, "id" | "lastUpdated">
+        );
 
-      
         setActivities([created, ...activities]);
         toast({
           title: "Activity added",
@@ -215,10 +249,13 @@ const created = await createActivity(activityData as Omit<Activity, 'id' | 'last
       }
       resetForm();
     } catch (error) {
-      console.error('Error saving activity:', error);
+      console.error("Error saving activity:", error);
       toast({
         title: "Error saving activity",
-        description: error instanceof Error ? error.message : "An error occurred while saving. Please try again.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "An error occurred while saving. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -230,10 +267,12 @@ const created = await createActivity(activityData as Omit<Activity, 'id' | 'last
     // Convert string IDs to numbers for the selects
     const categoryIds = activity.categoryIds || [];
     const tagIds = activity.tags || [];
-    
-    setSelectedCategories(categoryIds.map(id => Number(id)).filter(id => !isNaN(id)));
-    setSelectedTags(tagIds.map(id => Number(id)).filter(id => !isNaN(id)));
-    
+
+    setSelectedCategories(
+      categoryIds.map((id) => Number(id)).filter((id) => !isNaN(id))
+    );
+    setSelectedTags(tagIds.map((id) => Number(id)).filter((id) => !isNaN(id)));
+
     setCurrentActivity(activity);
     setIsEditing(true);
     window.scrollTo(0, 0);
@@ -242,13 +281,13 @@ const created = await createActivity(activityData as Omit<Activity, 'id' | 'last
   const handleDelete = async (id: string) => {
     try {
       await deleteActivity(id);
-      setActivities(activities.filter(activity => activity.id !== id));
+      setActivities(activities.filter((activity) => activity.id !== id));
       toast({
         title: "Activity deleted",
         description: "The activity has been removed",
       });
     } catch (error) {
-      console.error('Error deleting activity:', error);
+      console.error("Error deleting activity:", error);
       toast({
         title: "Error deleting activity",
         description: "An error occurred while deleting. Please try again.",
@@ -264,229 +303,680 @@ const created = await createActivity(activityData as Omit<Activity, 'id' | 'last
     setIsEditing(false);
   };
 
+  // Auto-detect categories and tags from title and description
+  const autoDetectCategoriesAndTags = (title: string, description: string) => {
+    const content = `${title} ${description}`.toLowerCase();
+
+    const detectedCategories: number[] = [];
+    const detectedTags: number[] = [];
+
+    // Category detection based on keywords
+    const categoryKeywords = {
+      1: [
+        "outdoor",
+        "nature",
+        "park",
+        "garden",
+        "hiking",
+        "trek",
+        "adventure",
+        "cycling",
+      ],
+      2: [
+        "art",
+        "paint",
+        "draw",
+        "craft",
+        "creative",
+        "workshop",
+        "pottery",
+        "sculpture",
+      ],
+      3: [
+        "music",
+        "concert",
+        "festival",
+        "show",
+        "performance",
+        "band",
+        "dj",
+        "live",
+      ],
+      4: [
+        "sport",
+        "football",
+        "cricket",
+        "tennis",
+        "gym",
+        "fitness",
+        "yoga",
+        "swimming",
+      ],
+      5: ["theatre", "drama", "play", "actor", "stage", "comedy", "standup"],
+      6: ["unique", "special", "exclusive", "limited", "rare", "unusual"],
+      7: [
+        "wellness",
+        "meditation",
+        "spa",
+        "massage",
+        "relax",
+        "mindful",
+        "health",
+      ],
+      8: ["party", "celebration", "birthday", "dance", "club", "nightlife"],
+      9: [
+        "food",
+        "restaurant",
+        "cuisine",
+        "dining",
+        "cooking",
+        "chef",
+        "taste",
+      ],
+      10: ["trek", "trekking", "mountain", "hill", "camping", "backpack"],
+      11: ["family", "kids", "children", "parents", "playground", "fun"],
+    };
+
+    // Tag detection based on keywords
+    const tagKeywords = {
+      1: ["free", "no cost", "complimentary"],
+      2: ["premium", "luxury", "exclusive", "vip"],
+      3: ["beginner", "starter", "introduction"],
+      4: ["advanced", "expert", "professional"],
+      5: ["weekend", "saturday", "sunday"],
+      6: ["evening", "night", "after work"],
+      7: ["morning", "early", "sunrise"],
+      8: ["indoor", "inside", "covered"],
+      9: ["couple", "romantic", "date", "valentine"],
+      10: ["group", "team", "friends", "together"],
+    };
+
+    // Check for category matches
+    Object.entries(categoryKeywords).forEach(([id, keywords]) => {
+      if (keywords.some((keyword) => content.includes(keyword))) {
+        detectedCategories.push(parseInt(id));
+      }
+    });
+
+    // Check for tag matches
+    Object.entries(tagKeywords).forEach(([id, keywords]) => {
+      if (keywords.some((keyword) => content.includes(keyword))) {
+        detectedTags.push(parseInt(id));
+      }
+    });
+
+    return { categories: detectedCategories, tags: detectedTags };
+  };
+
+  // Handle JSON bulk import
+  const handleJsonImport = async () => {
+    if (!jsonInput.trim()) {
+      toast({
+        title: "No JSON provided",
+        description: "Please paste your JSON data first",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsImporting(true);
+    setImportResults(null);
+
+    try {
+      const jsonData = JSON.parse(jsonInput);
+      const activitiesArray = Array.isArray(jsonData) ? jsonData : [jsonData];
+
+      let successCount = 0;
+      let failedCount = 0;
+      const errors: string[] = [];
+
+      for (const activityData of activitiesArray) {
+        try {
+          // Auto-detect categories and tags
+          const detected = autoDetectCategoriesAndTags(
+            activityData.title || "",
+            activityData.description || ""
+          );
+
+          // Merge detected with provided categories/tags
+          const categoryIds = [
+            ...(activityData.categoryIds || []),
+            ...detected.categories.map((id) => id.toString()),
+          ].filter((id, index, arr) => arr.indexOf(id) === index); // Remove duplicates
+
+          const tagIds = [
+            ...(activityData.tags || []),
+            ...detected.tags.map((id) => id.toString()),
+          ].filter((id, index, arr) => arr.indexOf(id) === index); // Remove duplicates
+
+          const processedActivity = {
+            title: activityData.title || "",
+            image: activityData.image || "",
+            description: activityData.description || "",
+            priceRange: activityData.priceRange || "Free",
+            location: activityData.location || "Bangalore",
+            date: activityData.date || "",
+            time: activityData.time || "",
+            mapLink: activityData.mapLink || "",
+            contactInfo: activityData.contactInfo || "",
+            url: activityData.url || "",
+            categoryIds,
+            tags: tagIds,
+          };
+
+          await createActivity(processedActivity);
+          successCount++;
+        } catch (error) {
+          failedCount++;
+          errors.push(
+            `Failed to import "${activityData.title || "Unknown"}": ${
+              error instanceof Error ? error.message : "Unknown error"
+            }`
+          );
+        }
+      }
+
+      setImportResults({ success: successCount, failed: failedCount, errors });
+
+      if (successCount > 0) {
+        toast({
+          title: "Import completed",
+          description: `Successfully imported ${successCount} activities${
+            failedCount > 0 ? ` (${failedCount} failed)` : ""
+          }`,
+        });
+        loadActivities(); // Refresh the activities list
+        if (failedCount === 0) {
+          setJsonInput(""); // Clear input only if all succeeded
+        }
+      }
+    } catch (error) {
+      toast({
+        title: "Invalid JSON",
+        description: "Please check your JSON format and try again",
+        variant: "destructive",
+      });
+      setImportResults({
+        success: 0,
+        failed: 1,
+        errors: ["Invalid JSON format"],
+      });
+    } finally {
+      setIsImporting(false);
+    }
+  };
+
+  const sampleJsonStructure = `[
+  {
+    "title": "Sunset Yoga Session",
+    "image": "https://example.com/yoga-sunset.jpg",
+    "description": "Join us for a peaceful outdoor yoga session as the sun sets over Bangalore. Perfect for beginners and experienced practitioners.",
+    "priceRange": "₹300 - ₹500",
+    "location": "Cubbon Park, Bangalore",
+    "date": "December 15, 2025",
+    "time": "5:30 PM - 6:30 PM",
+    "mapLink": "https://maps.google.com/cubbon-park",
+    "contactInfo": "+91 9876543210",
+    "url": "https://yogastudio.com/sunset-session",
+    "categoryIds": ["4", "7"],
+    "tags": ["1", "8"]
+  },
+  {
+    "title": "Food Truck Festival",
+    "image": "https://example.com/food-truck.jpg",
+    "description": "A weekend food festival featuring the best food trucks in the city. Family-friendly event with live music.",
+    "priceRange": "₹200 - ₹800",
+    "location": "Brigade Road, Bangalore",
+    "date": "December 20-21, 2025",
+    "time": "12:00 PM - 10:00 PM",
+    "categoryIds": ["9", "11"],
+    "tags": ["5", "10"]
+  }
+]`;
+
   return (
     <div className="min-h-screen bg-w2d-cream">
       <Header />
-      
+
       <main className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <div className="flex gap-2">
-            <Button variant="outline" asChild>
-              <Link to="/admin/bms-import">
-                <FileText className="mr-2 h-4 w-4" /> Import from BMS
-              </Link>
-            </Button>
-            <Button onClick={() => setIsEditing(!isEditing)} disabled={isSaving}>
-              {isEditing ? 'Cancel' : <><Plus className="mr-2 h-4 w-4" /> Add Activity</>}
-            </Button>
-          </div>
+          <Button variant="outline" asChild>
+            <Link to="/admin/bms-import">
+              <FileText className="mr-2 h-4 w-4" /> Import from BMS
+            </Link>
+          </Button>
         </div>
-        
-        {isEditing && (
-          <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-            <h2 className="text-xl font-bold mb-4">{currentActivity.id ? 'Edit Activity' : 'Add New Activity'}</h2>
-            
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block mb-1 text-sm font-medium">Title *</label>
-                <Input
-                  name="title"
-                  value={currentActivity.title || ''}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              
-              <div>
-                <label className="block mb-1 text-sm font-medium">Image URL *</label>
-                <Input
-                  name="image"
-                  value={currentActivity.image || ''}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="Use https:// URLs only (avoid Facebook URLs which may be blocked)"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Note: Some image hosts (like Facebook) may block loading images directly.
-                  Consider uploading to a different service if images don't appear.
-                </p>
-              </div>
-              
-              <div>
-                <label className="block mb-1 text-sm font-medium">Description</label>
-                <Textarea
-                  name="description"
-                  value={currentActivity.description || ''}
-                  onChange={handleInputChange}
-                  rows={3}
-                />
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block mb-1 text-sm font-medium">Price Range</label>
-                  <Input
-                    name="priceRange"
-                    value={currentActivity.priceRange || ''}
-                    onChange={handleInputChange}
-                    placeholder="₹100 - ₹500"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block mb-1 text-sm font-medium">Location</label>
-                  <Input
-                    name="location"
-                    value={currentActivity.location || ''}
-                    onChange={handleInputChange}
-                    placeholder="Indiranagar, Bangalore"
-                  />
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block mb-1 text-sm font-medium">Date</label>
-                  <Input
-                    name="date"
-                    value={currentActivity.date || ''}
-                    onChange={handleInputChange}
-                    placeholder="May 15, 2025"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block mb-1 text-sm font-medium">Time</label>
-                  <Input
-                    name="time"
-                    value={currentActivity.time || ''}
-                    onChange={handleInputChange}
-                    placeholder="6:00 PM - 9:00 PM"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block mb-1 text-sm font-medium">Categories</label>
-                <div className="bg-white p-3 border rounded-md max-h-40 overflow-y-auto">
-                  <div className="space-y-2">
-                    {categories.map((category) => (
-                      <div key={category.id} className="flex items-center space-x-2">
-                        <Checkbox 
-                          id={`category-${category.id}`} 
-                          checked={selectedCategories.includes(category.id)}
-                          onCheckedChange={() => handleCategorySelect(category.id)}
-                        />
-                        <label 
-                          htmlFor={`category-${category.id}`}
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          {category.name}
-                        </label>
-                      </div>
-                    ))}
+
+        <Tabs defaultValue="single" className="mb-8">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="single">Single Activity</TabsTrigger>
+            <TabsTrigger value="bulk">Bulk JSON Import</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="single" className="space-y-6">
+            <div className="flex justify-end">
+              <Button
+                onClick={() => setIsEditing(!isEditing)}
+                disabled={isSaving}
+              >
+                {isEditing ? (
+                  "Cancel"
+                ) : (
+                  <>
+                    <Plus className="mr-2 h-4 w-4" /> Add Activity
+                  </>
+                )}
+              </Button>
+            </div>
+
+            {isEditing && (
+              <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
+                <h2 className="text-xl font-bold mb-4">
+                  {currentActivity.id ? "Edit Activity" : "Add New Activity"}
+                </h2>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label className="block mb-1 text-sm font-medium">
+                      Title *
+                    </label>
+                    <Input
+                      name="title"
+                      value={currentActivity.title || ""}
+                      onChange={handleInputChange}
+                      required
+                    />
                   </div>
-                </div>
-                <div className="mt-2">
-                  <label className="block mb-1 text-xs text-gray-500">Selected Category IDs:</label>
-                  <Input
-                    name="categoryIds"
-                    value={(currentActivity.categoryIds || []).join(', ')}
-                    onChange={handleCategoryChange}
-                    readOnly
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block mb-1 text-sm font-medium">Tags</label>
-                <div className="bg-white p-3 border rounded-md max-h-40 overflow-y-auto">
-                  <div className="space-y-2">
-                    {tags.map((tag) => (
-                      <div key={tag.id} className="flex items-center space-x-2">
-                        <Checkbox 
-                          id={`tag-${tag.id}`} 
-                          checked={selectedTags.includes(tag.id)}
-                          onCheckedChange={() => handleTagSelect(tag.id)}
-                        />
-                        <label 
-                          htmlFor={`tag-${tag.id}`}
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          {tag.name} (ID: {tag.id})
-                        </label>
-                      </div>
-                    ))}
+
+                  <div>
+                    <label className="block mb-1 text-sm font-medium">
+                      Image URL *
+                    </label>
+                    <Input
+                      name="image"
+                      value={currentActivity.image || ""}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Use https:// URLs only (avoid Facebook URLs which may be blocked)"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Note: Some image hosts (like Facebook) may block loading
+                      images directly. Consider uploading to a different service
+                      if images don't appear.
+                    </p>
                   </div>
-                </div>
-                <div className="mt-2">
-                  <label className="block mb-1 text-xs text-gray-500">Selected Tag IDs:</label>
-                  <Input
-                    name="tags"
-                    value={(currentActivity.tags || []).join(', ')}
-                    onChange={handleTagsChange}
-                    readOnly
+
+                  <div>
+                    <label className="block mb-1 text-sm font-medium">
+                      Description
+                    </label>
+                    <Textarea
+                      name="description"
+                      value={currentActivity.description || ""}
+                      onChange={handleInputChange}
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block mb-1 text-sm font-medium">
+                        Price Range
+                      </label>
+                      <Input
+                        name="priceRange"
+                        value={currentActivity.priceRange || ""}
+                        onChange={handleInputChange}
+                        placeholder="₹100 - ₹500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block mb-1 text-sm font-medium">
+                        Location
+                      </label>
+                      <Input
+                        name="location"
+                        value={currentActivity.location || ""}
+                        onChange={handleInputChange}
+                        placeholder="Indiranagar, Bangalore"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block mb-1 text-sm font-medium">
+                        Date
+                      </label>
+                      <Input
+                        name="date"
+                        value={currentActivity.date || ""}
+                        onChange={handleInputChange}
+                        placeholder="May 15, 2025"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block mb-1 text-sm font-medium">
+                        Time
+                      </label>
+                      <Input
+                        name="time"
+                        value={currentActivity.time || ""}
+                        onChange={handleInputChange}
+                        placeholder="6:00 PM - 9:00 PM"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block mb-1 text-sm font-medium">
+                      Categories
+                    </label>
+                    <div className="bg-white p-3 border rounded-md max-h-40 overflow-y-auto">
+                      <div className="space-y-2">
+                        {categories.map((category) => (
+                          <div
+                            key={category.id}
+                            className="flex items-center space-x-2"
+                          >
+                            <Checkbox
+                              id={`category-${category.id}`}
+                              checked={selectedCategories.includes(category.id)}
+                              onCheckedChange={() =>
+                                handleCategorySelect(category.id)
+                              }
+                            />
+                            <label
+                              htmlFor={`category-${category.id}`}
+                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                              {category.name}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="mt-2">
+                      <label className="block mb-1 text-xs text-gray-500">
+                        Selected Category IDs:
+                      </label>
+                      <Input
+                        name="categoryIds"
+                        value={(currentActivity.categoryIds || []).join(", ")}
+                        onChange={handleCategoryChange}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block mb-1 text-sm font-medium">
+                      Tags
+                    </label>
+                    <div className="bg-white p-3 border rounded-md max-h-40 overflow-y-auto">
+                      <div className="space-y-2">
+                        {tags.map((tag) => (
+                          <div
+                            key={tag.id}
+                            className="flex items-center space-x-2"
+                          >
+                            <Checkbox
+                              id={`tag-${tag.id}`}
+                              checked={selectedTags.includes(tag.id)}
+                              onCheckedChange={() => handleTagSelect(tag.id)}
+                            />
+                            <label
+                              htmlFor={`tag-${tag.id}`}
+                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                              {tag.name} (ID: {tag.id})
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="mt-2">
+                      <label className="block mb-1 text-xs text-gray-500">
+                        Selected Tag IDs:
+                      </label>
+                      <Input
+                        name="tags"
+                        value={(currentActivity.tags || []).join(", ")}
+                        onChange={handleTagsChange}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block mb-1 text-sm font-medium">
+                      Map Link
+                    </label>
+                    <Input
+                      name="mapLink"
+                      value={currentActivity.mapLink || ""}
+                      onChange={handleInputChange}
+                      placeholder="https://maps.google.com/..."
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Google Maps or other location link that opens in the map
+                      view
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block mb-1 text-sm font-medium">
+                      Website URL
+                    </label>
+                    <Input
+                      name="url"
+                      value={currentActivity.url || ""}
+                      onChange={handleInputChange}
+                      placeholder="https://example.com/event"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Official website of the activity or event
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block mb-1 text-sm font-medium">
+                      Contact Info
+                    </label>
+                    <Input
+                      name="contactInfo"
+                      value={currentActivity.contactInfo || ""}
+                      onChange={handleInputChange}
+                      placeholder="Phone or email"
+                    />
+                  </div>
+
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={resetForm}
+                      disabled={isSaving}
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" disabled={isSaving}>
+                      {isSaving ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Saving...
+                        </>
+                      ) : currentActivity.id ? (
+                        "Update Activity"
+                      ) : (
+                        "Add Activity"
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="bulk" className="space-y-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="flex items-center gap-2 mb-4">
+                <Upload className="h-5 w-5" />
+                <h2 className="text-xl font-bold">Bulk JSON Import</h2>
+                <Sparkles
+                  className="h-4 w-4 text-yellow-500"
+                  title="Auto-detects categories and tags!"
+                />
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block mb-2 text-sm font-medium">
+                    JSON Data
+                  </label>
+                  <Textarea
+                    value={jsonInput}
+                    onChange={(e) => setJsonInput(e.target.value)}
+                    placeholder="Paste your JSON data here..."
+                    rows={18}
+                    className="font-mono text-sm"
                   />
+                  <p className="text-xs text-gray-500 mt-2">
+                    <Sparkles className="inline h-3 w-3 mr-1 text-yellow-500" />
+                    Categories and tags will be auto-detected from title and
+                    description!
+                  </p>
+                </div>
+
+                <div className="flex gap-2">
+                  <Button
+                    onClick={handleJsonImport}
+                    disabled={isImporting || !jsonInput.trim()}
+                  >
+                    {isImporting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Importing...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="mr-2 h-4 w-4" />
+                        Import Activities
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setJsonInput(sampleJsonStructure)}
+                  >
+                    Load Sample JSON
+                  </Button>
+                  <Button variant="ghost" onClick={() => setJsonInput("")}>
+                    Clear
+                  </Button>
+                </div>
+
+                {importResults && (
+                  <Alert>
+                    <AlertDescription>
+                      <div className="space-y-2">
+                        <div>
+                          <strong>Import Results:</strong>
+                        </div>
+                        <div className="text-sm">
+                          ✅ Successfully imported: {importResults.success}{" "}
+                          activities
+                          <br />
+                          {importResults.failed > 0 && (
+                            <>❌ Failed: {importResults.failed} activities</>
+                          )}
+                        </div>
+                        {importResults.errors.length > 0 && (
+                          <div className="text-sm text-red-600 mt-2">
+                            <strong>Errors:</strong>
+                            <ul className="list-disc list-inside mt-1">
+                              {importResults.errors.map((error, index) => (
+                                <li key={index}>{error}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+                )}
+              </div>
+
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                <h3 className="font-semibold mb-2">Sample JSON Structure:</h3>
+                <pre className="text-xs bg-white p-3 rounded border overflow-x-auto">
+                  <code>{sampleJsonStructure}</code>
+                </pre>
+                <div className="mt-3 text-xs text-gray-600">
+                  <p>
+                    <strong>Field Descriptions:</strong>
+                  </p>
+                  <ul className="list-disc list-inside mt-1 space-y-1">
+                    <li>
+                      <code>title</code>*: Activity name (required)
+                    </li>
+                    <li>
+                      <code>image</code>*: Image URL (required, use https://
+                      URLs)
+                    </li>
+                    <li>
+                      <code>description</code>: Detailed description (used for
+                      auto-detection)
+                    </li>
+                    <li>
+                      <code>priceRange</code>: Price range (e.g., "₹300 - ₹500"
+                      or "Free")
+                    </li>
+                    <li>
+                      <code>location</code>: Activity location
+                    </li>
+                    <li>
+                      <code>date</code>: Event date
+                    </li>
+                    <li>
+                      <code>time</code>: Event time
+                    </li>
+                    <li>
+                      <code>mapLink</code>: Google Maps or location link
+                    </li>
+                    <li>
+                      <code>contactInfo</code>: Phone or email
+                    </li>
+                    <li>
+                      <code>url</code>: Official website
+                    </li>
+                    <li>
+                      <code>categoryIds</code>: Array of category IDs (will be
+                      merged with auto-detected)
+                    </li>
+                    <li>
+                      <code>tags</code>: Array of tag IDs (will be merged with
+                      auto-detected)
+                    </li>
+                  </ul>
+                  <p className="mt-2 text-yellow-700">
+                    <Sparkles className="inline h-3 w-3 mr-1" />
+                    <strong>Auto-Detection:</strong> Categories and tags are
+                    automatically detected from title and description using
+                    keyword matching!
+                  </p>
                 </div>
               </div>
-              
-              <div>
-                <label className="block mb-1 text-sm font-medium">Map Link</label>
-                <Input
-                  name="mapLink"
-                  value={currentActivity.mapLink || ''}
-                  onChange={handleInputChange}
-                  placeholder="https://maps.google.com/..."
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Google Maps or other location link that opens in the map view
-                </p>
-              </div>
-              
-              <div>
-                <label className="block mb-1 text-sm font-medium">Website URL</label>
-                <Input
-                  name="url"
-                  value={currentActivity.url || ''}
-                  onChange={handleInputChange}
-                  placeholder="https://example.com/event"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Official website of the activity or event
-                </p>
-              </div>
-              
-              <div>
-                <label className="block mb-1 text-sm font-medium">Contact Info</label>
-                <Input
-                  name="contactInfo"
-                  value={currentActivity.contactInfo || ''}
-                  onChange={handleInputChange}
-                  placeholder="Phone or email"
-                />
-              </div>
-              
-              <div className="flex justify-end gap-2">
-                <Button type="button" variant="outline" onClick={resetForm} disabled={isSaving}>Cancel</Button>
-                <Button type="submit" disabled={isSaving}>
-                  {isSaving ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Saving...
-                    </>
-                  ) : (
-                    currentActivity.id ? 'Update Activity' : 'Add Activity'
-                  )}
-                </Button>
-              </div>
-            </form>
-          </div>
-        )}
-        
+            </div>
+          </TabsContent>
+        </Tabs>
+
         <div className="bg-white p-4 rounded-lg shadow-sm overflow-hidden">
           <h2 className="text-xl font-bold mb-4">Activities Database</h2>
-          
+
           {isLoading ? (
             <div className="flex justify-center items-center p-8">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -507,16 +997,26 @@ const created = await createActivity(activityData as Omit<Activity, 'id' | 'last
                   {activities.length > 0 ? (
                     activities.map((activity) => (
                       <TableRow key={activity.id}>
-                        <TableCell className="font-medium">{activity.title}</TableCell>
+                        <TableCell className="font-medium">
+                          {activity.title}
+                        </TableCell>
                         <TableCell>{activity.location}</TableCell>
                         <TableCell>{activity.priceRange}</TableCell>
                         <TableCell>{activity.lastUpdated}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
-                            <Button size="sm" variant="ghost" onClick={() => handleEdit(activity)}>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleEdit(activity)}
+                            >
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => handleDelete(activity.id)}>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleDelete(activity.id)}
+                            >
                               <Trash className="h-4 w-4" />
                             </Button>
                           </div>
@@ -526,7 +1026,8 @@ const created = await createActivity(activityData as Omit<Activity, 'id' | 'last
                   ) : (
                     <TableRow>
                       <TableCell colSpan={5} className="text-center py-8">
-                        No activities found. Add some activities to see them here.
+                        No activities found. Add some activities to see them
+                        here.
                       </TableCell>
                     </TableRow>
                   )}
@@ -536,7 +1037,7 @@ const created = await createActivity(activityData as Omit<Activity, 'id' | 'last
           )}
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );
