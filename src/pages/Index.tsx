@@ -821,12 +821,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* All Events Header */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">All Events</h2>
-          <span className="text-sm text-gray-500">{allActivitiesTotal} events</span>
-        </div>
-        
         {/* Activities listing */}
         <div className="mb-8">
           {isLoading ? (
