@@ -11,11 +11,12 @@ interface ActivityDetailContentProps {
 }
 
 const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity }) => {
-  const handleKnowMore = () => {
+  const handleShowOnMap = () => {
     if (activity.mapLink) {
       window.open(activity.mapLink, '_blank');
-    } else if (activity.url) {
-      window.open(activity.url, '_blank');
+    } else {
+      const searchQuery = encodeURIComponent(`${activity.title} ${activity.location}`);
+      window.open(`https://www.google.com/maps/search/${searchQuery}`, '_blank');
     }
   };
 
@@ -54,7 +55,6 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
     return true;
   };
 
-  const hasExternalLink = Boolean(activity.mapLink || activity.url);
   const rotationDeg = activity.id.charCodeAt(0) % 2 === 0 ? 1 : -1;
 
   return (
@@ -136,15 +136,16 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
           </div>
         )}
 
-        <div className="flex justify-center mt-6">
-          <Button 
-            onClick={handleKnowMore} 
-            className="sticky-tab bg-w2d-sticky-dark hover:bg-amber-200 border-t border-amber-200 text-amber-800 flex items-center gap-2 rounded-b-lg rounded-t-none md:text-base md:py-3 md:px-6"
-            disabled={!hasExternalLink}
-          >
-            Know More <ExternalLink className="h-4 w-4" />
-          </Button>
-        </div>
+        {activity.url && (
+          <div className="flex justify-center mt-6">
+            <Button 
+              onClick={() => window.open(activity.url, '_blank')}
+              className="sticky-tab bg-orange-500 hover:bg-orange-600 text-white flex items-center gap-2 rounded-lg md:text-base md:py-3 md:px-6"
+            >
+              View More Details <ExternalLink className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
