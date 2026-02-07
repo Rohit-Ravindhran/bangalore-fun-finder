@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Clock, Calendar, Map } from 'lucide-react';
+import { ArrowLeft, ArrowRight, MapPin, Clock, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getActivityById } from '@/services/activityService';
 import { useToast } from '@/components/ui/use-toast';
@@ -87,18 +87,6 @@ const ActivityDetail = () => {
       </div>
     );
   }
-  
-  const goToMap = () => {
-    if (activity.mapLink) {
-      window.open(activity.mapLink, '_blank');
-    } else if (activity.url) {
-      window.open(activity.url, '_blank');
-    } else {
-      const searchQuery = encodeURIComponent(`${activity.title} ${activity.location}`);
-      window.open(`https://www.google.com/maps/search/${searchQuery}`, '_blank');
-    }
-  };
-
   const formattedTime = formatTimeTo12Hour(activity.time);
   
   return (
@@ -187,15 +175,16 @@ const ActivityDetail = () => {
           </div>
         </div>
         
-        {/* Show on Map Button */}
-        <Button 
-          onClick={goToMap}
-          variant="outline"
-          className="w-full py-6 text-base font-medium border-gray-200 hover:bg-gray-50 flex items-center justify-center gap-2"
-        >
-          <Map className="h-5 w-5" />
-          Show on Map
-        </Button>
+        {/* View More Details Button */}
+        {activity.url && (
+          <Button 
+            onClick={() => window.open(activity.url, '_blank')}
+            className="w-full py-6 text-base font-medium bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center gap-2"
+          >
+            View More Details
+            <ArrowRight className="h-5 w-5" />
+          </Button>
+        )}
       </div>
     </div>
   );
