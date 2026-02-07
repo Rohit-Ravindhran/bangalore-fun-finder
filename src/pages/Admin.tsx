@@ -23,6 +23,9 @@ import {
   FileText,
   Upload,
   Sparkles,
+  LogOut,
+  Download,
+  Image as ImageIcon,
 } from "lucide-react";
 import {
   createActivity,
@@ -40,9 +43,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useAuth } from "@/contexts/AuthContext";
+import ActivityImageGenerator from "@/components/ActivityImageGenerator";
 
 type CategoryItem = {
   id: number;
@@ -71,7 +76,21 @@ const Admin = () => {
     failed: number;
     errors: string[];
   } | null>(null);
+  const [isDownloadingImages, setIsDownloadingImages] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState(0);
+  const [downloadingActivityIds, setDownloadingActivityIds] = useState<Set<string>>(new Set());
   const { toast } = useToast();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/admin/login');
+    toast({
+      title: 'Logged out',
+      description: 'You have been logged out successfully',
+    });
+  };
 
   useEffect(() => {
     loadActivities();
@@ -506,6 +525,51 @@ const Admin = () => {
     }
   };
 
+  // Function to get the last 10 activities for image download
+  const getLastTenActivities = () => {
+    // Sort activities by creation date (newest first) and take the last 10
+    return [...activities]
+      .sort((a, b) => {
+        const dateA = new Date(a.lastUpdated || 0);
+        const dateB = new Date(b.lastUpdated || 0);
+        return dateB.getTime() - dateA.getTime();
+      })
+      .slice(0, 10);
+  };
+
+  // Function to download all images
+  const handleDownloadAll = async () => {
+    const latestActivities = getLastTenActivities();
+    if (latestActivities.length === 0) return;
+
+    setIsDownloadingImages(true);
+    setDownloadProgress(0);
+
+    toast({
+      title: "Starting bulk download",
+      description: `Downloading ${latestActivities.length} images. Please wait...`,
+    });
+
+    for (let i = 0; i < latestActivities.length; i++) {
+      const activity = latestActivities[i];
+      setDownloadingActivityIds(new Set([activity.id]));
+      
+      // Wait for a small delay between downloads to avoid overwhelming the browser
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      setDownloadProgress(Math.round(((i + 1) / latestActivities.length) * 100));
+    }
+
+    setDownloadingActivityIds(new Set());
+    setIsDownloadingImages(false);
+    setDownloadProgress(0);
+
+    toast({
+      title: "Download complete!",
+      description: `Successfully downloaded ${latestActivities.length} images`,
+    });
+  };
+
   const sampleJsonStructure = `[
   {
     "title": "Sunset Yoga Session",
@@ -541,17 +605,23 @@ const Admin = () => {
       <main className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <Button variant="outline" asChild>
-            <Link to="/admin/bms-import">
-              <FileText className="mr-2 h-4 w-4" /> Import from BMS
-            </Link>
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button variant="outline" asChild>
+              <Link to="/admin/bms-import">
+                <FileText className="mr-2 h-4 w-4" /> Import from BMS
+              </Link>
+            </Button>
+            <Button variant="outline" onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" /> Logout
+            </Button>
+          </div>
         </div>
 
         <Tabs defaultValue="single" className="mb-8">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="single">Single Activity</TabsTrigger>
             <TabsTrigger value="bulk">Bulk JSON Import</TabsTrigger>
+            <TabsTrigger value="marketing">Marketing Images</TabsTrigger>
           </TabsList>
 
           <TabsContent value="single" className="space-y-6">
@@ -968,6 +1038,102 @@ const Admin = () => {
                     automatically detected from title and description using
                     keyword matching!
                   </p>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="marketing" className="space-y-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="flex items-center gap-2 mb-4">
+                <ImageIcon className="h-5 w-5" />
+                <h2 className="text-xl font-bold">Download Marketing Images</h2>
+              </div>
+              
+              <Alert className="mb-6">
+                <AlertDescription>
+                  Download professionally formatted images of the latest activities for social media and marketing purposes. Each image includes the Happ'nin Bangalore branding and activity details.
+                </AlertDescription>
+              </Alert>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div>
+                    <h3 className="font-semibold text-lg">Latest 10 Activities</h3>
+                    <p className="text-sm text-gray-600">
+                      {activities.length > 0 
+                        ? `${Math.min(10, activities.length)} images will be generated`
+                        : 'No activities available'}
+                    </p>
+                    {isDownloadingImages && (
+                      <div className="mt-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div 
+                              className="bg-orange-500 h-2 rounded-full transition-all duration-300"
+                              style={{ width: `${downloadProgress}%` }}
+                            />
+                          </div>
+                          <span className="text-sm font-medium">{downloadProgress}%</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <Button
+                    disabled={activities.length === 0 || isDownloadingImages}
+                    onClick={handleDownloadAll}
+                    className="gap-2 bg-orange-500 hover:bg-orange-600"
+                  >
+                    {isDownloadingImages ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Downloading {downloadProgress}%
+                      </>
+                    ) : (
+                      <>
+                        <Download className="h-4 w-4" />
+                        Download All ({Math.min(10, activities.length)})
+                      </>
+                    )}
+                  </Button>
+                </div>
+
+                {/* Display the last 10 activities with download buttons */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold">Recent Activities:</h3>
+                  <div className="grid gap-4">
+                    {getLastTenActivities().map((activity, index) => (
+                      <div key={activity.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
+                        <div className="flex items-center gap-4 flex-1">
+                          <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center font-bold text-orange-600">
+                            {index + 1}
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-medium">{activity.title}</h4>
+                            <p className="text-sm text-gray-500">{activity.location} • {activity.priceRange}</p>
+                          </div>
+                        </div>
+                        <ActivityImageGenerator 
+                          activity={activity}
+                          autoDownload={downloadingActivityIds.has(activity.id)}
+                          onImageGenerated={() => {
+                            if (!isDownloadingImages) {
+                              toast({
+                                title: "Image downloaded",
+                                description: `${activity.title} image saved successfully`,
+                              });
+                            }
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {activities.length === 0 && (
+                    <div className="text-center py-8 text-gray-500">
+                      No activities available. Add some activities first.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
