@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
+import { SEO } from '@/components/SEO';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -63,6 +64,12 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-w2d-cream">
+      <SEO 
+        title="Contact Us"
+        description="Get in touch with Happenings Bangalore. Have questions, suggestions, or found a hidden gem? We'd love to hear from you!"
+        url="https://happeningsbangalore.com/contact"
+        keywords="contact Happenings Bangalore, feedback, suggestions, Bangalore activities support"
+      />
       <Header />
 
       <main className="container px-4 pt-6 pb-20">

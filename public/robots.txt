@@ -12,3 +12,13 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# Sitemap
+Sitemap: https://happeningsbangalore.com/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Disallow admin pages
+Disallow: /admin
+Disallow: /admin/*

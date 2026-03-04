@@ -2,10 +2,17 @@
 import React from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 
 const Privacy = () => {
   return (
     <div className="min-h-screen bg-w2d-cream">
+      <SEO 
+        title="Privacy Policy"
+        description="Privacy Policy for Happenings Bangalore. Learn how we collect, use, and protect your personal information."
+        url="https://happeningsbangalore.com/privacy"
+        keywords="privacy policy, data protection, Happenings Bangalore privacy"
+      />
       <Header />
       
       <main className="container px-4 pt-6 pb-20">
