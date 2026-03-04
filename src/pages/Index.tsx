@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
@@ -12,13 +12,17 @@ import InstallPrompt from '@/components/InstallPrompt';
 import SubscribePopup from '@/components/SubscribePopup';
 import SubscribeSection from '@/components/SubscribeSection';
 import TabView from '@/components/TabView';
+import QuickExplore from '@/components/QuickExplore';
+import TrendingSection from '@/components/TrendingSection';
+import LocationFilter from '@/components/LocationFilter';
+import BottomNav from '@/components/BottomNav';
 import { 
   getFilteredActivitiesBySection, 
-  getFilteredActivities, 
   fetchCategories 
 } from '@/services/activityService';
+import { useAllSections, useCategories, activityKeys } from '@/hooks/useActivities';
 import { useToast } from '@/components/ui/use-toast';
-import { Dice6, Share2, Search, Loader2, Clock } from 'lucide-react';
+import { Dice6, Share2, Search, Loader2, Clock, Heart, Users, Utensils, Car, Briefcase, Compass, MapPin as MapPinIcon, Flame } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Activity } from '@/components/ActivityCard';
@@ -219,32 +223,46 @@ const formatTimeTo12Hour = (timeString: string | undefined): string => {
 const Index = () => {
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
   const [selectedQuickFilters, setSelectedQuickFilters] = useState<Set<string>>(new Set());
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [likedActivities, setLikedActivities] = useState<Set<string>>(new Set());
   const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
   const [viewMode, setViewMode] = useState<'card' | 'grid'>('grid');
   const [sortOption, setSortOption] = useState('newest');
   const [showSubscribe, setShowSubscribe] = useState(false);
-  const [searchVisible, setSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
   
   // Tab-related states
-  const [allActivities, setAllActivities] = useState<Activity[]>([]);
-  const [uniqueExperiences, setUniqueExperiences] = useState<Activity[]>([]);
-  const [dateIdeas, setDateIdeas] = useState<Activity[]>([]);
   const [currentTab, setCurrentTab] = useState('all');
   
-  // Pagination states
-  const [allActivitiesTotal, setAllActivitiesTotal] = useState(0);
-  const [uniqueExperiencesTotal, setUniqueExperiencesTotal] = useState(0);
-  const [dateIdeasTotal, setDateIdeasTotal] = useState(0);
+  // Pagination states for display
   const [allActivitiesPage, setAllActivitiesPage] = useState(1);
   const [uniqueExperiencesPage, setUniqueExperiencesPage] = useState(1);
   const [dateIdeasPage, setDateIdeasPage] = useState(1);
-  const [loadingMore, setLoadingMore] = useState(false);
   
-  const [categories, setCategories] = useState<Category[]>([]);
   const { toast } = useToast();
+
+  // Use React Query hooks for data fetching with caching
+  const { data: categories = [], isLoading: categoriesLoading } = useCategories();
+  
+  // Fetch all sections with React Query caching
+  const { 
+    allActivities: allActivitiesQuery, 
+    uniqueExperiences: uniqueExperiencesQuery, 
+    dateIdeas: dateIdeasQuery,
+    isLoading: sectionsLoading 
+  } = useAllSections(sortOption);
+
+  const rawAllActivities = allActivitiesQuery.data || [];
+  const rawUniqueExperiences = uniqueExperiencesQuery.data || [];
+  const rawDateIdeas = dateIdeasQuery.data || [];
+
+  // Time-based filters
+  const timeFilters = [
+    { id: 'today', label: 'Today', icon: '📅' },
+    { id: 'weekend', label: 'This Weekend', icon: '🗓️' },
+    { id: 'week', label: 'This Week', icon: '📆' },
+    { id: 'anytime', label: 'Anytime', icon: '✨' },
+  ];
 
   // Custom filters for the weekend
   const customQuickFilters = [
@@ -253,30 +271,97 @@ const Index = () => {
     { id: 'weekend', label: 'This Weekend' }
   ];
 
+  // Helper function to apply all filters to an activity list
+  const applyFilters = useCallback((activities: Activity[]): Activity[] => {
+    let filtered = [...activities];
+
+    // Filter by category if selected
+    if (selectedCategories.size > 0) {
+      const categoryIds = Array.from(selectedCategories);
+      filtered = filtered.filter(activity =>
+        categoryIds.some(id => activity.categoryIds.includes(id))
+      );
+    }
+
+    // Apply quick filters
+    if (selectedQuickFilters.size > 0) {
+      if (selectedQuickFilters.has('free')) {
+        filtered = filtered.filter(activity =>
+          activity.priceRange?.toLowerCase().includes('free')
+        );
+      }
+
+      if (selectedQuickFilters.has('today')) {
+        filtered = filtered.filter(activity => isToday(activity.date || ''));
+      }
+
+      if (selectedQuickFilters.has('weekend')) {
+        filtered = filtered.filter(activity => isWeekend(activity.date || ''));
+      }
+    }
+
+    // Apply location filter
+    if (selectedLocation) {
+      const locationMap: Record<string, string[]> = {
+        'indiranagar': ['indiranagar', 'indira nagar'],
+        'koramangala': ['koramangala'],
+        'hsr': ['hsr', 'hsr layout'],
+        'whitefield': ['whitefield'],
+        'jayanagar': ['jayanagar', 'jaya nagar'],
+        'malleshwaram': ['malleshwaram'],
+      };
+      const locationTerms = locationMap[selectedLocation] || [selectedLocation];
+      filtered = filtered.filter(activity =>
+        locationTerms.some(term => 
+          activity.location?.toLowerCase().includes(term)
+        )
+      );
+    }
+
+    // Apply search query
+    if (searchQuery && searchQuery.trim() !== '') {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(activity =>
+        activity.title.toLowerCase().includes(query) ||
+        (activity.description && activity.description.toLowerCase().includes(query)) ||
+        (activity.location && activity.location.toLowerCase().includes(query)) ||
+        (activity.tags && activity.tags.some(tag => tag.toLowerCase().includes(query)))
+      );
+    }
+
+    return filtered;
+  }, [selectedCategories, selectedQuickFilters, selectedLocation, searchQuery]);
+
+  // Memoized filtered activities - only recalculate when filters or data change
+  const allActivities = useMemo(() => 
+    applyFilters(rawAllActivities), 
+    [rawAllActivities, applyFilters]
+  );
+
+  const uniqueExperiences = useMemo(() => 
+    applyFilters(rawUniqueExperiences), 
+    [rawUniqueExperiences, applyFilters]
+  );
+
+  const dateIdeas = useMemo(() => 
+    applyFilters(rawDateIdeas), 
+    [rawDateIdeas, applyFilters]
+  );
+
+  // Derived totals from filtered data
+  const allActivitiesTotal = allActivities.length;
+  const uniqueExperiencesTotal = uniqueExperiences.length;
+  const dateIdeasTotal = dateIdeas.length;
+
+  // Combined loading state
+  const isLoading = sectionsLoading;
+
   useEffect(() => {
     const badge = document.getElementById('lovable-badge');
     if (badge) {
       badge.style.display = 'none';
     }
   }, []);
-
-  useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        const fetchedCategories = await fetchCategories();
-        setCategories(fetchedCategories);
-      } catch (error) {
-        console.error('Error loading categories:', error);
-        toast({
-          title: 'Error loading categories',
-          description: 'Please try again later',
-          variant: 'destructive',
-        });
-      }
-    };
-    
-    loadCategories();
-  }, [toast]);
 
   useEffect(() => {
     const savedLiked = localStorage.getItem('likedActivities');
@@ -293,123 +378,10 @@ const Index = () => {
     localStorage.setItem('likedActivities', JSON.stringify([...likedActivities]));
   }, [likedActivities]);
   
-  // Main data fetching useEffect - modified for weekend filter
+  // Reset activity index when filters change
   useEffect(() => {
-    const fetchSectionActivities = async () => {
-      setIsLoading(true);
-      try {
-        // Fetch all activities and filter by section type
-        const allActivitiesData = await getFilteredActivitiesBySection('all', sortOption);
-        const unique = await getFilteredActivitiesBySection('unique', sortOption);
-        const dateIdeasData = await getFilteredActivitiesBySection('date', sortOption);
-        
-        // Filter by category if selected
-        let filteredAll = [...allActivitiesData];
-        let filteredUnique = [...unique];
-        let filteredDateIdeas = [...dateIdeasData];
-        
-        if (selectedCategories.size > 0) {
-          const categoryIds = Array.from(selectedCategories);
-          filteredAll = filteredAll.filter(activity => 
-            categoryIds.some(id => activity.categoryIds.includes(id))
-          );
-          filteredUnique = filteredUnique.filter(activity => 
-            categoryIds.some(id => activity.categoryIds.includes(id))
-          );
-          filteredDateIdeas = filteredDateIdeas.filter(activity => 
-            categoryIds.some(id => activity.categoryIds.includes(id))
-          );
-        }
-        
-        // Apply quick filters
-        if (selectedQuickFilters.size > 0) {
-          if (selectedQuickFilters.has('free')) {
-            filteredAll = filteredAll.filter(activity => 
-              activity.priceRange?.toLowerCase().includes('free')
-            );
-            filteredUnique = filteredUnique.filter(activity => 
-              activity.priceRange?.toLowerCase().includes('free')
-            );
-            filteredDateIdeas = filteredDateIdeas.filter(activity => 
-              activity.priceRange?.toLowerCase().includes('free')
-            );
-          }
-          
-          if (selectedQuickFilters.has('today')) {
-            filteredAll = filteredAll.filter(activity => isToday(activity.date || ''));
-            filteredUnique = filteredUnique.filter(activity => isToday(activity.date || ''));
-            filteredDateIdeas = filteredDateIdeas.filter(activity => isToday(activity.date || ''));
-          }
-          
-          // Enhanced weekend filter
-          if (selectedQuickFilters.has('weekend')) {
-            console.log('Weekend filter active, checking dates...');
-            
-            // Log all dates before filtering for debugging
-            allActivitiesData.forEach(activity => {
-              console.log(`Activity: ${activity.title}, Date: ${activity.date}`);
-            });
-            
-            filteredAll = filteredAll.filter(activity => {
-              const result = isWeekend(activity.date || '');
-              console.log(`Activity: ${activity.title}, Date: ${activity.date}, Is Weekend: ${result}`);
-              return result;
-            });
-            
-            filteredUnique = filteredUnique.filter(activity => isWeekend(activity.date || ''));
-            filteredDateIdeas = filteredDateIdeas.filter(activity => isWeekend(activity.date || ''));
-          }
-        }
-        
-        // Apply search query
-        if (searchQuery && searchQuery.trim() !== '') {
-          const query = searchQuery.toLowerCase().trim();
-          
-          filteredAll = filteredAll.filter(activity => 
-            activity.title.toLowerCase().includes(query) || 
-            (activity.description && activity.description.toLowerCase().includes(query)) ||
-            (activity.location && activity.location.toLowerCase().includes(query)) ||
-            (activity.tags && activity.tags.some(tag => tag.toLowerCase().includes(query)))
-          );
-          
-          filteredUnique = filteredUnique.filter(activity => 
-            activity.title.toLowerCase().includes(query) || 
-            (activity.description && activity.description.toLowerCase().includes(query)) ||
-            (activity.location && activity.location.toLowerCase().includes(query)) ||
-            (activity.tags && activity.tags.some(tag => tag.toLowerCase().includes(query)))
-          );
-          
-          filteredDateIdeas = filteredDateIdeas.filter(activity => 
-            activity.title.toLowerCase().includes(query) || 
-            (activity.description && activity.description.toLowerCase().includes(query)) ||
-            (activity.location && activity.location.toLowerCase().includes(query)) ||
-            (activity.tags && activity.tags.some(tag => tag.toLowerCase().includes(query)))
-          );
-        }
-        
-        setAllActivities(filteredAll);
-        setUniqueExperiences(filteredUnique);
-        setDateIdeas(filteredDateIdeas);
-        
-        setAllActivitiesTotal(filteredAll.length);
-        setUniqueExperiencesTotal(filteredUnique.length);
-        setDateIdeasTotal(filteredDateIdeas.length);
-        
-        // Reset current activity index when filters change
-        setCurrentActivityIndex(0);
-      } catch (error) {
-        console.error('Error loading sections:', error);
-        toast({
-          title: 'Error loading sections',
-          description: 'Please try again later',
-          variant: 'destructive',
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchSectionActivities();
-  }, [toast, sortOption, selectedCategories, selectedQuickFilters, searchQuery]);
+    setCurrentActivityIndex(0);
+  }, [selectedCategories, selectedQuickFilters, searchQuery, sortOption]);
 
   const currentActivity = allActivities[currentActivityIndex];
 
@@ -541,94 +513,40 @@ const Index = () => {
     
     toast({ title: 'Shuffled activities', description: 'Finding something random for you', duration: 1500 });
   };
-
-  const toggleSearch = () => {
-    setSearchVisible(!searchVisible);
-    if (!searchVisible) {
-      setTimeout(() => {
-        document.getElementById('search-input')?.focus();
-      }, 100);
-    } else {
-      setSearchQuery('');
-    }
-  };
   
   const handleSortChange = (option: string) => {
     setSortOption(option);
-    // Activities will be re-fetched with the new sort option via the useEffect
+    // React Query will refetch with the new sort option automatically
   };
   
-  const loadMoreAll = async () => {
-    setLoadingMore(true);
-    try {
-      const nextPage = allActivitiesPage + 1;
-      const moreActivities = await getFilteredActivitiesBySection('all', sortOption);
-      const startIndex = allActivitiesPage * ITEMS_PER_PAGE;
-      const newItems = moreActivities.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-      
-      if (newItems.length > 0) {
-        setAllActivities(prev => [...prev, ...newItems]);
-        setAllActivitiesPage(nextPage);
-      }
-    } catch (error) {
-      console.error('Error loading more activities:', error);
-      toast({
-        title: 'Error loading more activities',
-        description: 'Please try again later',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoadingMore(false);
-    }
-  };
+  // Simplified loadMore functions - data is already cached, just update display
+  const loadMoreAll = useCallback(() => {
+    setAllActivitiesPage(prev => prev + 1);
+  }, []);
   
-  const loadMoreUniqueExperiences = async () => {
-    setLoadingMore(true);
-    try {
-      const nextPage = uniqueExperiencesPage + 1;
-      const moreActivities = await getFilteredActivitiesBySection('unique', sortOption);
-      const startIndex = uniqueExperiencesPage * ITEMS_PER_PAGE;
-      const newItems = moreActivities.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-      
-      if (newItems.length > 0) {
-        setUniqueExperiences(prev => [...prev, ...newItems]);
-        setUniqueExperiencesPage(nextPage);
-      }
-    } catch (error) {
-      console.error('Error loading more activities:', error);
-      toast({
-        title: 'Error loading more activities',
-        description: 'Please try again later',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoadingMore(false);
-    }
-  };
+  const loadMoreUniqueExperiences = useCallback(() => {
+    setUniqueExperiencesPage(prev => prev + 1);
+  }, []);
   
-  const loadMoreDateIdeas = async () => {
-    setLoadingMore(true);
-    try {
-      const nextPage = dateIdeasPage + 1;
-      const moreActivities = await getFilteredActivitiesBySection('date', sortOption);
-      const startIndex = dateIdeasPage * ITEMS_PER_PAGE;
-      const newItems = moreActivities.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-      
-      if (newItems.length > 0) {
-        setDateIdeas(prev => [...prev, ...newItems]);
-        setDateIdeasPage(nextPage);
-      }
-    } catch (error) {
-      console.error('Error loading more activities:', error);
-      toast({
-        title: 'Error loading more activities',
-        description: 'Please try again later',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoadingMore(false);
-    }
-  };
+  const loadMoreDateIdeas = useCallback(() => {
+    setDateIdeasPage(prev => prev + 1);
+  }, []);
+
+  // Calculate displayed activities based on pagination
+  const displayedAllActivities = useMemo(() => 
+    allActivities.slice(0, allActivitiesPage * ITEMS_PER_PAGE),
+    [allActivities, allActivitiesPage]
+  );
+
+  const displayedUniqueExperiences = useMemo(() => 
+    uniqueExperiences.slice(0, uniqueExperiencesPage * ITEMS_PER_PAGE),
+    [uniqueExperiences, uniqueExperiencesPage]
+  );
+
+  const displayedDateIdeas = useMemo(() => 
+    dateIdeas.slice(0, dateIdeasPage * ITEMS_PER_PAGE),
+    [dateIdeas, dateIdeasPage]
+  );
 
   const renderTabContent = (activities: Activity[], sectionType: string) => {
     if (isLoading) {
@@ -686,30 +604,30 @@ const Index = () => {
     {
       id: 'all',
       title: 'All',
-      content: renderTabContent(allActivities, 'All'),
+      content: renderTabContent(displayedAllActivities, 'All'),
       count: {
-        loaded: allActivities.length,
+        loaded: displayedAllActivities.length,
         total: allActivitiesTotal
       },
-      onLoadMore: loadMoreAll,
-      isLoading: loadingMore && currentTab === 'all'
+      onLoadMore: displayedAllActivities.length < allActivitiesTotal ? loadMoreAll : undefined,
+      isLoading: false
     },
     {
       id: 'unique-experiences',
       title: 'Unique Experiences',
-      content: renderTabContent(uniqueExperiences, 'Unique Experiences'),
+      content: renderTabContent(displayedUniqueExperiences, 'Unique Experiences'),
       count: {
-        loaded: uniqueExperiences.length,
+        loaded: displayedUniqueExperiences.length,
         total: uniqueExperiencesTotal
       },
-      onLoadMore: loadMoreUniqueExperiences,
-      isLoading: loadingMore && currentTab === 'unique-experiences'
+      onLoadMore: displayedUniqueExperiences.length < uniqueExperiencesTotal ? loadMoreUniqueExperiences : undefined,
+      isLoading: false
     },
     {
       id: 'date-ideas',
       title: 'Date Ideas',
-      content: dateIdeas.length > 0 
-        ? renderTabContent(dateIdeas, 'Date Ideas')
+      content: displayedDateIdeas.length > 0 
+        ? renderTabContent(displayedDateIdeas, 'Date Ideas')
         : (
           <div className="glass-floating scale-in p-8 text-center border-dashed border-2 border-white/20 relative overflow-hidden">
             <div className="relative z-10">
@@ -718,12 +636,12 @@ const Index = () => {
             </div>
           </div>
         ),
-      count: dateIdeas.length > 0 ? {
-        loaded: dateIdeas.length,
+      count: displayedDateIdeas.length > 0 ? {
+        loaded: displayedDateIdeas.length,
         total: dateIdeasTotal
       } : undefined,
-      onLoadMore: loadMoreDateIdeas,
-      isLoading: loadingMore && currentTab === 'date-ideas'
+      onLoadMore: displayedDateIdeas.length < dateIdeasTotal ? loadMoreDateIdeas : undefined,
+      isLoading: false
     }
   ];
 
@@ -739,48 +657,40 @@ const Index = () => {
   const lastUpdatedDate = yesterday.toLocaleDateString();
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header toggleSearch={toggleSearch} />
+    <div className="min-h-screen bg-gray-50 pb-20">
+      <Header 
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
 
-      <main className="container px-4 pt-6 pb-32 lg:max-w-6xl mx-auto">
-        {/* Hero Section */}
-        <div className="bg-gray-50 rounded-2xl p-6 mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-            Happ'nin Bangalore
-          </h1>
-          <p className="text-gray-600">
-            A Bangalore outing guide — shaped by a growing community.
-          </p>
-        </div>
-
+      <main className="container px-4 pt-4 pb-8 lg:max-w-6xl mx-auto">
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
 
-        {searchVisible && (
-          <div className="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-            <div className="flex items-center gap-3">
-              <Search className="h-5 w-5 text-gray-400" />
-              <Input 
-                id="search-input"
-                type="text" 
-                placeholder="Search activities..." 
-                className="border-0 focus-visible:ring-0 text-base"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          </div>
-        )}
+        {/* Quick Explore Section */}
+        <QuickExplore onItemClick={(id) => {
+          toast({ title: `${id} coming soon!`, description: 'This feature is under development', duration: 2000 });
+        }} />
 
-        {/* Quick Filters */}
-        <div className="mb-4">
+        {/* Trending Section */}
+        <TrendingSection activities={rawAllActivities} />
+
+        {/* Location Filter */}
+        <LocationFilter 
+          selectedLocation={selectedLocation}
+          onLocationSelect={setSelectedLocation}
+        />
+
+        {/* Combined Filters Row */}
+        <div className="mb-6">
           <div className="flex items-center justify-between">
-            <div className="flex gap-2 overflow-x-auto pb-2 flex-1">
+            <div className="flex gap-2 overflow-x-auto pb-2 flex-1" style={{ scrollbarWidth: 'none' }}>
+              {/* Time/Quick Filters */}
               {customQuickFilters.map((filter) => (
                 <button
                   key={filter.id}
                   onClick={() => handleQuickFilterSelect(filter.id)}
                   className={cn(
-                    "flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all border",
+                    "flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition-all border",
                     selectedQuickFilters.has(filter.id)
                       ? "bg-gray-900 text-white border-gray-900"
                       : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
@@ -789,48 +699,54 @@ const Index = () => {
                   {filter.label}
                 </button>
               ))}
+              
+              {/* Divider */}
+              <div className="flex-shrink-0 w-px h-6 bg-gray-200 self-center mx-1" />
+              
+              {/* Category Filters */}
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => handleCategorySelect(category.id)}
+                  className={cn(
+                    "flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium flex items-center gap-1.5 transition-all border",
+                    selectedCategories.has(category.id)
+                      ? "bg-gray-900 text-white border-gray-900"
+                      : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
+                  )}
+                >
+                  <span>{category.emoji}</span>
+                  <span>{category.name}</span>
+                </button>
+              ))}
             </div>
-            <div className="ml-4">
-              <ViewToggle 
-                selectedMode={viewMode} 
-                onSelect={setViewMode} 
-                disabled={currentTab !== 'all'} 
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Category Filters */}
-        <div className="mb-6">
-          <div className="flex gap-2 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => handleCategorySelect(category.id)}
-                className={cn(
-                  "flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium flex items-center gap-2 transition-all border",
-                  selectedCategories.has(category.id)
-                    ? "bg-gray-900 text-white border-gray-900"
-                    : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
-                )}
-              >
-                <span>{category.emoji}</span>
-                <span>{category.name}</span>
-              </button>
-            ))}
           </div>
         </div>
 
         {/* Activities listing */}
         <div className="mb-8">
+          {/* Section Header */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Flame className="h-5 w-5 text-orange-500" />
+              <h2 className="text-lg font-bold text-gray-900">Events & Activities</h2>
+              <span className="text-xs text-gray-400 font-medium">({allActivities.length})</span>
+            </div>
+            <ViewToggle 
+              selectedMode={viewMode} 
+              onSelect={setViewMode} 
+              disabled={currentTab !== 'all'} 
+            />
+          </div>
+          
           {isLoading ? (
             <div className="flex justify-center items-center py-20">
               <Loader2 className="h-10 w-10 animate-spin text-orange-500" />
             </div>
           ) : allActivities.length === 0 ? (
-            <div className="bg-gray-50 rounded-2xl p-8 text-center">
-              <h3 className="text-xl font-semibold mb-2 text-gray-900">No activities found</h3>
-              <p className="text-gray-600">Try a different filter</p>
+            <div className="bg-white rounded-2xl p-8 text-center border border-gray-100">
+              <h3 className="text-lg font-semibold mb-2 text-gray-900">No activities found</h3>
+              <p className="text-sm text-gray-500">Try a different filter or location</p>
             </div>
           ) : viewMode === 'card' ? (
             currentActivity && (
@@ -841,6 +757,7 @@ const Index = () => {
                 onLike={handleLike}
                 onShare={handleShare}
                 liked={likedActivities.has(currentActivity.id)}
+                showSwipeHint={true}
               />
             )
           ) : (
@@ -856,7 +773,7 @@ const Index = () => {
         </div>
       </main>
       
-      <Footer />
+      <BottomNav />
     </div>
   );
 };
