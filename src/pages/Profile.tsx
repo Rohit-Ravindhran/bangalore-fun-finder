@@ -1,19 +1,25 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, User, Sparkles, Bell, Crown, Heart, Info, Mail, Shield, FileText, ChevronRight } from 'lucide-react';
+import { 
+  ArrowLeft, User, Sparkles, Bell, Heart, Info, Mail, Shield, FileText, 
+  ChevronRight, MapPin, Share2
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BottomNav from '@/components/BottomNav';
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
-  
-  // TODO: Replace with actual auth check
-  const isSignedIn = false;
-  const userName = isSignedIn ? 'User Name' : 'Mysterious Explorer';
-  const userSubtitle = isSignedIn ? 'Welcome back!' : 'Lurking in the shadows... for now';
+
+  const quickActions = [
+    { label: 'My Favorites', icon: Heart, path: '/favorites', color: 'bg-pink-50 text-pink-600' },
+    { label: 'Share App', icon: Share2, action: () => {
+      if (navigator.share) {
+        navigator.share({ title: "Happ'nin Bangalore", url: window.location.origin });
+      }
+    }, color: 'bg-blue-50 text-blue-600' },
+  ];
 
   const menuItems = [
-    { label: 'Favorites', icon: Heart, path: '/favorites', color: 'text-pink-500' },
     { label: 'About Us', icon: Info, path: '/about', color: 'text-blue-500' },
     { label: 'Contact Us', icon: Mail, path: '/contact', color: 'text-green-500' },
     { label: 'Privacy Policy', icon: Shield, path: '/privacy', color: 'text-purple-500' },
@@ -21,9 +27,9 @@ const Profile: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white pb-20">
+    <div className="min-h-screen bg-gray-50 pb-24">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100">
+      <header className="sticky top-0 z-40 bg-white border-b border-gray-100">
         <div className="flex items-center justify-between px-4 py-3">
           <button onClick={() => navigate('/')} className="p-2 -ml-2">
             <ArrowLeft className="h-5 w-5 text-gray-700" />
@@ -36,56 +42,58 @@ const Profile: React.FC = () => {
       {/* Content */}
       <main className="px-4 py-6">
         <div className="max-w-md mx-auto">
-          {/* User Card */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6 text-center">
-            {/* Avatar */}
-            <div className="relative inline-flex items-center justify-center mb-4">
-              <div className="relative bg-gradient-to-br from-orange-100 to-pink-100 p-5 rounded-full">
-                <User className="h-10 w-10 text-orange-500" />
-              </div>
-              {!isSignedIn && (
-                <Crown className="absolute -top-1 -right-1 h-5 w-5 text-yellow-500" />
-              )}
+          {/* Profile Card */}
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-4 text-center">
+            <div className="w-20 h-20 bg-gradient-to-br from-orange-400 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <User className="h-10 w-10 text-white" />
             </div>
-
-            {/* Name & Status */}
-            <h2 className="text-xl font-bold text-gray-900 mb-1">{userName}</h2>
-            <p className="text-sm text-gray-500 mb-4">{userSubtitle}</p>
-
-            {!isSignedIn && (
-              <div className="inline-flex items-center gap-2 bg-orange-50 text-orange-600 px-3 py-1.5 rounded-full text-xs font-medium">
-                <Sparkles className="h-3 w-3" />
-                Ghost Mode Activated
-              </div>
-            )}
+            <h2 className="text-xl font-bold text-gray-900">Guest User</h2>
+            <p className="text-sm text-gray-500 flex items-center justify-center gap-1 mt-1">
+              <MapPin className="h-3 w-3" /> Bangalore
+            </p>
           </div>
 
-          {/* Coming Soon Features */}
-          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-5 mb-6">
-            <div className="flex items-center gap-2 mb-3">
+          {/* Quick Actions */}
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            {quickActions.map((action) => {
+              const Icon = action.icon;
+              return action.path ? (
+                <Link
+                  key={action.label}
+                  to={action.path}
+                  className={`${action.color} rounded-xl p-4 flex items-center gap-3`}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span className="font-medium text-sm">{action.label}</span>
+                </Link>
+              ) : (
+                <button
+                  key={action.label}
+                  onClick={action.action}
+                  className={`${action.color} rounded-xl p-4 flex items-center gap-3`}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span className="font-medium text-sm">{action.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Coming Soon */}
+          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-4 mb-4">
+            <div className="flex items-center gap-2 mb-2">
               <Sparkles className="h-4 w-4 text-purple-500" />
-              <h3 className="font-semibold text-gray-900">Coming Soon</h3>
+              <h3 className="font-semibold text-gray-900 text-sm">Sign In Coming Soon</h3>
             </div>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li className="flex items-start gap-2">
-                <span className="text-purple-500 mt-0.5">✓</span>
-                Sign in to save your adventures across devices
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-purple-500 mt-0.5">✓</span>
-                Earn badges as you explore Bangalore
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-purple-500 mt-0.5">✓</span>
-                Get personalized recommendations
-              </li>
-            </ul>
+            <p className="text-xs text-gray-600 mb-3">
+              Save favorites across devices and get personalized recommendations.
+            </p>
             <Button 
-              className="w-full mt-4 bg-purple-500 hover:bg-purple-600 text-white rounded-xl"
-              onClick={() => {}}
+              size="sm"
+              className="w-full bg-purple-500 hover:bg-purple-600 text-white rounded-lg text-xs"
             >
-              <Bell className="h-4 w-4 mr-2" />
-              Notify me when ready
+              <Bell className="h-3 w-3 mr-1.5" />
+            Stay tuned
             </Button>
           </div>
 
@@ -97,13 +105,13 @@ const Profile: React.FC = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex items-center justify-between px-4 py-3.5 hover:bg-gray-50 transition-colors ${
+                  className={`flex items-center justify-between px-4 py-3.5 hover:bg-gray-50 ${
                     index !== menuItems.length - 1 ? 'border-b border-gray-100' : ''
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <Icon className={`h-5 w-5 ${item.color}`} />
-                    <span className="text-gray-700 font-medium">{item.label}</span>
+                    <span className="text-gray-700">{item.label}</span>
                   </div>
                   <ChevronRight className="h-4 w-4 text-gray-400" />
                 </Link>
@@ -114,10 +122,7 @@ const Profile: React.FC = () => {
           {/* Footer */}
           <div className="mt-8 text-center">
             <p className="text-xs text-gray-400">
-              Happ'nin Bangalore - Your city, your adventures
-            </p>
-            <p className="text-xs text-gray-300 mt-1">
-              © {new Date().getFullYear()} Happenings
+              Happ'nin Bangalore v1.0.0
             </p>
           </div>
         </div>

@@ -13,11 +13,11 @@ interface ExploreItem {
 }
 
 const exploreItems: ExploreItem[] = [
-  { id: 'outings', label: 'Day Out', icon: Sun, color: 'text-orange-500', bgColor: 'bg-orange-50', iconColor: 'text-orange-500' },
-  { id: 'dates', label: 'Date Ideas', icon: Heart, color: 'text-pink-500', bgColor: 'bg-pink-50', iconColor: 'text-pink-500' },
-  { id: 'food', label: 'Food Spots', icon: Utensils, color: 'text-amber-500', bgColor: 'bg-amber-50', iconColor: 'text-amber-500' },
-  { id: 'meetups', label: 'Meetups', icon: Users, color: 'text-purple-500', bgColor: 'bg-purple-50', iconColor: 'text-purple-500' },
-  { id: 'people', label: 'Meet People', icon: Globe, color: 'text-blue-500', bgColor: 'bg-blue-50', iconColor: 'text-blue-500' },
+  { id: 'outings', label: 'Day Out', icon: Sun, color: 'text-orange-500', bgColor: 'bg-orange-50', iconColor: 'text-orange-500', comingSoon: true },
+  { id: 'dates', label: 'Date Ideas', icon: Heart, color: 'text-pink-500', bgColor: 'bg-pink-50', iconColor: 'text-pink-500', comingSoon: true },
+  { id: 'food', label: 'Food Spots', icon: Utensils, color: 'text-amber-500', bgColor: 'bg-amber-50', iconColor: 'text-amber-500', comingSoon: true },
+  { id: 'meetups', label: 'Meetups', icon: Users, color: 'text-purple-500', bgColor: 'bg-purple-50', iconColor: 'text-purple-500', comingSoon: true },
+  { id: 'people', label: 'Meet People', icon: Globe, color: 'text-blue-500', bgColor: 'bg-blue-50', iconColor: 'text-blue-500', comingSoon: true },
   { id: 'jobs', label: 'City Jobs', icon: Briefcase, color: 'text-slate-500', bgColor: 'bg-slate-50', iconColor: 'text-slate-500', comingSoon: true },
   { id: 'rides', label: 'Ride Deals', icon: Car, color: 'text-teal-500', bgColor: 'bg-teal-50', iconColor: 'text-teal-500', comingSoon: true },
 ];
