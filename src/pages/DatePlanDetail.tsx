@@ -17,13 +17,14 @@ import { useToast } from '@/components/ui/use-toast';
 import { SEO } from '@/components/SEO';
 import StopsTimeline from '@/components/StopsTimeline';
 import { cn } from '@/lib/utils';
-import { getDatePlanById } from '@/data/datePlanData';
+import { getDatePlanById, trackDatePlanView } from '@/data/datePlanData';
 import { 
   DatePlan, 
   DatePlanStop,
   formatDuration, 
   formatCost, 
-  getVibeInfo 
+  getVibeInfo,
+  getStopEmoji
 } from '@/types/datePlan';
 
 const DatePlanDetail: React.FC = () => {
@@ -40,6 +41,13 @@ const DatePlanDetail: React.FC = () => {
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, [id]);
+  
+  // Track view when page loads
+  useEffect(() => {
+    if (id) {
+      trackDatePlanView(id);
+    }
   }, [id]);
   
   // Set first stop as active by default
@@ -331,7 +339,7 @@ const DatePlanDetail: React.FC = () => {
                   <div className="flex items-center justify-center gap-2 text-lg mb-2">
                     {datePlan.stops.map((stop, i) => (
                       <React.Fragment key={stop.id}>
-                        <span className="text-2xl">{stop.emoji}</span>
+                        <span className="text-2xl">{getStopEmoji(stop)}</span>
                         {i < datePlan.stops.length - 1 && (
                           <span className="text-rose-300">→</span>
                         )}
@@ -372,7 +380,7 @@ const DatePlanDetail: React.FC = () => {
               <div className="flex items-center justify-center gap-1 text-white mb-2">
                 {datePlan.stops.slice(0, 4).map((stop, i) => (
                   <React.Fragment key={stop.id}>
-                    <span className="text-xl">{stop.emoji}</span>
+                    <span className="text-xl">{getStopEmoji(stop)}</span>
                     {i < Math.min(datePlan.stops.length, 4) - 1 && (
                       <span className="text-rose-300 text-sm">→</span>
                     )}

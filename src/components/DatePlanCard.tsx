@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Clock, MapPin, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { DatePlan, formatDuration, formatCost, getVibeInfo } from '@/types/datePlan';
+import { DatePlan, formatDuration, formatCost, getVibeInfo, getStopEmoji } from '@/types/datePlan';
 
 interface DatePlanCardProps {
   datePlan: DatePlan;
@@ -131,7 +131,7 @@ const DatePlanCard: React.FC<DatePlanCardProps> = ({ datePlan, onLike, liked = f
                   key={stop.id} 
                   className="flex items-center gap-1.5 text-sm"
                 >
-                  <span>{stop.emoji}</span>
+                  <span>{getStopEmoji(stop)}</span>
                   <span className="text-gray-700 truncate">{stop.name}</span>
                   {stop.estimatedCost === 0 && (
                     <span className="text-green-600 text-xs font-medium ml-auto flex-shrink-0">Free</span>

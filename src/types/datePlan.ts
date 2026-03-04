@@ -4,7 +4,7 @@ export interface DatePlanStop {
   id: string;
   name: string;
   type: 'cafe' | 'restaurant' | 'park' | 'dessert' | 'bar' | 'activity' | 'attraction' | 'shopping';
-  emoji: string;
+  emoji?: string; // Optional - will be derived from type if not provided
   description: string;
   estimatedCost: number; // in INR
   duration: number; // in minutes
@@ -32,7 +32,9 @@ export interface DatePlan {
   tags: string[];
   isFeatured?: boolean;
   likes?: number;
+  views?: number; // Track how many people visited the plan
   createdAt?: string;
+  updatedAt?: string;
 }
 
 export type DatePlanVibe = DatePlan['vibe'];
@@ -52,6 +54,11 @@ export const getStopTypeEmoji = (type: StopType): string => {
     shopping: '🛍️',
   };
   return emojiMap[type] || '📍';
+};
+
+// Helper function to get emoji for a stop (from stop or derived from type)
+export const getStopEmoji = (stop: DatePlanStop): string => {
+  return stop.emoji || getStopTypeEmoji(stop.type);
 };
 
 // Helper function to get vibe display info

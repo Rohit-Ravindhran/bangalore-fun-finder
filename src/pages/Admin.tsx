@@ -26,6 +26,7 @@ import {
   LogOut,
   Download,
   Image as ImageIcon,
+  Heart,
 } from "lucide-react";
 import {
   createActivity,
@@ -48,6 +49,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
 import ActivityImageGenerator from "@/components/ActivityImageGenerator";
+import DatePlanAdmin from "@/components/DatePlanAdmin";
 
 type CategoryItem = {
   id: number;
@@ -618,10 +620,11 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="single" className="mb-8">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="single">Single Activity</TabsTrigger>
-            <TabsTrigger value="bulk">Bulk JSON Import</TabsTrigger>
-            <TabsTrigger value="marketing">Marketing Images</TabsTrigger>
+            <TabsTrigger value="dateplans">Date Plans</TabsTrigger>
+            <TabsTrigger value="bulk">Bulk Import</TabsTrigger>
+            <TabsTrigger value="marketing">Marketing</TabsTrigger>
           </TabsList>
 
           <TabsContent value="single" className="space-y-6">
@@ -891,15 +894,18 @@ const Admin = () => {
             )}
           </TabsContent>
 
+          <TabsContent value="dateplans" className="space-y-6">
+            <DatePlanAdmin />
+          </TabsContent>
+
           <TabsContent value="bulk" className="space-y-6">
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <div className="flex items-center gap-2 mb-4">
                 <Upload className="h-5 w-5" />
                 <h2 className="text-xl font-bold">Bulk JSON Import</h2>
-                <Sparkles
-                  className="h-4 w-4 text-yellow-500"
-                  title="Auto-detects categories and tags!"
-                />
+                <span title="Auto-detects categories and tags!">
+                  <Sparkles className="h-4 w-4 text-yellow-500" />
+                </span>
               </div>
 
               <div className="space-y-4">

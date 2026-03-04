@@ -481,3 +481,60 @@ export const getDatePlanById = (id: string): DatePlan | undefined => {
 export const getAllAreas = (): string[] => {
   return [...new Set(mockDatePlans.map(plan => plan.area))];
 };
+
+// View tracking using localStorage (to be replaced with database later)
+const VIEWS_STORAGE_KEY = 'datePlanViews';
+
+// Get stored views from localStorage
+const getStoredViews = (): Record<string, number> => {
+  try {
+    const stored = localStorage.getItem(VIEWS_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
+};
+
+// Save views to localStorage
+const saveStoredViews = (views: Record<string, number>) => {
+  try {
+    localStorage.setItem(VIEWS_STORAGE_KEY, JSON.stringify(views));
+  } catch {
+    console.error('Failed to save views to localStorage');
+  }
+};
+
+// Track a view for a date plan
+export const trackDatePlanView = (planId: string): void => {
+  const views = getStoredViews();
+  views[planId] = (views[planId] || 0) + 1;
+  saveStoredViews(views);
+  
+  // Update the mockDatePlans array as well (for in-memory consistency)
+  const plan = mockDatePlans.find(p => p.id === planId);
+  if (plan) {
+    plan.views = views[planId];
+  }
+};
+
+// Get view count for a specific plan
+export const getDatePlanViews = (planId: string): number => {
+  const views = getStoredViews();
+  return views[planId] || 0;
+};
+
+// Get all view counts
+export const getAllDatePlanViews = (): Record<string, number> => {
+  return getStoredViews();
+};
+
+// Initialize views from localStorage on module load
+const initializeViews = () => {
+  const storedViews = getStoredViews();
+  mockDatePlans.forEach(plan => {
+    plan.views = storedViews[plan.id] || 0;
+  });
+};
+
+// Run initialization
+initializeViews();

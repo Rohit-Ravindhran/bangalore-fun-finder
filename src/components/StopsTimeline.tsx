@@ -1,7 +1,7 @@
 import React from 'react';
 import { Clock, MapPin, ExternalLink, Navigation } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { DatePlanStop, formatCost } from '@/types/datePlan';
+import { DatePlanStop, formatCost, getStopEmoji } from '@/types/datePlan';
 
 interface StopsTimelineProps {
   stops: DatePlanStop[];
@@ -55,7 +55,7 @@ const StopsTimeline: React.FC<StopsTimelineProps> = ({
                 ? "bg-rose-500 shadow-lg scale-110" 
                 : "bg-rose-100 border-2 border-rose-300"
             )}>
-              <span>{stop.emoji}</span>
+              <span>{getStopEmoji(stop)}</span>
             </div>
             
             {/* Stop number */}
