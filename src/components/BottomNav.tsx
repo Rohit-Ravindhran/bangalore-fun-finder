@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Compass, Users, Utensils, Globe, User } from 'lucide-react';
+import { Compass, Users, Utensils, Globe, User, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const BottomNav: React.FC = () => {
@@ -9,9 +9,9 @@ const BottomNav: React.FC = () => {
 
   const navItems = [
     { id: 'explore', label: 'Explore', icon: Compass, path: '/' },
+    { id: 'dates', label: 'Dates', icon: Heart, path: '/date-plans' },
     { id: 'meetups', label: 'Meetups', icon: Users, path: '/meetups', comingSoon: true },
     { id: 'food', label: 'Food', icon: Utensils, path: '/food', comingSoon: true },
-    { id: 'network', label: 'Network', icon: Globe, path: '/network', comingSoon: true },
     { id: 'profile', label: 'Profile', icon: User, path: '/profile', comingSoon: true },
   ];
 

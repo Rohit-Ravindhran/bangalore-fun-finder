@@ -24,6 +24,8 @@ const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
+const DatePlans = lazy(() => import("./pages/DatePlans"));
+const DatePlanDetail = lazy(() => import("./pages/DatePlanDetail"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -71,6 +73,8 @@ const App = () => {
                 </ProtectedRoute>
               } />
               <Route path="/favorites" element={<Favorites />} />
+              <Route path="/date-plans" element={<DatePlans />} />
+              <Route path="/date-plans/:id" element={<DatePlanDetail />} />
               <Route path="/meetups" element={<Meetups />} />
               <Route path="/food" element={<Food />} />
               <Route path="/network" element={<Network />} />
