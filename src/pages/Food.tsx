@@ -40,15 +40,15 @@ const Food: React.FC = () => {
 
           {/* Fun Headline */}
           <h2 className="text-2xl font-bold text-gray-900 mb-3">
-            Hungry? We Got You! 🍔
+            Food Spots
           </h2>
 
           {/* Curious Description */}
           <p className="text-gray-600 mb-6 leading-relaxed">
-            Forget those boring "best restaurants" lists. We're curating 
-            <span className="font-semibold text-amber-600"> hidden gems, legendary street food, 
-            and that one aunty's house that makes killer biriyani</span>. 
-            Your taste buds will thank us later!
+            Discover great places to eat around Bangalore — from popular cafés and breweries to local favourites and hidden food spots.
+          </p>
+          <p className="text-gray-500 text-sm mb-6">
+            We're building a curated guide to help you quickly find where to eat, what to try, and where to go next.
           </p>
 
           {/* Feature Preview */}
@@ -83,7 +83,7 @@ const Food: React.FC = () => {
             onClick={() => {}}
           >
             <Bell className="h-4 w-4 mr-2" />
-            Feed me updates
+            Stay tuned
           </Button>
 
           <p className="text-xs text-gray-400 mt-3">
