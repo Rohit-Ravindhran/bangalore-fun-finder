@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { SEO } from '@/components/SEO';
 import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
 import ActivityCard from '@/components/ActivityCard';
@@ -658,6 +659,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
+      <SEO 
+        url="https://happeningsbangalore.com"
+        keywords="Things to do in Bangalore, Bangalore activities, Bangalore events, weekend plans Bangalore, date ideas Bangalore, couple activities Bangalore"
+      />
       <Header 
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}

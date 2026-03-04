@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Activity } from '@/components/ActivityCard';
 import { useActivity } from '@/hooks/useActivities';
+import { SEO, generateActivitySchema } from '@/components/SEO';
 
 const ActivityDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -89,6 +90,22 @@ const ActivityDetail = () => {
   
   return (
     <div className="min-h-screen bg-white">
+      <SEO 
+        title={activity.title}
+        description={activity.description || `Discover ${activity.title} in Bangalore. ${activity.location ? `Located at ${activity.location}.` : ''} Book now on Happenings Bangalore.`}
+        image={activity.image}
+        url={`https://happeningsbangalore.com/activity/${id}`}
+        type="event"
+        keywords={`${activity.title}, ${activity.category || ''}, Bangalore activities, things to do in Bangalore`}
+        schema={generateActivitySchema({
+          id: activity.id,
+          name: activity.title,
+          description: activity.description || '',
+          image: activity.image,
+          location: activity.location,
+          price: activity.price,
+        })}
+      />
       {/* Header with back button */}
       <div className="sticky top-0 z-40 bg-white border-b border-gray-100 px-4 py-3">
         <button
