@@ -13,9 +13,11 @@ clarity.init(projectId);
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      cacheTime: 10 * 60 * 1000, // 10 minut
+      staleTime: 5 * 60 * 1000, // 5 minutes - data is fresh for this duration
+      gcTime: 30 * 60 * 1000, // 30 minutes - cache persists for this duration
       refetchOnWindowFocus: false,
+      refetchOnMount: false, // Prevent refetch when component remounts
+      retry: 1, // Only retry once on failure
     },
   },
 });
