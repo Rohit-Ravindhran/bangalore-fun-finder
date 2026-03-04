@@ -144,15 +144,360 @@ export type Database = {
         }
         Relationships: []
       }
+      date_packages: {
+        Row: {
+          id: string
+          title: string
+          area: string | null
+          description: string | null
+          estimated_cost: number | null
+          duration_minutes: number | null
+          image: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          area?: string | null
+          description?: string | null
+          estimated_cost?: number | null
+          duration_minutes?: number | null
+          image?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          area?: string | null
+          description?: string | null
+          estimated_cost?: number | null
+          duration_minutes?: number | null
+          image?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      outing_packages: {
+        Row: {
+          id: string
+          title: string
+          category: string | null
+          area: string | null
+          description: string | null
+          duration_minutes: number | null
+          estimated_cost: number | null
+          image: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          category?: string | null
+          area?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          estimated_cost?: number | null
+          image?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          category?: string | null
+          area?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          estimated_cost?: number | null
+          image?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      package_stops: {
+        Row: {
+          id: string
+          package_id: string
+          package_type: Database["public"]["Enums"]["package_type_enum"]
+          stop_order: number
+          place_name: string
+          latitude: number | null
+          longitude: number | null
+          category: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          package_id: string
+          package_type: Database["public"]["Enums"]["package_type_enum"]
+          stop_order: number
+          place_name: string
+          latitude?: number | null
+          longitude?: number | null
+          category?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          package_id?: string
+          package_type?: Database["public"]["Enums"]["package_type_enum"]
+          stop_order?: number
+          place_name?: string
+          latitude?: number | null
+          longitude?: number | null
+          category?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      food_places: {
+        Row: {
+          id: string
+          name: string
+          area: string | null
+          category: string | null
+          rating: number | null
+          price_range: string | null
+          description: string | null
+          latitude: number | null
+          longitude: number | null
+          image: string | null
+          tags: string[] | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          area?: string | null
+          category?: string | null
+          rating?: number | null
+          price_range?: string | null
+          description?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          image?: string | null
+          tags?: string[] | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          area?: string | null
+          category?: string | null
+          rating?: number | null
+          price_range?: string | null
+          description?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          image?: string | null
+          tags?: string[] | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      meetups: {
+        Row: {
+          id: string
+          title: string
+          description: string | null
+          location: string | null
+          latitude: number | null
+          longitude: number | null
+          date_time: string
+          host_user_id: string | null
+          max_people: number | null
+          category: string | null
+          image: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          description?: string | null
+          location?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          date_time: string
+          host_user_id?: string | null
+          max_people?: number | null
+          category?: string | null
+          image?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string | null
+          location?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          date_time?: string
+          host_user_id?: string | null
+          max_people?: number | null
+          category?: string | null
+          image?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meetups_host_user_id_fkey"
+            columns: ["host_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      meetup_participants: {
+        Row: {
+          id: string
+          meetup_id: string
+          user_id: string
+          status: Database["public"]["Enums"]["participant_status_enum"]
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          meetup_id: string
+          user_id: string
+          status?: Database["public"]["Enums"]["participant_status_enum"]
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          meetup_id?: string
+          user_id?: string
+          status?: Database["public"]["Enums"]["participant_status_enum"]
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meetup_participants_meetup_id_fkey"
+            columns: ["meetup_id"]
+            isOneToOne: false
+            referencedRelation: "meetups"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      connections: {
+        Row: {
+          id: string
+          sender_id: string
+          receiver_id: string
+          status: Database["public"]["Enums"]["connection_status_enum"]
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          sender_id: string
+          receiver_id: string
+          status?: Database["public"]["Enums"]["connection_status_enum"]
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          sender_id?: string
+          receiver_id?: string
+          status?: Database["public"]["Enums"]["connection_status_enum"]
+          created_at?: string
+        }
+        Relationships: []
+      }
+      jobs: {
+        Row: {
+          id: string
+          title: string
+          company: string
+          salary: string | null
+          location: string | null
+          description: string | null
+          contact: string | null
+          type: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          company: string
+          salary?: string | null
+          location?: string | null
+          description?: string | null
+          contact?: string | null
+          type?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          company?: string
+          salary?: string | null
+          location?: string | null
+          description?: string | null
+          contact?: string | null
+          type?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      ride_routes: {
+        Row: {
+          id: string
+          source: string
+          destination: string
+          provider: string
+          average_price: number | null
+          deep_link: string | null
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          source: string
+          destination: string
+          provider: string
+          average_price?: number | null
+          deep_link?: string | null
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          source?: string
+          destination?: string
+          provider?: string
+          average_price?: number | null
+          deep_link?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_meetup_participant_count: {
+        Args: {
+          meetup_uuid: string
+        }
+        Returns: number
+      }
+      is_meetup_full: {
+        Args: {
+          meetup_uuid: string
+        }
+        Returns: boolean
+      }
+      get_mutual_connections_count: {
+        Args: {
+          user1: string
+          user2: string
+        }
+        Returns: number
+      }
     }
     Enums: {
-      [_ in never]: never
+      package_type_enum: "date" | "outing"
+      participant_status_enum: "joined" | "pending" | "cancelled"
+      connection_status_enum: "pending" | "accepted" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -267,6 +612,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      package_type_enum: ["date", "outing"] as const,
+      participant_status_enum: ["joined", "pending", "cancelled"] as const,
+      connection_status_enum: ["pending", "accepted", "rejected"] as const,
+    },
   },
 } as const
