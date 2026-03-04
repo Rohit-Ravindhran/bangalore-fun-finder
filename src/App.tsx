@@ -15,6 +15,10 @@ const Admin = lazy(() => import("./pages/Admin"));
 const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const ActivityAddFromBMS = lazy(() => import("./pages/ActivityAddFromBMS"));
 const Favorites = lazy(() => import("./pages/Favorites"));
+const Meetups = lazy(() => import("./pages/Meetups"));
+const Food = lazy(() => import("./pages/Food"));
+const Network = lazy(() => import("./pages/Network"));
+const Profile = lazy(() => import("./pages/Profile"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
@@ -67,6 +71,10 @@ const App = () => {
                 </ProtectedRoute>
               } />
               <Route path="/favorites" element={<Favorites />} />
+              <Route path="/meetups" element={<Meetups />} />
+              <Route path="/food" element={<Food />} />
+              <Route path="/network" element={<Network />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/privacy" element={<Privacy />} />
