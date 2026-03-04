@@ -679,57 +679,60 @@ const Index = () => {
         {/* Trending Section */}
         <TrendingSection activities={rawAllActivities} />
 
-        {/* Location Filter */}
-        <LocationFilter 
-          selectedLocation={selectedLocation}
-          onLocationSelect={setSelectedLocation}
-        />
+        {/* Sticky Filters Container */}
+        <div className="sticky top-[52px] z-30 bg-gray-50 -mx-4 px-4 py-2">
+          {/* Location Filter */}
+          <LocationFilter 
+            selectedLocation={selectedLocation}
+            onLocationSelect={setSelectedLocation}
+          />
 
-        {/* Combined Filters Row */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex gap-2 overflow-x-auto pb-2 flex-1" style={{ scrollbarWidth: 'none' }}>
-              {/* Time/Quick Filters */}
-              {customQuickFilters.map((filter) => (
-                <button
-                  key={filter.id}
-                  onClick={() => handleQuickFilterSelect(filter.id)}
-                  className={cn(
-                    "flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition-all border",
-                    selectedQuickFilters.has(filter.id)
-                      ? "bg-gray-900 text-white border-gray-900"
-                      : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
-                  )}
-                >
-                  {filter.label}
-                </button>
-              ))}
-              
-              {/* Divider */}
-              <div className="flex-shrink-0 w-px h-6 bg-gray-200 self-center mx-1" />
-              
-              {/* Category Filters */}
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => handleCategorySelect(category.id)}
-                  className={cn(
-                    "flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium flex items-center gap-1.5 transition-all border",
-                    selectedCategories.has(category.id)
-                      ? "bg-gray-900 text-white border-gray-900"
-                      : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
-                  )}
-                >
-                  <span>{category.emoji}</span>
-                  <span>{category.name}</span>
-                </button>
-              ))}
+          {/* Combined Filters Row */}
+          <div className="mt-1">
+            <div className="flex items-center justify-between">
+              <div className="flex gap-2 overflow-x-auto pb-2 flex-1" style={{ scrollbarWidth: 'none' }}>
+                {/* Time/Quick Filters */}
+                {customQuickFilters.map((filter) => (
+                  <button
+                    key={filter.id}
+                    onClick={() => handleQuickFilterSelect(filter.id)}
+                    className={cn(
+                      "flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition-all border",
+                      selectedQuickFilters.has(filter.id)
+                        ? "bg-gray-900 text-white border-gray-900"
+                        : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
+                    )}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+                
+                {/* Divider */}
+                <div className="flex-shrink-0 w-px h-6 bg-gray-200 self-center mx-1" />
+                
+                {/* Category Filters */}
+                {categories.map((category) => (
+                  <button
+                    key={category.id}
+                    onClick={() => handleCategorySelect(category.id)}
+                    className={cn(
+                      "flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium flex items-center gap-1.5 transition-all border",
+                      selectedCategories.has(category.id)
+                        ? "bg-gray-900 text-white border-gray-900"
+                        : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
+                    )}
+                  >
+                    <span>{category.emoji}</span>
+                    <span>{category.name}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Activities listing */}
-        <div className="mb-8">
+        <div className="mb-8 mt-4 min-h-[60vh]">
           {/* Section Header */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
@@ -751,7 +754,17 @@ const Index = () => {
           ) : allActivities.length === 0 ? (
             <div className="bg-white rounded-2xl p-8 text-center border border-gray-100">
               <h3 className="text-lg font-semibold mb-2 text-gray-900">No activities found</h3>
-              <p className="text-sm text-gray-500">Try a different filter or location</p>
+              <p className="text-sm text-gray-500 mb-4">Try a different filter or location</p>
+              <button 
+                onClick={() => {
+                  setSelectedQuickFilters(new Set());
+                  setSelectedLocation(null);
+                  setSelectedCategories(new Set());
+                }}
+                className="text-orange-500 text-sm font-medium hover:underline"
+              >
+                Clear all filters
+              </button>
             </div>
           ) : viewMode === 'card' ? (
             currentActivity && (
