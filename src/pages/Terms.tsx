@@ -2,10 +2,17 @@
 import React from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 
 const Terms = () => {
   return (
     <div className="min-h-screen bg-w2d-cream">
+      <SEO 
+        title="Terms and Conditions"
+        description="Terms and Conditions for using Happenings Bangalore services. Read our terms of service and usage policies."
+        url="https://happeningsbangalore.com/terms"
+        keywords="terms and conditions, terms of service, Happenings Bangalore terms"
+      />
       <Header />
       
       <main className="container px-4 pt-6 pb-20">

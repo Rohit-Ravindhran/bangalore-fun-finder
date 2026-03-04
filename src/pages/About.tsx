@@ -2,10 +2,17 @@
 import React from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 
 const About = () => {
   return (
     <div className="min-h-screen bg-w2d-cream">
+      <SEO 
+        title="About Us"
+        description="Learn about Happenings Bangalore - your personal city guide to discover hidden gems and trending experiences in Bangalore. Curated activities verified by local enthusiasts."
+        url="https://happeningsbangalore.com/about"
+        keywords="about Happenings Bangalore, Bangalore city guide, local experiences Bangalore, curated activities"
+      />
       <Header />
       
       <main className="container px-4 pt-6 pb-20">

@@ -7,6 +7,7 @@ import { fetchActivities } from '@/services/activityService';
 import { useToast } from '@/components/ui/use-toast';
 import { Activity } from '@/components/ActivityCard';
 import { Loader2 } from 'lucide-react';
+import { SEO } from '@/components/SEO';
 
 const Favorites: React.FC = () => {
   const [likedActivities, setLikedActivities] = useState<Set<string>>(new Set());
@@ -115,6 +116,12 @@ const Favorites: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-w2d-cream overflow-x-hidden pb-6">
+      <SEO 
+        title="Your Favorites"
+        description="Save and manage your favorite activities in Bangalore. Keep track of things you want to do and places you want to visit."
+        url="https://happeningsbangalore.com/favorites"
+        noindex={true}
+      />
       <Header />
       
       <main className="container px-4 pt-6 pb-20">
