@@ -19,6 +19,8 @@ const Meetups = lazy(() => import("./pages/Meetups"));
 const Food = lazy(() => import("./pages/Food"));
 const Network = lazy(() => import("./pages/Network"));
 const Profile = lazy(() => import("./pages/Profile"));
+const DayOut = lazy(() => import("./pages/DayOut"));
+const DateIdeas = lazy(() => import("./pages/DateIdeas"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
@@ -75,6 +77,8 @@ const App = () => {
               <Route path="/food" element={<Food />} />
               <Route path="/network" element={<Network />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/day-out" element={<DayOut />} />
+              <Route path="/date-ideas" element={<DateIdeas />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/privacy" element={<Privacy />} />
