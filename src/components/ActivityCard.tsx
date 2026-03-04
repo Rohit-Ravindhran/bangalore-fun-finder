@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, MapPin, Calendar, Clock } from 'lucide-react';
+import { ArrowRight, MapPin, Calendar, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface Activity {
@@ -29,6 +29,7 @@ interface ActivityCardProps {
   onLike?: (id: string) => void;
   onShare?: (id: string) => void;
   liked?: boolean;
+  showSwipeHint?: boolean;
 }
 
 const ActivityCard: React.FC<ActivityCardProps> = ({ 
@@ -38,6 +39,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   onLike,
   onShare,
   liked = false,
+  showSwipeHint = false,
 }) => {
   const navigate = useNavigate();
   const [isLeaving, setIsLeaving] = React.useState<string | null>(null);
@@ -159,6 +161,24 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           loading="lazy"
           onError={handleImageError}
         />
+        
+        {/* Swipe hint arrows */}
+        {showSwipeHint && (
+          <>
+            <div 
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 backdrop-blur-sm p-2 rounded-full cursor-pointer hover:bg-black/60 transition-colors"
+              onClick={(e) => { e.stopPropagation(); onSwipeRight?.(); }}
+            >
+              <ChevronLeft className="h-5 w-5 text-white" />
+            </div>
+            <div 
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 backdrop-blur-sm p-2 rounded-full cursor-pointer hover:bg-black/60 transition-colors"
+              onClick={(e) => { e.stopPropagation(); onSwipeLeft?.(); }}
+            >
+              <ChevronRight className="h-5 w-5 text-white" />
+            </div>
+          </>
+        )}
       </div>
       
       {/* Content */}

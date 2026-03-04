@@ -12,13 +12,17 @@ import InstallPrompt from '@/components/InstallPrompt';
 import SubscribePopup from '@/components/SubscribePopup';
 import SubscribeSection from '@/components/SubscribeSection';
 import TabView from '@/components/TabView';
+import QuickExplore from '@/components/QuickExplore';
+import TrendingSection from '@/components/TrendingSection';
+import LocationFilter from '@/components/LocationFilter';
+import BottomNav from '@/components/BottomNav';
 import { 
   getFilteredActivitiesBySection, 
   fetchCategories 
 } from '@/services/activityService';
 import { useAllSections, useCategories, activityKeys } from '@/hooks/useActivities';
 import { useToast } from '@/components/ui/use-toast';
-import { Dice6, Share2, Search, Loader2, Clock, Heart, Users, Utensils, Car, Briefcase, Compass, MapPin as MapPinIcon } from 'lucide-react';
+import { Dice6, Share2, Search, Loader2, Clock, Heart, Users, Utensils, Car, Briefcase, Compass, MapPin as MapPinIcon, Flame } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Activity } from '@/components/ActivityCard';
@@ -219,12 +223,12 @@ const formatTimeTo12Hour = (timeString: string | undefined): string => {
 const Index = () => {
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
   const [selectedQuickFilters, setSelectedQuickFilters] = useState<Set<string>>(new Set());
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [likedActivities, setLikedActivities] = useState<Set<string>>(new Set());
   const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
   const [viewMode, setViewMode] = useState<'card' | 'grid'>('grid');
   const [sortOption, setSortOption] = useState('newest');
   const [showSubscribe, setShowSubscribe] = useState(false);
-  const [searchVisible, setSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   
   // Tab-related states
@@ -251,6 +255,14 @@ const Index = () => {
   const rawAllActivities = allActivitiesQuery.data || [];
   const rawUniqueExperiences = uniqueExperiencesQuery.data || [];
   const rawDateIdeas = dateIdeasQuery.data || [];
+
+  // Time-based filters
+  const timeFilters = [
+    { id: 'today', label: 'Today', icon: '📅' },
+    { id: 'weekend', label: 'This Weekend', icon: '🗓️' },
+    { id: 'week', label: 'This Week', icon: '📆' },
+    { id: 'anytime', label: 'Anytime', icon: '✨' },
+  ];
 
   // Custom filters for the weekend
   const customQuickFilters = [
@@ -288,6 +300,24 @@ const Index = () => {
       }
     }
 
+    // Apply location filter
+    if (selectedLocation) {
+      const locationMap: Record<string, string[]> = {
+        'indiranagar': ['indiranagar', 'indira nagar'],
+        'koramangala': ['koramangala'],
+        'hsr': ['hsr', 'hsr layout'],
+        'whitefield': ['whitefield'],
+        'jayanagar': ['jayanagar', 'jaya nagar'],
+        'malleshwaram': ['malleshwaram'],
+      };
+      const locationTerms = locationMap[selectedLocation] || [selectedLocation];
+      filtered = filtered.filter(activity =>
+        locationTerms.some(term => 
+          activity.location?.toLowerCase().includes(term)
+        )
+      );
+    }
+
     // Apply search query
     if (searchQuery && searchQuery.trim() !== '') {
       const query = searchQuery.toLowerCase().trim();
@@ -300,7 +330,7 @@ const Index = () => {
     }
 
     return filtered;
-  }, [selectedCategories, selectedQuickFilters, searchQuery]);
+  }, [selectedCategories, selectedQuickFilters, selectedLocation, searchQuery]);
 
   // Memoized filtered activities - only recalculate when filters or data change
   const allActivities = useMemo(() => 
@@ -483,17 +513,6 @@ const Index = () => {
     
     toast({ title: 'Shuffled activities', description: 'Finding something random for you', duration: 1500 });
   };
-
-  const toggleSearch = () => {
-    setSearchVisible(!searchVisible);
-    if (!searchVisible) {
-      setTimeout(() => {
-        document.getElementById('search-input')?.focus();
-      }, 100);
-    } else {
-      setSearchQuery('');
-    }
-  };
   
   const handleSortChange = (option: string) => {
     setSortOption(option);
@@ -638,38 +657,40 @@ const Index = () => {
   const lastUpdatedDate = yesterday.toLocaleDateString();
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header toggleSearch={toggleSearch} />
+    <div className="min-h-screen bg-gray-50 pb-20">
+      <Header 
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
 
-      <main className="container px-4 pt-4 pb-32 lg:max-w-6xl mx-auto">
+      <main className="container px-4 pt-4 pb-8 lg:max-w-6xl mx-auto">
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
 
-        {searchVisible && (
-          <div className="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-            <div className="flex items-center gap-3">
-              <Search className="h-5 w-5 text-gray-400" />
-              <Input 
-                id="search-input"
-                type="text" 
-                placeholder="Search activities..." 
-                className="border-0 focus-visible:ring-0 text-base"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          </div>
-        )}
+        {/* Quick Explore Section */}
+        <QuickExplore onItemClick={(id) => {
+          toast({ title: `${id} coming soon!`, description: 'This feature is under development', duration: 2000 });
+        }} />
 
-        {/* Quick Filters */}
-        <div className="mb-4">
+        {/* Trending Section */}
+        <TrendingSection activities={rawAllActivities} />
+
+        {/* Location Filter */}
+        <LocationFilter 
+          selectedLocation={selectedLocation}
+          onLocationSelect={setSelectedLocation}
+        />
+
+        {/* Combined Filters Row */}
+        <div className="mb-6">
           <div className="flex items-center justify-between">
-            <div className="flex gap-2 overflow-x-auto pb-2 flex-1">
+            <div className="flex gap-2 overflow-x-auto pb-2 flex-1" style={{ scrollbarWidth: 'none' }}>
+              {/* Time/Quick Filters */}
               {customQuickFilters.map((filter) => (
                 <button
                   key={filter.id}
                   onClick={() => handleQuickFilterSelect(filter.id)}
                   className={cn(
-                    "flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all border",
+                    "flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition-all border",
                     selectedQuickFilters.has(filter.id)
                       ? "bg-gray-900 text-white border-gray-900"
                       : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
@@ -678,48 +699,54 @@ const Index = () => {
                   {filter.label}
                 </button>
               ))}
+              
+              {/* Divider */}
+              <div className="flex-shrink-0 w-px h-6 bg-gray-200 self-center mx-1" />
+              
+              {/* Category Filters */}
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => handleCategorySelect(category.id)}
+                  className={cn(
+                    "flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium flex items-center gap-1.5 transition-all border",
+                    selectedCategories.has(category.id)
+                      ? "bg-gray-900 text-white border-gray-900"
+                      : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
+                  )}
+                >
+                  <span>{category.emoji}</span>
+                  <span>{category.name}</span>
+                </button>
+              ))}
             </div>
-            <div className="ml-4">
-              <ViewToggle 
-                selectedMode={viewMode} 
-                onSelect={setViewMode} 
-                disabled={currentTab !== 'all'} 
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Category Filters */}
-        <div className="mb-6">
-          <div className="flex gap-2 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => handleCategorySelect(category.id)}
-                className={cn(
-                  "flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium flex items-center gap-2 transition-all border",
-                  selectedCategories.has(category.id)
-                    ? "bg-gray-900 text-white border-gray-900"
-                    : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
-                )}
-              >
-                <span>{category.emoji}</span>
-                <span>{category.name}</span>
-              </button>
-            ))}
           </div>
         </div>
 
         {/* Activities listing */}
         <div className="mb-8">
+          {/* Section Header */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Flame className="h-5 w-5 text-orange-500" />
+              <h2 className="text-lg font-bold text-gray-900">Events & Activities</h2>
+              <span className="text-xs text-gray-400 font-medium">({allActivities.length})</span>
+            </div>
+            <ViewToggle 
+              selectedMode={viewMode} 
+              onSelect={setViewMode} 
+              disabled={currentTab !== 'all'} 
+            />
+          </div>
+          
           {isLoading ? (
             <div className="flex justify-center items-center py-20">
               <Loader2 className="h-10 w-10 animate-spin text-orange-500" />
             </div>
           ) : allActivities.length === 0 ? (
-            <div className="bg-gray-50 rounded-2xl p-8 text-center">
-              <h3 className="text-xl font-semibold mb-2 text-gray-900">No activities found</h3>
-              <p className="text-gray-600">Try a different filter</p>
+            <div className="bg-white rounded-2xl p-8 text-center border border-gray-100">
+              <h3 className="text-lg font-semibold mb-2 text-gray-900">No activities found</h3>
+              <p className="text-sm text-gray-500">Try a different filter or location</p>
             </div>
           ) : viewMode === 'card' ? (
             currentActivity && (
@@ -730,6 +757,7 @@ const Index = () => {
                 onLike={handleLike}
                 onShare={handleShare}
                 liked={likedActivities.has(currentActivity.id)}
+                showSwipeHint={true}
               />
             )
           ) : (
@@ -743,112 +771,9 @@ const Index = () => {
             />
           )}
         </div>
-
-        {/* Coming Soon Section */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 mb-6">
-            <h2 className="text-xl font-bold text-gray-900">Coming Soon</h2>
-            <span className="bg-orange-100 text-orange-600 text-xs font-medium px-2 py-1 rounded-full">New Features</span>
-          </div>
-          
-          {/* EXPLORE Section */}
-          <div className="mb-6">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Explore</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-100 rounded-xl p-4 relative overflow-hidden group hover:shadow-md transition-all">
-                <div className="absolute top-2 right-2">
-                  <span className="bg-pink-500/10 text-pink-600 text-[10px] font-medium px-2 py-0.5 rounded-full">Soon</span>
-                </div>
-                <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center mb-3">
-                  <Heart className="h-5 w-5 text-pink-500" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-1">Date Planner</h3>
-                <p className="text-xs text-gray-500">Romantic date ideas with route map</p>
-              </div>
-              
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-4 relative overflow-hidden group hover:shadow-md transition-all">
-                <div className="absolute top-2 right-2">
-                  <span className="bg-blue-500/10 text-blue-600 text-[10px] font-medium px-2 py-0.5 rounded-full">Soon</span>
-                </div>
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
-                  <Compass className="h-5 w-5 text-blue-500" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-1">Outing Planner</h3>
-                <p className="text-xs text-gray-500">Friends & weekend outing plans</p>
-              </div>
-              
-              <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-xl p-4 relative overflow-hidden group hover:shadow-md transition-all">
-                <div className="absolute top-2 right-2">
-                  <span className="bg-amber-500/10 text-amber-600 text-[10px] font-medium px-2 py-0.5 rounded-full">Soon</span>
-                </div>
-                <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mb-3">
-                  <Utensils className="h-5 w-5 text-amber-500" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-1">Food Explorer</h3>
-                <p className="text-xs text-gray-500">Discover must-try food places</p>
-              </div>
-            </div>
-          </div>
-          
-          {/* COMMUNITY Section */}
-          <div className="mb-6">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Community</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-100 rounded-xl p-4 relative overflow-hidden group hover:shadow-md transition-all">
-                <div className="absolute top-2 right-2">
-                  <span className="bg-purple-500/10 text-purple-600 text-[10px] font-medium px-2 py-0.5 rounded-full">Soon</span>
-                </div>
-                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-3">
-                  <Users className="h-5 w-5 text-purple-500" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-1">Meet People</h3>
-                <p className="text-xs text-gray-500">Events + social meetups</p>
-              </div>
-              
-              <div className="bg-gradient-to-br from-teal-50 to-cyan-50 border border-teal-100 rounded-xl p-4 relative overflow-hidden group hover:shadow-md transition-all">
-                <div className="absolute top-2 right-2">
-                  <span className="bg-teal-500/10 text-teal-600 text-[10px] font-medium px-2 py-0.5 rounded-full">Soon</span>
-                </div>
-                <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center mb-3">
-                  <MapPinIcon className="h-5 w-5 text-teal-500" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-1">City Network</h3>
-                <p className="text-xs text-gray-500">Connect with people nearby</p>
-              </div>
-            </div>
-          </div>
-          
-          {/* SERVICES Section */}
-          <div>
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Services</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100 rounded-xl p-4 relative overflow-hidden group hover:shadow-md transition-all">
-                <div className="absolute top-2 right-2">
-                  <span className="bg-green-500/10 text-green-600 text-[10px] font-medium px-2 py-0.5 rounded-full">Soon</span>
-                </div>
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-3">
-                  <Car className="h-5 w-5 text-green-500" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-1">Ride Deals</h3>
-                <p className="text-xs text-gray-500">Compare cheapest rides</p>
-              </div>
-              
-              <div className="bg-gradient-to-br from-slate-50 to-gray-50 border border-slate-100 rounded-xl p-4 relative overflow-hidden group hover:shadow-md transition-all">
-                <div className="absolute top-2 right-2">
-                  <span className="bg-slate-500/10 text-slate-600 text-[10px] font-medium px-2 py-0.5 rounded-full">Soon</span>
-                </div>
-                <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mb-3">
-                  <Briefcase className="h-5 w-5 text-slate-500" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-1">City Jobs</h3>
-                <p className="text-xs text-gray-500">Local job opportunities</p>
-              </div>
-            </div>
-          </div>
-        </div>
       </main>
       
-      <Footer />
+      <BottomNav />
     </div>
   );
 };
