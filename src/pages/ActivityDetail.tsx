@@ -1,26 +1,24 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, MapPin, Clock, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { getActivityById } from '@/services/activityService';
 import { useToast } from '@/components/ui/use-toast';
 import { Activity } from '@/components/ActivityCard';
-import { useQuery } from '@tanstack/react-query';
+import { useActivity } from '@/hooks/useActivities';
 
 const ActivityDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Use React Query for data fetching with caching
-  const { data: activity, isLoading, error } = useQuery({
-    queryKey: ['activity', id],
-    queryFn: () => getActivityById(id!),
-    enabled: !!id,
-    staleTime: 5 * 60 * 1000,
-    cacheTime: 10 * 60 * 1000,
-  });
+  // Use the custom hook with automatic caching and initial data from list cache
+  const { data: activity, isLoading, error } = useActivity(id);
+  
+  // Scroll to top when page loads
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
   
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = '/placeholder.svg';
