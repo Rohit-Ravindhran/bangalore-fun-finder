@@ -20,12 +20,9 @@ const AdminLogin: React.FC = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate a small delay for UX
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    const success = login(username, password);
+    const result = await login(username, password);
     
-    if (success) {
+    if (result.success) {
       toast({
         title: 'Login successful',
         description: 'Welcome to the admin panel',
@@ -34,7 +31,7 @@ const AdminLogin: React.FC = () => {
     } else {
       toast({
         title: 'Login failed',
-        description: 'Invalid username or password',
+        description: result.message,
         variant: 'destructive',
       });
     }
