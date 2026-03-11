@@ -17,6 +17,7 @@ import QuickExplore from '@/components/QuickExplore';
 import TrendingSection from '@/components/TrendingSection';
 import LocationFilter from '@/components/LocationFilter';
 import BottomNav from '@/components/BottomNav';
+import HighlightsCarousel from '@/components/HighlightsCarousel';
 import { 
   getFilteredActivitiesBySection, 
   fetchCategories 
@@ -670,6 +671,11 @@ const Index = () => {
 
       <main className="container px-4 pt-4 pb-8 lg:max-w-6xl mx-auto">
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
+
+        {/* Highlights Carousel */}
+        <div className="overflow-hidden">
+          <HighlightsCarousel />
+        </div>
 
         {/* Quick Explore Section */}
         <QuickExplore onItemClick={(id) => {

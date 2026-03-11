@@ -469,6 +469,36 @@ export type Database = {
         }
         Relationships: []
       }
+      highlights: {
+        Row: {
+          id: number
+          title: string | null
+          image_url: string
+          link_url: string | null
+          display_order: number
+          is_active: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: number
+          title?: string | null
+          image_url: string
+          link_url?: string | null
+          display_order?: number
+          is_active?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: number
+          title?: string | null
+          image_url?: string
+          link_url?: string | null
+          display_order?: number
+          is_active?: boolean
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -492,6 +522,105 @@ export type Database = {
           user2: string
         }
         Returns: number
+      }
+      verify_admin_credentials: {
+        Args: {
+          p_username: string
+          p_password: string
+        }
+        Returns: {
+          success: boolean
+          message: string
+          admin_id?: string
+          username?: string
+        }
+      }
+      create_admin_user: {
+        Args: {
+          p_username: string
+          p_password: string
+          p_email?: string
+        }
+        Returns: {
+          success: boolean
+          message: string
+          admin_id?: string
+        }
+      }
+      change_admin_password: {
+        Args: {
+          p_username: string
+          p_old_password: string
+          p_new_password: string
+        }
+        Returns: {
+          success: boolean
+          message: string
+        }
+      }
+      admin_create_activity: {
+        Args: {
+          p_admin_id: string
+          p_title: string
+          p_description?: string | null
+          p_image?: string | null
+          p_price_range?: string | null
+          p_location?: string | null
+          p_date?: string | null
+          p_time?: string | null
+          p_map_link?: string | null
+          p_contact_info?: string | null
+          p_url?: string | null
+          p_category_ids?: string[]
+          p_tags?: string[]
+          p_section_type?: string
+          p_enabled?: boolean
+        }
+        Returns: {
+          success: boolean
+          message: string
+          activity_id?: number
+        }
+      }
+      admin_update_activity: {
+        Args: {
+          p_admin_id: string
+          p_activity_id: number
+          p_title?: string | null
+          p_description?: string | null
+          p_image?: string | null
+          p_price_range?: string | null
+          p_location?: string | null
+          p_date?: string | null
+          p_time?: string | null
+          p_map_link?: string | null
+          p_contact_info?: string | null
+          p_url?: string | null
+          p_category_ids?: string[] | null
+          p_tags?: string[] | null
+          p_section_type?: string | null
+          p_enabled?: boolean | null
+        }
+        Returns: {
+          success: boolean
+          message: string
+        }
+      }
+      admin_delete_activity: {
+        Args: {
+          p_admin_id: string
+          p_activity_id: number
+        }
+        Returns: {
+          success: boolean
+          message: string
+        }
+      }
+      is_valid_admin_session: {
+        Args: {
+          p_admin_id: string
+        }
+        Returns: boolean
       }
     }
     Enums: {

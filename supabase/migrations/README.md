@@ -165,4 +165,55 @@ For issues specific to:
 
 ## Migration History
 
-- **001_initial_schema.sql** - Initial database setup with all tables, indexes, and RLS policies
+- **001_initial_schema.sql** - Initial database setup with all tables, indexes, and RLS policies- **002_update_rls_policies.sql** - Updates to Row Level Security policies
+- **003_add_age_limit_column.sql** - Add age limit column to activities
+- **004_new_features_schema.sql** - Schema for new features (date packages, meetups, etc.)
+- **005_admin_users_secure.sql** - Secure admin authentication with encrypted passwords
+
+## Admin User Setup
+
+### Security Features
+The admin authentication system uses industry-standard security practices:
+- **bcrypt hashing** with cost factor 12 for password storage
+- **Server-side verification** - passwords are verified in PostgreSQL, never exposed to client
+- **Row Level Security** - admin_users table is protected from direct access
+- **Session expiration** - sessions automatically expire after 8 hours
+
+### Initial Setup
+
+After running migration `005_admin_users_secure.sql`, create your admin user:
+
+1. Open the Supabase SQL Editor
+2. Run the seed script from `supabase/seed_admin.sql` with your own password:
+
+```sql
+SELECT create_admin_user(
+    'admin',                          -- username
+    'your_strong_password_here',      -- password (min 8 chars)
+    'admin@yourdomain.com'            -- email (optional)
+);
+```
+
+**Important:**
+- Use a strong, unique password (minimum 8 characters)
+- Never commit real passwords to version control
+- Store your admin credentials securely
+
+### Changing Admin Password
+
+```sql
+SELECT change_admin_password(
+    'admin',                    -- username
+    'current_password',         -- current password
+    'new_secure_password'       -- new password
+);
+```
+
+### Testing Authentication
+
+To verify the admin setup works:
+```sql
+SELECT verify_admin_credentials('admin', 'your_password');
+```
+
+This will return a JSON object with `success: true` if credentials are valid.

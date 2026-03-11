@@ -21,26 +21,41 @@ const Header: React.FC<HeaderProps> = ({
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchExpanded, setSearchExpanded] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  // Treat as scrolled state when search is focused OR actually scrolled
+  const showCompactMode = isScrolled || isSearchFocused;
 
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY > 10;
       setIsScrolled(scrolled);
-      // Collapse search when scrolling back to top
-      if (!scrolled) {
+      // Collapse search when scrolling back to top (only if not focused)
+      if (!scrolled && !isSearchFocused) {
         setSearchExpanded(false);
       }
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isSearchFocused]);
+
+  const handleSearchFocus = () => {
+    setIsSearchFocused(true);
+    setSearchExpanded(true);
+  };
+
+  const handleSearchClose = () => {
+    setIsSearchFocused(false);
+    setSearchExpanded(false);
+    onSearchChange?.('');
+  };
 
   return (
     <header className="bg-white px-4 md:px-8 sticky top-0 z-40 border-b border-gray-100 transition-all duration-200">
       {/* Top row with logo and profile */}
       <div className="flex items-center justify-between py-3 gap-2">
         {/* Logo - hidden when search expanded */}
-        {!(isScrolled && searchExpanded) && (
+        {!(showCompactMode && searchExpanded) && (
           <div 
             className="flex items-center gap-1 cursor-pointer flex-shrink-0"
             onClick={() => navigate('/')}
@@ -54,8 +69,8 @@ const Header: React.FC<HeaderProps> = ({
           </div>
         )}
         
-        {/* Scrolled state: search expands full width */}
-        {isScrolled && searchExpanded && (
+        {/* Compact state: search expands full width */}
+        {showCompactMode && searchExpanded && (
           <div className="flex-1">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -68,10 +83,7 @@ const Header: React.FC<HeaderProps> = ({
                 autoFocus
               />
               <button
-                onClick={() => {
-                  setSearchExpanded(false);
-                  onSearchChange?.('');
-                }}
+                onClick={handleSearchClose}
                 className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
               >
                 <X className="h-4 w-4 text-gray-400" />
@@ -81,8 +93,8 @@ const Header: React.FC<HeaderProps> = ({
         )}
         
         <div className="flex items-center gap-1 flex-shrink-0">
-          {/* Search icon - only show when scrolled and search not expanded */}
-          {isScrolled && !searchExpanded && (
+          {/* Search icon - only show when compact and search not expanded */}
+          {showCompactMode && !searchExpanded && (
             <button
               onClick={() => setSearchExpanded(true)}
               className="p-2 rounded-full hover:bg-gray-100 transition-colors"
@@ -102,7 +114,7 @@ const Header: React.FC<HeaderProps> = ({
       </div>
       
       {/* Hero text and search - animated show/hide */}
-      <div className={`overflow-hidden transition-all duration-200 ease-out ${isScrolled ? 'max-h-0 opacity-0' : 'max-h-40 opacity-100'}`}>
+      <div className={`overflow-hidden transition-all duration-200 ease-out ${showCompactMode ? 'max-h-0 opacity-0' : 'max-h-40 opacity-100'}`}>
         <div className="pb-3">
           <h1 className="text-lg font-semibold text-gray-900 mb-1">
             Discover things to do in Bangalore
@@ -122,6 +134,7 @@ const Header: React.FC<HeaderProps> = ({
               className="w-full pl-10 pr-4 py-5 bg-gray-50 border-gray-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-orange-500/20"
               value={searchQuery}
               onChange={(e) => onSearchChange?.(e.target.value)}
+              onFocus={handleSearchFocus}
             />
           </div>
         </div>
