@@ -26,6 +26,7 @@ import {
   LogOut,
   Download,
   Image as ImageIcon,
+  Megaphone,
 } from "lucide-react";
 import {
   createActivity,
@@ -48,6 +49,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
 import ActivityImageGenerator from "@/components/ActivityImageGenerator";
+import AdminHighlights from "@/components/AdminHighlights";
 
 type CategoryItem = {
   id: number;
@@ -80,7 +82,7 @@ const Admin = () => {
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [downloadingActivityIds, setDownloadingActivityIds] = useState<Set<string>>(new Set());
   const { toast } = useToast();
-  const { logout } = useAuth();
+  const { logout, getAdminId } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -240,13 +242,17 @@ const Admin = () => {
       if (currentActivity.id) {
         // Update existing activity
 
-        const updated = await updateActivity(
+        const result = await updateActivity(
           currentActivity.id,
-          activityToSave as Omit<Activity, "id" | "lastUpdated">
+          activityToSave as Omit<Activity, "id" | "lastUpdated">,
+          getAdminId() || undefined
         );
+        if (result.error || !result.data) {
+          throw new Error(result.error || 'Failed to update activity');
+        }
         setActivities(
           activities.map((activity) =>
-            activity.id === currentActivity.id ? updated : activity
+            activity.id === currentActivity.id ? result.data! : activity
           )
         );
         toast({
@@ -256,14 +262,18 @@ const Admin = () => {
       } else {
         // Add new activity
         const { id, lastUpdated, ...activityData } = currentActivity;
-        const created = await createActivity(
-          activityData as Omit<Activity, "id" | "lastUpdated">
+        const result = await createActivity(
+          activityData as Omit<Activity, "id" | "lastUpdated">,
+          getAdminId() || undefined
         );
+        if (result.error || !result.data) {
+          throw new Error(result.error || 'Failed to create activity');
+        }
 
-        setActivities([created, ...activities]);
+        setActivities([result.data, ...activities]);
         toast({
           title: "Activity added",
-          description: `${created.title} has been added`,
+          description: `${result.data.title} has been added`,
         });
       }
       resetForm();
@@ -299,7 +309,10 @@ const Admin = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteActivity(id);
+      const result = await deleteActivity(id, getAdminId() || undefined);
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to delete activity');
+      }
       setActivities(activities.filter((activity) => activity.id !== id));
       toast({
         title: "Activity deleted",
@@ -309,7 +322,7 @@ const Admin = () => {
       console.error("Error deleting activity:", error);
       toast({
         title: "Error deleting activity",
-        description: "An error occurred while deleting. Please try again.",
+        description: error instanceof Error ? error.message : "An error occurred while deleting. Please try again.",
         variant: "destructive",
       });
     }
@@ -483,7 +496,10 @@ const Admin = () => {
             tags: tagIds,
           };
 
-          await createActivity(processedActivity);
+          const result = await createActivity(processedActivity, getAdminId() || undefined);
+          if (result.error) {
+            throw new Error(result.error);
+          }
           successCount++;
         } catch (error) {
           failedCount++;
@@ -618,9 +634,10 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="single" className="mb-8">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="single">Single Activity</TabsTrigger>
             <TabsTrigger value="bulk">Bulk JSON Import</TabsTrigger>
+            <TabsTrigger value="highlights">Highlights</TabsTrigger>
             <TabsTrigger value="marketing">Marketing Images</TabsTrigger>
           </TabsList>
 
@@ -1041,6 +1058,10 @@ const Admin = () => {
                 </div>
               </div>
             </div>
+          </TabsContent>
+
+          <TabsContent value="highlights" className="space-y-6">
+            <AdminHighlights />
           </TabsContent>
 
           <TabsContent value="marketing" className="space-y-6">
