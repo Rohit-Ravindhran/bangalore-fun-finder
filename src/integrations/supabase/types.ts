@@ -19,7 +19,9 @@ export type Database = {
           enabled: boolean | null
           id: number
           image: string | null
+          latitude: number | null
           location: string | null
+          longitude: number | null
           map_link: string | null
           price_range: string | null
           section_type: string | null
@@ -38,7 +40,9 @@ export type Database = {
           enabled?: boolean | null
           id?: number
           image?: string | null
+          latitude?: number | null
           location?: string | null
+          longitude?: number | null
           map_link?: string | null
           price_range?: string | null
           section_type?: string | null
@@ -57,7 +61,9 @@ export type Database = {
           enabled?: boolean | null
           id?: number
           image?: string | null
+          latitude?: number | null
           location?: string | null
+          longitude?: number | null
           map_link?: string | null
           price_range?: string | null
           section_type?: string | null

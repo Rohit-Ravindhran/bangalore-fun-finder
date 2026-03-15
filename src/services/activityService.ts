@@ -57,7 +57,9 @@ const transformActivities = (activities: any[]): Activity[] => {
     time: act.time || '',
     mapLink: act.map_link || '',
     contactInfo: act.contact_info || '',
-    url: act.url || ''
+    url: act.url || '',
+    latitude: act.latitude ?? undefined,
+    longitude: act.longitude ?? undefined
   }));
 };
 
@@ -265,7 +267,9 @@ export const createActivity = async (activity: Partial<Activity>, adminId?: stri
         p_category_ids: activity.categoryIds || [],
         p_tags: activity.tags || [],
         p_section_type: 'all',
-        p_enabled: true
+        p_enabled: true,
+        p_latitude: activity.latitude ?? null,
+        p_longitude: activity.longitude ?? null
       });
 
       if (error) {
@@ -349,7 +353,9 @@ export const updateActivity = async (id: string, activity: Partial<Activity>, ad
         p_category_ids: activity.categoryIds !== undefined ? activity.categoryIds : null,
         p_tags: activity.tags !== undefined ? activity.tags : null,
         p_section_type: null,
-        p_enabled: null
+        p_enabled: null,
+        p_latitude: activity.latitude !== undefined ? activity.latitude : null,
+        p_longitude: activity.longitude !== undefined ? activity.longitude : null
       });
 
       if (error) {
