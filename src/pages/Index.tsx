@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import CategoryFilter from '@/components/CategoryFilter';
 import ActivityCard from '@/components/ActivityCard';
 import ActivityGrid from '@/components/ActivityGrid';
+import ActivityMapView from '@/components/ActivityMapView';
 import ShuffleButton from '@/components/ShuffleButton';
 import { ViewToggleWithLegacyProps as ViewToggle } from '@/components/ViewToggle';
 import { SortSelectorWithLegacyProps as SortSelector } from '@/components/SortSelector';
@@ -228,7 +229,8 @@ const Index = () => {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [likedActivities, setLikedActivities] = useState<Set<string>>(new Set());
   const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
-  const [viewMode, setViewMode] = useState<'card' | 'grid'>('grid');
+  const [viewMode, setViewMode] = useState<'card' | 'grid' | 'map'>('grid');
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [sortOption, setSortOption] = useState('newest');
   const [showSubscribe, setShowSubscribe] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -688,9 +690,10 @@ const Index = () => {
         {/* Sticky Filters Container */}
         <div className="sticky top-[52px] z-30 bg-gray-50 -mx-4 px-4 py-2">
           {/* Location Filter */}
-          <LocationFilter 
+          <LocationFilter
             selectedLocation={selectedLocation}
             onLocationSelect={setSelectedLocation}
+            onUserLocation={setUserLocation}
           />
 
           {/* Combined Filters Row */}
@@ -746,10 +749,9 @@ const Index = () => {
               <h2 className="text-lg font-bold text-gray-900">Events & Activities</h2>
               <span className="text-xs text-gray-400 font-medium">({allActivities.length})</span>
             </div>
-            <ViewToggle 
-              selectedMode={viewMode} 
-              onSelect={setViewMode} 
-              disabled={currentTab !== 'all'} 
+            <ViewToggle
+              selectedMode={viewMode}
+              onSelect={setViewMode}
             />
           </div>
           
@@ -772,9 +774,11 @@ const Index = () => {
                 Clear all filters
               </button>
             </div>
+          ) : viewMode === 'map' ? (
+            <ActivityMapView activities={allActivities} userLocation={userLocation} />
           ) : viewMode === 'card' ? (
             currentActivity && (
-              <ActivityCard 
+              <ActivityCard
                 activity={currentActivity}
                 onSwipeLeft={handleSwipeLeft}
                 onSwipeRight={handleSwipeRight}
@@ -785,7 +789,7 @@ const Index = () => {
               />
             )
           ) : (
-            <ActivityGrid 
+            <ActivityGrid
               activities={allActivities}
               onLike={handleLike}
               likedActivities={likedActivities}

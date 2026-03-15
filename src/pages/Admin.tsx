@@ -27,6 +27,7 @@ import {
   Download,
   Image as ImageIcon,
   Megaphone,
+  MapPin,
 } from "lucide-react";
 import {
   createActivity,
@@ -36,6 +37,19 @@ import {
   fetchCategoriesFromTable,
   fetchTagsFromTable,
 } from "@/services/activityService";
+
+// Client-side extractor for full Google Maps URLs (no network call needed)
+function extractGoogleMapsCoords(url: string): { lat: number; lng: number } | null {
+  const atMatch = url.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+  if (atMatch) return { lat: parseFloat(atMatch[1]), lng: parseFloat(atMatch[2]) };
+  const qMatch = url.match(/[?&]q=(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+  if (qMatch) return { lat: parseFloat(qMatch[1]), lng: parseFloat(qMatch[2]) };
+  const llMatch = url.match(/[?&]ll=(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+  if (llMatch) return { lat: parseFloat(llMatch[1]), lng: parseFloat(llMatch[2]) };
+  const embedMatch = url.match(/!3d(-?\d+\.?\d*)!4d(-?\d+\.?\d*)/);
+  if (embedMatch) return { lat: parseFloat(embedMatch[1]), lng: parseFloat(embedMatch[2]) };
+  return null;
+}
 import {
   Select,
   SelectContent,
@@ -81,6 +95,8 @@ const Admin = () => {
   const [isDownloadingImages, setIsDownloadingImages] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [downloadingActivityIds, setDownloadingActivityIds] = useState<Set<string>>(new Set());
+  const [isResolvingMap, setIsResolvingMap] = useState(false);
+  const [coordsPreview, setCoordsPreview] = useState<{ lat: number; lng: number } | null>(null);
   const { toast } = useToast();
   const { logout, getAdminId } = useAuth();
   const navigate = useNavigate();
@@ -140,6 +156,52 @@ const Admin = () => {
       ...currentActivity,
       [name]: value,
     });
+  };
+
+  // Extract lat/lng from a Google Maps URL (client-side for full URLs,
+  // Edge Function for short/redirect URLs like maps.app.goo.gl)
+  const resolveMapLink = async (url: string) => {
+    if (!url || !url.startsWith('http')) return;
+    setIsResolvingMap(true);
+    setCoordsPreview(null);
+
+    // Try client-side extraction first (works for full Google Maps URLs)
+    const clientCoords = extractGoogleMapsCoords(url);
+    if (clientCoords) {
+      setCurrentActivity(prev => ({ ...prev, latitude: clientCoords.lat, longitude: clientCoords.lng }));
+      setCoordsPreview(clientCoords);
+      setIsResolvingMap(false);
+      return;
+    }
+
+    // Fall back to Edge Function for short URLs
+    try {
+      const { data, error } = await (window as any).__supabase?.functions.invoke('resolve-map-url', {
+        body: { url },
+      }) ?? {};
+
+      // Direct fetch fallback if supabase functions client unavailable
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+      const res = await fetch(`${supabaseUrl}/functions/v1/resolve-map-url`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` },
+        body: JSON.stringify({ url }),
+      });
+      const result = await res.json();
+
+      if (result.success && result.lat != null) {
+        const coords = { lat: result.lat, lng: result.lng };
+        setCurrentActivity(prev => ({ ...prev, latitude: coords.lat, longitude: coords.lng }));
+        setCoordsPreview(coords);
+      } else {
+        toast({ title: 'Could not extract location', description: result.error || 'Try pasting the full Google Maps URL', variant: 'destructive', duration: 3000 });
+      }
+    } catch {
+      toast({ title: 'Location extraction failed', description: 'Check your Supabase Edge Function is deployed', variant: 'destructive', duration: 3000 });
+    } finally {
+      setIsResolvingMap(false);
+    }
   };
 
   const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -215,6 +277,15 @@ const Admin = () => {
       toast({
         title: "Missing required fields",
         description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!currentActivity.mapLink) {
+      toast({
+        title: "Map link is required",
+        description: "Paste a Google Maps link so we can place this on the map",
         variant: "destructive",
       });
       return;
@@ -304,6 +375,11 @@ const Admin = () => {
 
     setCurrentActivity(activity);
     setIsEditing(true);
+    setCoordsPreview(
+      activity.latitude != null && activity.longitude != null
+        ? { lat: activity.latitude, lng: activity.longitude }
+        : null
+    );
     window.scrollTo(0, 0);
   };
 
@@ -333,6 +409,7 @@ const Admin = () => {
     setSelectedCategories([]);
     setSelectedTags([]);
     setIsEditing(false);
+    setCoordsPreview(null);
   };
 
   // Auto-detect categories and tags from title and description
@@ -840,18 +917,43 @@ const Admin = () => {
 
                   <div>
                     <label className="block mb-1 text-sm font-medium">
-                      Map Link
+                      Map Link <span className="text-red-500">*</span>
                     </label>
-                    <Input
-                      name="mapLink"
-                      value={currentActivity.mapLink || ""}
-                      onChange={handleInputChange}
-                      placeholder="https://maps.google.com/..."
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      Google Maps or other location link that opens in the map
-                      view
-                    </p>
+                    <div className="flex gap-2">
+                      <Input
+                        name="mapLink"
+                        value={currentActivity.mapLink || ""}
+                        onChange={handleInputChange}
+                        onBlur={(e) => resolveMapLink(e.target.value)}
+                        placeholder="https://maps.app.goo.gl/... or full Google Maps URL"
+                        className={!currentActivity.mapLink ? "border-orange-300" : ""}
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        disabled={isResolvingMap || !currentActivity.mapLink}
+                        onClick={() => resolveMapLink(currentActivity.mapLink || "")}
+                        className="flex-shrink-0"
+                      >
+                        {isResolvingMap ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <MapPin className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                    {coordsPreview ? (
+                      <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
+                        <Check className="h-3 w-3" />
+                        Location extracted: {coordsPreview.lat.toFixed(5)}, {coordsPreview.lng.toFixed(5)}
+                      </p>
+                    ) : (
+                      <p className="text-xs text-gray-500 mt-1">
+                        Paste a Google Maps link (short or full) — coordinates will be auto-extracted for the map view
+                      </p>
+                    )}
                   </div>
 
                   <div>
