@@ -36,7 +36,7 @@ const QuickExplore: React.FC<QuickExploreProps> = ({ onItemClick }) => {
           Coming Soon
         </span>
       </div>
-      <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1" style={{ scrollbarWidth: 'none' }}>
+      <div className="flex gap-3 overflow-x-auto md:overflow-visible md:flex-wrap pb-2 -mx-1 px-1" style={{ scrollbarWidth: 'none' }}>
         {exploreItems.map((item) => {
           const Icon = item.icon;
           return (

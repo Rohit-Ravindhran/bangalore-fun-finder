@@ -51,7 +51,8 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="bg-white px-4 md:px-8 sticky top-0 z-40 border-b border-gray-100 transition-all duration-200">
+    <header className="bg-white sticky top-0 z-40 border-b border-gray-100 transition-all duration-200">
+      <div className="max-w-6xl mx-auto px-4 md:px-8">
       {/* Top row with logo and profile */}
       <div className="flex items-center justify-between py-3 gap-2">
         {/* Logo - hidden when search expanded */}
@@ -138,6 +139,7 @@ const Header: React.FC<HeaderProps> = ({
             />
           </div>
         </div>
+      </div>
       </div>
     </header>
   );
