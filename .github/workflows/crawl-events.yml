@@ -1,9 +1,9 @@
 name: Event Crawler
 
 on:
-  # Run every 6 hours
+  # Run every Tuesday at 6:00 AM UTC
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 6 * * 2'
 
   # Allow manual trigger from GitHub Actions UI
   workflow_dispatch:
@@ -24,6 +24,7 @@ jobs:
     name: Crawl & Import Events
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    environment: production
 
     steps:
       - name: Checkout
