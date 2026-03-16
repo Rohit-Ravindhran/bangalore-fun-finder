@@ -14,6 +14,7 @@ const ActivityTable = lazy(() => import("./pages/ActivityTable"));
 const Admin = lazy(() => import("./pages/Admin"));
 const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const ActivityAddFromBMS = lazy(() => import("./pages/ActivityAddFromBMS"));
+const AdminScrapedEvents = lazy(() => import("./pages/AdminScrapedEvents"));
 const Favorites = lazy(() => import("./pages/Favorites"));
 const Meetups = lazy(() => import("./pages/Meetups"));
 const Food = lazy(() => import("./pages/Food"));
@@ -70,6 +71,11 @@ const App = () => {
               <Route path="/admin/bms-import" element={
                 <ProtectedRoute>
                   <ActivityAddFromBMS />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/scraped-events" element={
+                <ProtectedRoute>
+                  <AdminScrapedEvents />
                 </ProtectedRoute>
               } />
               <Route path="/favorites" element={<Favorites />} />

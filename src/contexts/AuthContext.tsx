@@ -106,12 +106,12 @@ const decodeSession = (encoded: string): AdminSession | null => {
 
 // Get current valid session (internal helper)
 const getCurrentSession = (): AdminSession | null => {
-  const encodedSession = sessionStorage.getItem(SESSION_KEY);
+  const encodedSession = localStorage.getItem(SESSION_KEY);
   if (!encodedSession) return null;
-  
+
   const session = decodeSession(encodedSession);
   if (!session || session.expiresAt <= Date.now()) {
-    sessionStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(SESSION_KEY);
     return null;
   }
   return session;
@@ -175,7 +175,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           expiresAt: Date.now() + SESSION_DURATION_MS
         };
         
-        sessionStorage.setItem(SESSION_KEY, encodeSession(session));
+        localStorage.setItem(SESSION_KEY, encodeSession(session));
         setIsAuthenticated(true);
         setAdminUsername(session.username);
         
@@ -197,7 +197,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = () => {
     setIsAuthenticated(false);
     setAdminUsername(null);
-    sessionStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(SESSION_KEY);
   };
 
   // Get admin ID for server-side verification in API calls
