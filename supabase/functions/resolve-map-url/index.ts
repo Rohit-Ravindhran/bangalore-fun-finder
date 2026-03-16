@@ -7,6 +7,7 @@
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
 function extractCoordsFromUrl(url: string): { lat: number; lng: number } | null {
@@ -58,13 +59,22 @@ Deno.serve(async (req: Request) => {
     }
 
     // For short URLs, follow the redirect chain server-side (avoids CORS)
-    const response = await fetch(url, {
-      redirect: 'follow',
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15',
-      },
-    });
+    // 8s timeout prevents hanging on non-Maps URLs (e.g. garbled map links)
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    let response: Response;
+    try {
+      response = await fetch(url, {
+        redirect: 'follow',
+        signal: controller.signal,
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15',
+        },
+      });
+    } finally {
+      clearTimeout(timer);
+    }
 
     const finalUrl = response.url;
     const coords = extractCoordsFromUrl(finalUrl);
