@@ -20,6 +20,8 @@ export interface Activity {
   contactInfo?: string;
   categoryNames?: string[];
   url?: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 interface ActivityCardProps {
