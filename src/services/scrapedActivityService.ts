@@ -87,15 +87,17 @@ export async function saveScrapedActivity(
 
 export async function listScrapedActivities(
   adminId: string,
-  filters: { status?: string; source?: string } = {},
+  filters: { status?: string; source?: string; sort?: string; scrapedSince?: string } = {},
   pagination: { limit?: number; offset?: number } = {}
 ): Promise<{ data: ScrapedActivity[]; total: number; error?: string }> {
   const { data: result, error } = await supabase.rpc('admin_list_scraped_activities', {
-    p_admin_id: adminId,
-    p_status:   filters.status ?? null,
-    p_source:   filters.source ?? null,
-    p_limit:    pagination.limit  ?? 50,
-    p_offset:   pagination.offset ?? 0,
+    p_admin_id:      adminId,
+    p_status:        filters.status       ?? null,
+    p_source:        filters.source       ?? null,
+    p_sort:          filters.sort         ?? 'newest',
+    p_scraped_since: filters.scrapedSince ?? null,
+    p_limit:         pagination.limit     ?? 50,
+    p_offset:        pagination.offset    ?? 0,
   });
 
   if (error) return { data: [], total: 0, error: error.message };
