@@ -29,10 +29,8 @@ export const QUERIES = [
 export async function crawlQuery(query, apiKey) {
   const url = new URL(SCRAPINGBEE_GOOGLE_URL);
   url.searchParams.set('api_key', apiKey);
-  url.searchParams.set('search_query', query);
+  url.searchParams.set('search', query);   // ScrapingBee uses 'search', not 'search_query'
   url.searchParams.set('nb_results', '10');
-  // ai_overview: ScrapingBee will return Google's AI overview text when present
-  url.searchParams.set('ai_overview', 'true');
 
   const res = await fetch(url.toString(), { signal: AbortSignal.timeout(30_000) });
 
@@ -47,9 +45,10 @@ export async function crawlQuery(query, apiKey) {
   const aiOverview = data?.ai_overview?.trim();
 
   // Combine organic result snippets as fallback
+  // ScrapingBee uses 'description' field (not 'snippet')
   const organicText = (data?.organic_results ?? [])
     .slice(0, 8)
-    .map((r) => [r.title, r.snippet].filter(Boolean).join(' — '))
+    .map((r) => [r.title, r.description || r.snippet].filter(Boolean).join(' — '))
     .join('\n');
 
   const text = aiOverview || organicText;
