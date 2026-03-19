@@ -107,6 +107,8 @@ const Admin = () => {
   const [isDownloadingImages, setIsDownloadingImages] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [downloadingActivityIds, setDownloadingActivityIds] = useState<Set<string>>(new Set());
+  const [marketingPage, setMarketingPage] = useState(0);
+  const MARKETING_PAGE_SIZE = 20;
   const [isResolvingMap, setIsResolvingMap] = useState(false);
   const [coordsPreview, setCoordsPreview] = useState<{ lat: number; lng: number } | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -340,11 +342,17 @@ const Admin = () => {
     }
   };
 
-  const getLastTenActivities = () =>
-    [...activities].sort((a, b) => new Date(b.lastUpdated || 0).getTime() - new Date(a.lastUpdated || 0).getTime()).slice(0, 10);
+  const sortedActivities = [...activities].sort(
+    (a, b) => new Date(b.lastUpdated || 0).getTime() - new Date(a.lastUpdated || 0).getTime()
+  );
+  const marketingTotalPages = Math.ceil(sortedActivities.length / MARKETING_PAGE_SIZE);
+  const marketingPageItems  = sortedActivities.slice(
+    marketingPage * MARKETING_PAGE_SIZE,
+    (marketingPage + 1) * MARKETING_PAGE_SIZE
+  );
 
   const handleDownloadAll = async () => {
-    const latest = getLastTenActivities();
+    const latest = marketingPageItems;
     if (!latest.length) return;
     setIsDownloadingImages(true);
     setDownloadProgress(0);
@@ -737,42 +745,101 @@ const Admin = () => {
           {section === "marketing" && (
             <div className="space-y-6">
               <div className="bg-white rounded-xl border shadow-sm p-6">
-                <div className="flex items-center justify-between mb-6">
+                {/* Header */}
+                <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h3 className="font-semibold">Latest {Math.min(10, activities.length)} Activities</h3>
-                    <p className="text-sm text-gray-500">Download branded images for social media</p>
+                    <h3 className="font-semibold">
+                      All Activities ({activities.length})
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      Showing {marketingPage * MARKETING_PAGE_SIZE + 1}–
+                      {Math.min((marketingPage + 1) * MARKETING_PAGE_SIZE, sortedActivities.length)} of{" "}
+                      {sortedActivities.length} · newest first
+                    </p>
                   </div>
-                  <Button disabled={activities.length === 0 || isDownloadingImages} onClick={handleDownloadAll} className="bg-orange-500 hover:bg-orange-600 gap-2">
+                  <Button
+                    disabled={marketingPageItems.length === 0 || isDownloadingImages}
+                    onClick={handleDownloadAll}
+                    className="bg-orange-500 hover:bg-orange-600 gap-2"
+                  >
                     {isDownloadingImages ? (
                       <><Loader2 className="h-4 w-4 animate-spin" />{downloadProgress}%</>
                     ) : (
-                      <><Download className="h-4 w-4" />Download All ({Math.min(10, activities.length)})</>
+                      <><Download className="h-4 w-4" />Download Page ({marketingPageItems.length})</>
                     )}
                   </Button>
                 </div>
 
+                {/* Progress bar */}
                 {isDownloadingImages && (
                   <div className="mb-4 flex items-center gap-3">
                     <div className="flex-1 bg-gray-200 rounded-full h-2">
-                      <div className="bg-orange-500 h-2 rounded-full transition-all duration-300" style={{ width: `${downloadProgress}%` }} />
+                      <div
+                        className="bg-orange-500 h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${downloadProgress}%` }}
+                      />
                     </div>
                     <span className="text-sm font-medium text-gray-600">{downloadProgress}%</span>
                   </div>
                 )}
 
+                {/* List */}
                 <div className="space-y-2">
-                  {getLastTenActivities().map((activity, i) => (
-                    <div key={activity.id} className="flex items-center gap-4 p-3 rounded-lg border hover:bg-gray-50">
-                      <span className="w-6 text-sm font-bold text-gray-300 text-center">{i + 1}</span>
+                  {marketingPageItems.map((activity, i) => (
+                    <div
+                      key={activity.id}
+                      className="flex items-center gap-4 p-3 rounded-lg border hover:bg-gray-50"
+                    >
+                      <span className="w-8 text-sm font-bold text-gray-300 text-center shrink-0">
+                        {marketingPage * MARKETING_PAGE_SIZE + i + 1}
+                      </span>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-sm truncate">{activity.title}</p>
-                        <p className="text-xs text-gray-400">{activity.location} · {activity.priceRange}</p>
+                        <p className="text-xs text-gray-400">
+                          {activity.location} · {activity.priceRange}
+                        </p>
                       </div>
-                      <ActivityImageGenerator activity={activity} autoDownload={downloadingActivityIds.has(activity.id)} onImageGenerated={() => { if (!isDownloadingImages) toast({ title: "Image saved", description: activity.title }); }} />
+                      <ActivityImageGenerator
+                        activity={activity}
+                        autoDownload={downloadingActivityIds.has(activity.id)}
+                        onImageGenerated={() => {
+                          if (!isDownloadingImages)
+                            toast({ title: "Image saved", description: activity.title });
+                        }}
+                      />
                     </div>
                   ))}
-                  {activities.length === 0 && <p className="text-center py-8 text-gray-400 text-sm">No activities available yet.</p>}
+                  {activities.length === 0 && (
+                    <p className="text-center py-8 text-gray-400 text-sm">
+                      No activities available yet.
+                    </p>
+                  )}
                 </div>
+
+                {/* Pagination */}
+                {marketingTotalPages > 1 && (
+                  <div className="flex items-center justify-between mt-4 pt-4 border-t text-sm text-gray-600">
+                    <span>
+                      Page {marketingPage + 1} of {marketingTotalPages}
+                    </span>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline" size="sm"
+                        onClick={() => setMarketingPage((p) => p - 1)}
+                        disabled={marketingPage === 0}
+                      >
+                        Previous
+                      </Button>
+                      <Button
+                        variant="outline" size="sm"
+                        onClick={() => setMarketingPage((p) => p + 1)}
+                        disabled={marketingPage >= marketingTotalPages - 1}
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
