@@ -21,7 +21,7 @@ import {
 import {
   Eye, Check, X, Edit, Loader2, RefreshCw, ArrowLeft,
   ExternalLink, MapPin, Calendar, Clock, Tag, DollarSign,
-  Image as ImageIcon, Info, Wand2,
+  Image as ImageIcon, Info, Wand2, Play,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -503,8 +503,50 @@ export default function AdminScrapedEvents() {
   const [rejecting, setRejecting]     = useState<ScrapedActivity | null>(null);
   const [actingId, setActingId]       = useState<number | null>(null);
   const [fetchingImages, setFetchingImages] = useState(false);
+  const [triggeringCrawl, setTriggeringCrawl] = useState(false);
 
   const adminId = getAdminId() || "";
+
+  const WORKFLOW_URL = "https://github.com/Rohit-Ravindhran/bangalore-fun-finder/actions/workflows/crawl-events.yml";
+
+  const handleTriggerCrawl = async () => {
+    setTriggeringCrawl(true);
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const anonKey     = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const res = await fetch(`${supabaseUrl}/functions/v1/trigger-crawl`, {
+        method: "POST",
+        headers: {
+          "Content-Type":  "application/json",
+          "Authorization": `Bearer ${anonKey}`,
+          "apikey":        anonKey,
+        },
+        body: JSON.stringify({ dry_run: false }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) throw new Error(data.error ?? "Unknown error");
+      toast({
+        title: "Crawl started!",
+        description: (
+          <span>
+            Running on GitHub Actions.{" "}
+            <a href={WORKFLOW_URL} target="_blank" rel="noopener noreferrer"
+              className="underline font-medium">
+              View progress ↗
+            </a>
+          </span>
+        ) as unknown as string,
+      });
+    } catch (err: unknown) {
+      toast({
+        title: "Failed to start crawl",
+        description: (err as Error).message,
+        variant: "destructive",
+      });
+    } finally {
+      setTriggeringCrawl(false);
+    }
+  };
 
   const missingImageCount = items.filter((i) => !i.image).length;
   const selectableItems   = items.filter(
@@ -690,6 +732,27 @@ export default function AdminScrapedEvents() {
                 Fetch Images ({missingImageCount})
               </Button>
             )}
+            <Button
+              variant="outline" size="sm"
+              onClick={handleTriggerCrawl}
+              disabled={triggeringCrawl}
+              title="Dispatch the GitHub Actions crawl workflow now"
+            >
+              {triggeringCrawl
+                ? <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                : <Play className="h-4 w-4 mr-2 fill-current" />}
+              Run Scrape Now
+            </Button>
+            <a
+              href={WORKFLOW_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="View workflow runs on GitHub"
+            >
+              <Button variant="ghost" size="sm" className="px-2">
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            </a>
             <Button variant="outline" size="sm" onClick={load} disabled={loading}>
               <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} /> Refresh
             </Button>
