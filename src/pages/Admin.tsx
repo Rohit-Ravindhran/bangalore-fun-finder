@@ -31,6 +31,7 @@ import {
   ChevronRight,
   ExternalLink,
   RefreshCw,
+  Instagram,
 } from "lucide-react";
 import {
   createActivity,
@@ -60,7 +61,7 @@ function extractGoogleMapsCoords(url: string): { lat: number; lng: number } | nu
   return null;
 }
 
-type Section = "activities" | "import" | "bulk" | "highlights" | "marketing";
+type Section = "activities" | "import" | "instagram" | "bulk" | "highlights" | "marketing";
 
 type CategoryItem = { id: number; name: string };
 type TagItem = { id: number; name: string };
@@ -394,6 +395,7 @@ const Admin = () => {
   const navItems: { id: Section; label: string; icon: React.ReactNode; badge?: string }[] = [
     { id: "activities", label: "Activities", icon: <Database className="h-4 w-4" /> },
     { id: "import",     label: "Import from BMS", icon: <FileText className="h-4 w-4" /> },
+    { id: "instagram",  label: "Import from Screenshots", icon: <Instagram className="h-4 w-4" /> },
     { id: "bulk",       label: "Bulk JSON Import", icon: <Upload className="h-4 w-4" /> },
     { id: "highlights", label: "Highlights", icon: <Star className="h-4 w-4" /> },
     { id: "marketing",  label: "Marketing Images", icon: <ImageIcon className="h-4 w-4" /> },
@@ -476,6 +478,7 @@ const Admin = () => {
             <h2 className="text-lg font-semibold text-gray-900">
               {section === "activities" && "Activities Database"}
               {section === "import"     && "Import from BookMyShow"}
+              {section === "instagram"  && "Import from Screenshots"}
               {section === "bulk"       && "Bulk JSON Import"}
               {section === "highlights" && "Highlights"}
               {section === "marketing"  && "Marketing Images"}
@@ -483,6 +486,7 @@ const Admin = () => {
             <p className="text-xs text-gray-400 mt-0.5">
               {section === "activities" && `${activities.length} total activities`}
               {section === "import"     && "Auto-fill from a BMS event link"}
+              {section === "instagram"  && "Paste screenshots and let AI extract event details"}
               {section === "bulk"       && "Import multiple activities at once"}
               {section === "highlights" && "Manage featured content on the homepage"}
               {section === "marketing"  && "Generate social media images"}
@@ -687,6 +691,33 @@ const Admin = () => {
                 <Link to="/admin/bms-import">
                   <Button className="bg-orange-500 hover:bg-orange-600 gap-2">
                     <FileText className="h-4 w-4" /> Open BMS Import Tool
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* ── IMPORT FROM INSTAGRAM ── */}
+          {section === "instagram" && (
+            <div className="max-w-lg">
+              <div className="bg-white rounded-xl border shadow-sm p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg p-2">
+                    <Instagram className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-800">Import from Screenshots</p>
+                    <p className="text-xs text-gray-500">Powered by Claude AI vision</p>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-600 mb-5">
+                  Paste or drag screenshots from an Instagram post — the AI will extract the title, date, location, price, and other details automatically.
+                  The event is added to the <strong>Scraped Events</strong> queue for review before publishing.
+                </p>
+                <Link to="/admin/instagram-import">
+                  <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white gap-2">
+                    <Instagram className="h-4 w-4" /> Open Screenshot Import
                     <ChevronRight className="h-4 w-4" />
                   </Button>
                 </Link>
