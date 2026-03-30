@@ -144,12 +144,23 @@ const HighlightsCarousel: React.FC<HighlightsCarouselProps> = ({ className }) =>
 
   if (isLoading) return null;
 
+  const ALLOWED_EXTERNAL_HOSTS = ['happeningsbangalore.com', 'in.bookmyshow.com', 'www.google.com', 'maps.google.com'];
+
   const handleBannerClick = (highlight: Highlight) => {
-    if (highlight.link_url) {
-      if (highlight.link_url.startsWith('/')) {
-        window.location.href = highlight.link_url;
-      } else {
+    if (!highlight.link_url) return;
+    if (highlight.link_url.startsWith('/')) {
+      // Internal path — strip any protocol-relative or double-slash tricks
+      const safePath = '/' + highlight.link_url.replace(/^\/+/, '');
+      window.location.href = safePath;
+    } else {
+      try {
+        const parsed = new URL(highlight.link_url);
+        if (parsed.protocol !== 'https:') return;
+        const isAllowed = ALLOWED_EXTERNAL_HOSTS.some(h => parsed.hostname === h || parsed.hostname.endsWith('.' + h));
+        if (!isAllowed) return;
         window.open(highlight.link_url, '_blank', 'noopener,noreferrer');
+      } catch {
+        // Invalid URL — do nothing
       }
     }
   };

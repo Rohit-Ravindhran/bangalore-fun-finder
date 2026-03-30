@@ -1,6 +1,8 @@
+'use client'
+
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ExternalLink } from 'lucide-react';
 
@@ -49,11 +51,11 @@ const Footer: React.FC = () => {
           </div>
           
           <div className="flex justify-center space-x-6 text-sm text-gray-600">
-            <Link to="/about" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">About</Link>
-            <Link to="/contact" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">Contact</Link>
-            <Link to="/privacy" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">Privacy</Link>
-            <Link to="/terms" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">Terms</Link>
-            <Link to="/favorites" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">Favorites</Link>
+            <Link href="/about" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">About</Link>
+            <Link href="/contact" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">Contact</Link>
+            <Link href="/privacy" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">Privacy</Link>
+            <Link href="/terms" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">Terms</Link>
+            <Link href="/favorites" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">Favorites</Link>
           </div>
           <p className="text-xs text-gray-500 mt-5 font-medium">
             © {new Date().getFullYear()} Happenings Bangalore

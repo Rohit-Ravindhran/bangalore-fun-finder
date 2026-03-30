@@ -1,0 +1,23 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/sitemap.xml/route": "/sitemap.xml",
+  "/admin/bms-import/page": "/admin/bms-import",
+  "/admin/page": "/admin",
+  "/admin/scraped-events/page": "/admin/scraped-events",
+  "/admin/login/page": "/admin/login",
+  "/date-ideas/page": "/date-ideas",
+  "/food/page": "/food",
+  "/admin/instagram-import/page": "/admin/instagram-import",
+  "/meetups/page": "/meetups",
+  "/network/page": "/network",
+  "/day-out/page": "/day-out",
+  "/profile/page": "/profile",
+  "/activities/table/page": "/activities/table",
+  "/about/page": "/about",
+  "/activity/[id]/page": "/activity/[id]",
+  "/contact/page": "/contact",
+  "/page": "/",
+  "/favorites/page": "/favorites",
+  "/privacy/page": "/privacy",
+  "/terms/page": "/terms"
+}

@@ -1,11 +1,13 @@
+'use client'
+
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useRouter, usePathname } from 'next/navigation';
 import { Compass, Users, Utensils, MapPin, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const BottomNav: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const leftItems = [
     { id: 'day-out', label: 'Day Out', icon: MapPin, path: '/day-out', comingSoon: true },
@@ -18,12 +20,12 @@ const BottomNav: React.FC = () => {
   ];
 
   const NavButton = ({ item }: { item: typeof leftItems[0] }) => {
-    const isActive = location.pathname === item.path;
+    const isActive = pathname === item.path;
     const Icon = item.icon;
     
     return (
       <button
-        onClick={() => navigate(item.path)}
+        onClick={() => router.push(item.path)}
         className={cn(
           "flex flex-col items-center justify-center flex-1 h-full relative",
           isActive ? "text-orange-500" : "text-gray-500",
@@ -44,7 +46,7 @@ const BottomNav: React.FC = () => {
     );
   };
 
-  const isExploreActive = location.pathname === '/';
+  const isExploreActive = pathname === '/';
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 pb-safe">
@@ -57,7 +59,7 @@ const BottomNav: React.FC = () => {
         {/* Center floating Explore button */}
         <div className="flex-1 flex items-center justify-center">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => router.push('/')}
             className="absolute -top-6 flex flex-col items-center"
           >
             <div className={cn(
