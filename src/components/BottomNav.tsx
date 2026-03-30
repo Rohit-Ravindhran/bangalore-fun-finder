@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Compass, Users, Utensils, MapPin, Heart } from 'lucide-react';
+import { Compass, Users, Utensils, BookOpen, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const BottomNav: React.FC = () => {
@@ -10,7 +10,7 @@ const BottomNav: React.FC = () => {
   const pathname = usePathname();
 
   const leftItems = [
-    { id: 'day-out', label: 'Day Out', icon: MapPin, path: '/day-out', comingSoon: true },
+    { id: 'blog', label: 'Blog', icon: BookOpen, path: '/blog', comingSoon: false },
     { id: 'date-ideas', label: 'Date Ideas', icon: Heart, path: '/date-ideas', comingSoon: true },
   ];
 

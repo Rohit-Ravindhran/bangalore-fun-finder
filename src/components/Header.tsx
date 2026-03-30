@@ -2,7 +2,7 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { Search, CircleUserRound, X } from 'lucide-react';
+import { Search, CircleUserRound, X, BookOpen } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
 
@@ -105,7 +105,18 @@ const Header: React.FC<HeaderProps> = ({
               <Search className="h-5 w-5 text-gray-600" />
             </button>
           )}
-          
+
+          {/* Blog link - hidden when search is expanded */}
+          {!searchExpanded && (
+            <button
+              onClick={() => router.push('/blog')}
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-sm font-medium text-gray-600 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+            >
+              <BookOpen className="h-4 w-4" />
+              <span className="hidden sm:inline">Blog</span>
+            </button>
+          )}
+
           {/* Profile icon - always visible */}
           <button
             onClick={() => router.push('/profile')}
