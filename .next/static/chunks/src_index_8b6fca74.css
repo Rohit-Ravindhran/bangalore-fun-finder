@@ -2390,6 +2390,16 @@ p, span, div {
   background-color: rgba(254, 252, 232, var(--tw-bg-opacity, 1));
 }
 
+.bg-emerald-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgba(236, 253, 245, var(--tw-bg-opacity, 1));
+}
+
+.bg-sky-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgba(240, 249, 255, var(--tw-bg-opacity, 1));
+}
+
 .bg-gradient-to-b {
   background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
 }
@@ -3293,6 +3303,16 @@ p, span, div {
 .text-yellow-800 {
   --tw-text-opacity: 1;
   color: rgba(133, 77, 14, var(--tw-text-opacity, 1));
+}
+
+.text-emerald-700 {
+  --tw-text-opacity: 1;
+  color: rgba(4, 120, 87, var(--tw-text-opacity, 1));
+}
+
+.text-sky-600 {
+  --tw-text-opacity: 1;
+  color: rgba(2, 132, 199, var(--tw-text-opacity, 1));
 }
 
 .underline {
@@ -4286,6 +4306,11 @@ p, span, div {
   border-color: rgba(216, 180, 254, var(--tw-border-opacity, 1));
 }
 
+.hover\:border-orange-200:hover {
+  --tw-border-opacity: 1;
+  border-color: rgba(254, 215, 170, var(--tw-border-opacity, 1));
+}
+
 .hover\:bg-accent:hover {
   background-color: hsl(var(--accent));
 }
@@ -4428,6 +4453,11 @@ p, span, div {
 
 .hover\:bg-white\/30:hover {
   background-color: rgba(255, 255, 255, .3);
+}
+
+.hover\:bg-orange-50:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgba(255, 247, 237, var(--tw-bg-opacity, 1));
 }
 
 .hover\:bg-opacity-90:hover {
@@ -4589,6 +4619,12 @@ p, span, div {
 .hover\:shadow-xl:hover {
   --tw-shadow: 0 20px 25px -5px rgba(0, 0, 0, .1), 0 8px 10px -6px rgba(0, 0, 0, .1);
   --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 rgba(0, 0, 0, 0)), var(--tw-ring-shadow, 0 0 rgba(0, 0, 0, 0)), var(--tw-shadow);
+}
+
+.hover\:shadow-sm:hover {
+  --tw-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 rgba(0, 0, 0, 0)), var(--tw-ring-shadow, 0 0 rgba(0, 0, 0, 0)), var(--tw-shadow);
 }
 
@@ -5377,6 +5413,10 @@ p, span, div {
 
   .sm\:mt-0 {
     margin-top: 0;
+  }
+
+  .sm\:inline {
+    display: inline;
   }
 
   .sm\:flex {

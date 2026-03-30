@@ -108,6 +108,51 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   type __Unused = __Check
 }
 
+// Validate ../../src/app/blog/bangalore-morning-spots/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/blog/bangalore-morning-spots">> = Specific
+  const handler = {} as typeof import("../../src/app/blog/bangalore-morning-spots/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/app/blog/cafes-in-indiranagar/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/blog/cafes-in-indiranagar">> = Specific
+  const handler = {} as typeof import("../../src/app/blog/cafes-in-indiranagar/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/app/blog/hidden-places-in-bangalore/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/blog/hidden-places-in-bangalore">> = Specific
+  const handler = {} as typeof import("../../src/app/blog/hidden-places-in-bangalore/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/app/blog/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/blog">> = Specific
+  const handler = {} as typeof import("../../src/app/blog/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/app/blog/things-to-do-in-bangalore/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/blog/things-to-do-in-bangalore">> = Specific
+  const handler = {} as typeof import("../../src/app/blog/things-to-do-in-bangalore/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../src/app/contact/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/contact">> = Specific
