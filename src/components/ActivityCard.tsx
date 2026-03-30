@@ -1,6 +1,8 @@
+'use client'
+
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { ArrowRight, MapPin, Calendar, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -43,12 +45,12 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   liked = false,
   showSwipeHint = false,
 }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isLeaving, setIsLeaving] = React.useState<string | null>(null);
   const [touchStart, setTouchStart] = React.useState<number | null>(null);
   
   const handleViewDetails = () => {
-    navigate(`/activity/${activity.id}`);
+    router.push(`/activity/${activity.id}`);
   };
 
   const handleSwipeLeft = () => {

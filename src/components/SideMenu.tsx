@@ -1,6 +1,8 @@
+'use client'
+
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { X, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -29,7 +31,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
           <ul className="space-y-4">
             <li>
               <Link 
-                to="/" 
+                href="/" 
                 className="block py-2 text-primary hover:text-w2d-teal transition-colors"
                 onClick={onClose}
               >
@@ -38,7 +40,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
             </li>
             <li>
               <Link 
-                to="/favorites" 
+                href="/favorites" 
                 className="block py-2 text-primary hover:text-w2d-teal transition-colors flex items-center gap-2"
                 onClick={onClose}
               >
@@ -48,7 +50,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
             </li>
             <li>
               <Link 
-                to="/about" 
+                href="/about" 
                 className="block py-2 text-primary hover:text-w2d-teal transition-colors"
                 onClick={onClose}
               >
@@ -57,7 +59,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
             </li>
             <li>
               <Link 
-                to="/contact" 
+                href="/contact" 
                 className="block py-2 text-primary hover:text-w2d-teal transition-colors"
                 onClick={onClose}
               >
@@ -66,7 +68,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
             </li>
             <li>
               <Link 
-                to="/privacy" 
+                href="/privacy" 
                 className="block py-2 text-primary hover:text-w2d-teal transition-colors"
                 onClick={onClose}
               >
@@ -75,7 +77,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
             </li>
             <li>
               <Link 
-                to="/terms" 
+                href="/terms" 
                 className="block py-2 text-primary hover:text-w2d-teal transition-colors"
                 onClick={onClose}
               >

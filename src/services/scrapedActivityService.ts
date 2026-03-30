@@ -55,7 +55,7 @@ export async function saveScrapedActivity(
 ): Promise<{ error?: string; scrapedActivityId?: number; status?: string; qualityScore?: number }> {
   if (!adminId) return { error: 'Admin session required' };
 
-  const { data: result, error } = await supabase.rpc('admin_save_scraped_activity', {
+  const { data: result, error } = await (supabase as any).rpc('admin_save_scraped_activity', {
     p_admin_id:     adminId,
     p_title:        data.title,
     p_description:  data.description  ?? null,
@@ -90,7 +90,7 @@ export async function listScrapedActivities(
   filters: { status?: string; source?: string; sort?: string; scrapedSince?: string } = {},
   pagination: { limit?: number; offset?: number } = {}
 ): Promise<{ data: ScrapedActivity[]; total: number; error?: string }> {
-  const { data: result, error } = await supabase.rpc('admin_list_scraped_activities', {
+  const { data: result, error } = await (supabase as any).rpc('admin_list_scraped_activities', {
     p_admin_id:      adminId,
     p_status:        filters.status       ?? null,
     p_source:        filters.source       ?? null,
@@ -117,7 +117,7 @@ export async function approveScrapedActivity(
     latitude: number; longitude: number;
   }>
 ): Promise<{ error?: string; activityId?: number }> {
-  const { data: result, error } = await supabase.rpc('admin_approve_scraped_activity', {
+  const { data: result, error } = await (supabase as any).rpc('admin_approve_scraped_activity', {
     p_admin_id:     adminId,
     p_scraped_id:   scrapedId,
     p_title:        overrides?.title        ?? null,
@@ -147,7 +147,7 @@ export async function rejectScrapedActivity(
   scrapedId: number,
   notes?: string
 ): Promise<{ error?: string }> {
-  const { data: result, error } = await supabase.rpc('admin_reject_scraped_activity', {
+  const { data: result, error } = await (supabase as any).rpc('admin_reject_scraped_activity', {
     p_admin_id:   adminId,
     p_scraped_id: scrapedId,
     p_notes:      notes ?? null,
@@ -163,7 +163,7 @@ export async function updateScrapedActivity(
   scrapedId: number,
   data: Partial<SaveScrapedActivityInput>
 ): Promise<{ error?: string }> {
-  const { data: result, error } = await supabase.rpc('admin_update_scraped_activity', {
+  const { data: result, error } = await (supabase as any).rpc('admin_update_scraped_activity', {
     p_admin_id:     adminId,
     p_scraped_id:   scrapedId,
     p_title:        data.title        ?? null,

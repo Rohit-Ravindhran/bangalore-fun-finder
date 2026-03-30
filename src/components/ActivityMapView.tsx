@@ -1,8 +1,10 @@
+'use client'
+
 import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Activity } from '@/components/ActivityCard';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import 'leaflet/dist/leaflet.css';
 
 // User location marker — blue pulsing dot + "You are here" label
@@ -138,7 +140,7 @@ interface ActivityMapViewProps {
 }
 
 const ActivityMapView: React.FC<ActivityMapViewProps> = ({ activities, userLocation }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const center: [number, number] = userLocation
     ? [userLocation.lat, userLocation.lng]
@@ -192,7 +194,7 @@ const ActivityMapView: React.FC<ActivityMapViewProps> = ({ activities, userLocat
                     <div className="text-xs font-semibold text-gray-800">{activity.priceRange}</div>
                   )}
                   <button
-                    onClick={() => navigate(`/activity/${activity.id}`)}
+                    onClick={() => router.push(`/activity/${activity.id}`)}
                     className="mt-1 w-full bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold py-1.5 px-3 rounded-lg transition-colors"
                   >
                     View Details

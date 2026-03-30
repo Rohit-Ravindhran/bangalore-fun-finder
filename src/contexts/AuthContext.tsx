@@ -138,7 +138,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = async (username: string, password: string): Promise<{ success: boolean; message: string }> => {
     // Check rate limiting
-    const lockout = {locked:false,remainingTime:false};
+    const lockout = isLockedOut();
     if (lockout.locked) {
       return { 
         success: false, 
@@ -155,7 +155,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       if (error) {
         recordFailedAttempt();
-        if (import.meta.env.DEV) {
+        if (process.env.NODE_ENV === 'development') {
           console.error('Auth error:', error.message);
         }
         return { success: false, message: 'Authentication failed. Please try again.' };
@@ -187,7 +187,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       return { success: false, message: result.message || 'Invalid credentials' };
     } catch (err) {
       recordFailedAttempt();
-      if (import.meta.env.DEV) {
+      if (process.env.NODE_ENV === 'development') {
         console.error('Login error:', err);
       }
       return { success: false, message: 'An error occurred during login' };
