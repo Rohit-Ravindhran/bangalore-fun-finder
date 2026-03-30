@@ -1,8 +1,10 @@
+'use client'
+
 
 import React, { useState, useEffect } from 'react';
 import { Search, CircleUserRound, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
   toggleMenu?: () => void;
@@ -18,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({
   onSearchChange,
   showSearch = false 
 }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -59,7 +61,7 @@ const Header: React.FC<HeaderProps> = ({
         {!(showCompactMode && searchExpanded) && (
           <div 
             className="flex items-center gap-1 cursor-pointer flex-shrink-0"
-            onClick={() => navigate('/')}
+            onClick={() => router.push('/')}
           >
             <span className="text-xl md:text-2xl font-bold text-gray-900">
               Happ'nin
@@ -106,7 +108,7 @@ const Header: React.FC<HeaderProps> = ({
           
           {/* Profile icon - always visible */}
           <button
-            onClick={() => navigate('/profile')}
+            onClick={() => router.push('/profile')}
             className="flex items-center justify-center transition-transform hover:scale-105 p-1"
           >
             <CircleUserRound className="h-7 w-7 text-orange-500" fill="rgba(249, 115, 22, 0.15)" />

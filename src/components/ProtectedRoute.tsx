@@ -1,23 +1,26 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+'use client'
+
+import React, { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/contexts/AuthContext'
 
 interface ProtectedRouteProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth()
+  const router = useRouter()
 
-  if (isLoading) {
-    return null; // wait for session to be read from localStorage
-  }
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.replace('/admin/login')
+    }
+  }, [isAuthenticated, isLoading, router])
 
-  if (!isAuthenticated) {
-    return <Navigate to="/admin/login" replace />;
-  }
+  if (isLoading || !isAuthenticated) return null
 
-  return <>{children}</>;
-};
+  return <>{children}</>
+}
 
-export default ProtectedRoute;
+export default ProtectedRoute

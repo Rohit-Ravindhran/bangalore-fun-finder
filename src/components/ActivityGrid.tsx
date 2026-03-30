@@ -1,8 +1,10 @@
+'use client'
+
 
 import React from 'react';
 import { MapPin, Calendar, Clock, ArrowRight } from 'lucide-react';
 import { Activity } from '@/components/ActivityCard';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 interface ActivityGridProps {
@@ -22,10 +24,10 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
   columns = 2,
   sectionType 
 }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleCardClick = (activityId: string) => {
-    navigate(`/activity/${activityId}`);
+    router.push(`/activity/${activityId}`);
   };
 
   // Function to handle image loading error - use title-based placeholder

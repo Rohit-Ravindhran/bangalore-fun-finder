@@ -25,7 +25,7 @@ const activitySchema = z.object({
 
 // Helper to log errors only in development
 const logError = (message: string, error: unknown) => {
-  if (import.meta.env.DEV) {
+  if (process.env.NODE_ENV === 'development') {
     console.error(message, error);
   }
 };

@@ -1,14 +1,16 @@
+'use client'
+
 import React from 'react';
 import { TrendingUp, ChevronRight } from 'lucide-react';
 import { Activity } from '@/components/ActivityCard';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 interface TrendingSectionProps {
   activities: Activity[];
 }
 
 const TrendingSection: React.FC<TrendingSectionProps> = ({ activities }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   
   // Get top 4 activities for trending
   const trendingItems = activities.slice(0, 4);
@@ -26,7 +28,7 @@ const TrendingSection: React.FC<TrendingSectionProps> = ({ activities }) => {
         {trendingItems.map((activity, index) => (
           <button
             key={activity.id}
-            onClick={() => navigate(`/activity/${activity.id}`)}
+            onClick={() => router.push(`/activity/${activity.id}`)}
             className="flex-shrink-0 w-[200px] bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-all active:scale-[0.98]"
           >
             <div className="relative h-24 overflow-hidden">
