@@ -3877,12 +3877,12 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                     className: "h-10 w-10 animate-spin text-w2d-teal"
                 }, void 0, false, {
                     fileName: "[project]/src/views/Index.tsx",
-                    lineNumber: 569,
+                    lineNumber: 570,
                     columnNumber: 11
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/src/views/Index.tsx",
-                lineNumber: 568,
+                lineNumber: 569,
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0));
         }
@@ -3897,7 +3897,7 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                             children: "No activities found"
                         }, void 0, false, {
                             fileName: "[project]/src/views/Index.tsx",
-                            lineNumber: 578,
+                            lineNumber: 579,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3905,18 +3905,18 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                             children: "Try a different filter"
                         }, void 0, false, {
                             fileName: "[project]/src/views/Index.tsx",
-                            lineNumber: 579,
+                            lineNumber: 580,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/views/Index.tsx",
-                    lineNumber: 577,
+                    lineNumber: 578,
                     columnNumber: 11
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/src/views/Index.tsx",
-                lineNumber: 576,
+                lineNumber: 577,
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0));
         }
@@ -3929,7 +3929,7 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
             liked: likedActivities.has(currentActivity.id)
         }, void 0, false, {
             fileName: "[project]/src/views/Index.tsx",
-            lineNumber: 587,
+            lineNumber: 588,
             columnNumber: 9
         }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ActivityGrid$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
             activities: activities,
@@ -3940,7 +3940,7 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
             sectionType: sectionType
         }, void 0, false, {
             fileName: "[project]/src/views/Index.tsx",
-            lineNumber: 597,
+            lineNumber: 598,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0));
     };
@@ -4000,7 +4000,7 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                             children: "Coming Soon"
                         }, void 0, false, {
                             fileName: "[project]/src/views/Index.tsx",
-                            lineNumber: 648,
+                            lineNumber: 649,
                             columnNumber: 15
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4008,18 +4008,18 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                             children: "Sign up to get updates!"
                         }, void 0, false, {
                             fileName: "[project]/src/views/Index.tsx",
-                            lineNumber: 649,
+                            lineNumber: 650,
                             columnNumber: 15
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/views/Index.tsx",
-                    lineNumber: 647,
+                    lineNumber: 648,
                     columnNumber: 13
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/src/views/Index.tsx",
-                lineNumber: 646,
+                lineNumber: 647,
                 columnNumber: 11
             }, ("TURBOPACK compile-time value", void 0)),
             count: displayedDateIdeas.length > 0 ? {
@@ -4050,7 +4050,7 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                 onSearchChange: setSearchQuery
             }, void 0, false, {
                 fileName: "[project]/src/views/Index.tsx",
-                lineNumber: 675,
+                lineNumber: 676,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -4061,19 +4061,19 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                         onClose: ()=>setShowSubscribe(false)
                     }, void 0, false, {
                         fileName: "[project]/src/views/Index.tsx",
-                        lineNumber: 681,
+                        lineNumber: 682,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "overflow-hidden",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$HighlightsCarousel$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                             fileName: "[project]/src/views/Index.tsx",
-                            lineNumber: 685,
+                            lineNumber: 686,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0))
                     }, void 0, false, {
                         fileName: "[project]/src/views/Index.tsx",
-                        lineNumber: 684,
+                        lineNumber: 685,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$QuickExplore$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -4086,14 +4086,14 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                         }
                     }, void 0, false, {
                         fileName: "[project]/src/views/Index.tsx",
-                        lineNumber: 689,
+                        lineNumber: 690,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$TrendingSection$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                         activities: rawAllActivities
                     }, void 0, false, {
                         fileName: "[project]/src/views/Index.tsx",
-                        lineNumber: 694,
+                        lineNumber: 695,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4105,7 +4105,7 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                                 onUserLocation: setUserLocation
                             }, void 0, false, {
                                 fileName: "[project]/src/views/Index.tsx",
-                                lineNumber: 699,
+                                lineNumber: 700,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4124,14 +4124,14 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                                                     children: filter.label
                                                 }, filter.id, false, {
                                                     fileName: "[project]/src/views/Index.tsx",
-                                                    lineNumber: 711,
+                                                    lineNumber: 712,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0))),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "flex-shrink-0 w-px h-6 bg-gray-200 self-center mx-1"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/views/Index.tsx",
-                                                lineNumber: 726,
+                                                lineNumber: 727,
                                                 columnNumber: 17
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             categories.map((category)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4142,42 +4142,42 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                                                             children: category.emoji
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/views/Index.tsx",
-                                                            lineNumber: 740,
+                                                            lineNumber: 741,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             children: category.name
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/views/Index.tsx",
-                                                            lineNumber: 741,
+                                                            lineNumber: 742,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0))
                                                     ]
                                                 }, category.id, true, {
                                                     fileName: "[project]/src/views/Index.tsx",
-                                                    lineNumber: 730,
+                                                    lineNumber: 731,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0)))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/views/Index.tsx",
-                                        lineNumber: 708,
+                                        lineNumber: 709,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0))
                                 }, void 0, false, {
                                     fileName: "[project]/src/views/Index.tsx",
-                                    lineNumber: 707,
+                                    lineNumber: 708,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0))
                             }, void 0, false, {
                                 fileName: "[project]/src/views/Index.tsx",
-                                lineNumber: 706,
+                                lineNumber: 707,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/views/Index.tsx",
-                        lineNumber: 697,
+                        lineNumber: 698,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4193,7 +4193,7 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                                                 className: "h-5 w-5 text-orange-500"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/views/Index.tsx",
-                                                lineNumber: 754,
+                                                lineNumber: 755,
                                                 columnNumber: 15
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -4201,7 +4201,7 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                                                 children: "Events & Activities"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/views/Index.tsx",
-                                                lineNumber: 755,
+                                                lineNumber: 756,
                                                 columnNumber: 15
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4213,13 +4213,13 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/views/Index.tsx",
-                                                lineNumber: 756,
+                                                lineNumber: 757,
                                                 columnNumber: 15
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/views/Index.tsx",
-                                        lineNumber: 753,
+                                        lineNumber: 754,
                                         columnNumber: 13
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ViewToggle$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ViewToggleWithLegacyProps"], {
@@ -4227,13 +4227,13 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                                         onSelect: setViewMode
                                     }, void 0, false, {
                                         fileName: "[project]/src/views/Index.tsx",
-                                        lineNumber: 758,
+                                        lineNumber: 759,
                                         columnNumber: 13
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/views/Index.tsx",
-                                lineNumber: 752,
+                                lineNumber: 753,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4242,12 +4242,12 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                                     className: "h-10 w-10 animate-spin text-orange-500"
                                 }, void 0, false, {
                                     fileName: "[project]/src/views/Index.tsx",
-                                    lineNumber: 766,
+                                    lineNumber: 767,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
                             }, void 0, false, {
                                 fileName: "[project]/src/views/Index.tsx",
-                                lineNumber: 765,
+                                lineNumber: 766,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0)) : allActivities.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "bg-white rounded-2xl p-8 text-center border border-gray-100",
@@ -4257,7 +4257,7 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                                         children: "No activities found"
                                     }, void 0, false, {
                                         fileName: "[project]/src/views/Index.tsx",
-                                        lineNumber: 770,
+                                        lineNumber: 771,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4265,7 +4265,7 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                                         children: "Try a different filter or location"
                                     }, void 0, false, {
                                         fileName: "[project]/src/views/Index.tsx",
-                                        lineNumber: 771,
+                                        lineNumber: 772,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4278,20 +4278,20 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                                         children: "Clear all filters"
                                     }, void 0, false, {
                                         fileName: "[project]/src/views/Index.tsx",
-                                        lineNumber: 772,
+                                        lineNumber: 773,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/views/Index.tsx",
-                                lineNumber: 769,
+                                lineNumber: 770,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0)) : viewMode === 'map' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(ActivityMapView, {
                                 activities: allActivities,
                                 userLocation: userLocation
                             }, void 0, false, {
                                 fileName: "[project]/src/views/Index.tsx",
-                                lineNumber: 784,
+                                lineNumber: 785,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0)) : viewMode === 'card' ? currentActivity && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ActivityCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                                 activity: currentActivity,
@@ -4303,7 +4303,7 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                                 showSwipeHint: true
                             }, void 0, false, {
                                 fileName: "[project]/src/views/Index.tsx",
-                                lineNumber: 787,
+                                lineNumber: 788,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ActivityGrid$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                                 activities: allActivities,
@@ -4314,30 +4314,30 @@ const Index = ({ initialActivities = [], initialCategories = [] } = {})=>{
                                 sectionType: "All"
                             }, void 0, false, {
                                 fileName: "[project]/src/views/Index.tsx",
-                                lineNumber: 798,
+                                lineNumber: 799,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/views/Index.tsx",
-                        lineNumber: 750,
+                        lineNumber: 751,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/views/Index.tsx",
-                lineNumber: 680,
+                lineNumber: 681,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$BottomNav$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/src/views/Index.tsx",
-                lineNumber: 810,
+                lineNumber: 811,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/src/views/Index.tsx",
-        lineNumber: 674,
+        lineNumber: 675,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };

@@ -117,6 +117,15 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   type __Unused = __Check
 }
 
+// Validate ../../src/app/blog/bangalore-weekend-april-4-5/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/blog/bangalore-weekend-april-4-5">> = Specific
+  const handler = {} as typeof import("../../src/app/blog/bangalore-weekend-april-4-5/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../src/app/blog/cafes-in-indiranagar/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/blog/cafes-in-indiranagar">> = Specific

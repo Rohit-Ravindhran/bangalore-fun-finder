@@ -21,6 +21,8 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.js [app-rsc] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/client/app-dir/link.js [app-rsc] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$arrow$2d$left$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__default__as__ArrowLeft$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/arrow-left.js [app-rsc] (ecmascript) <export default as ArrowLeft>");
+;
 ;
 ;
 const metadata = {
@@ -28,6 +30,12 @@ const metadata = {
     description: "Guides, lists, and local picks for things to do in Bangalore. Cafes, morning spots, hidden gems, and more — written for people who actually live here."
 };
 const posts = [
+    {
+        slug: "bangalore-weekend-april-4-5",
+        title: "Best Things to Do in Bangalore This Weekend — 4 & 5 April 2026",
+        description: "Bollywood nights, a CBD run, live music, outdoor treks, and more happening across Bangalore this Saturday and Sunday.",
+        tag: "This Weekend"
+    },
     {
         slug: "things-to-do-in-bangalore",
         title: "27 Best Things to Do in Bangalore You Actually Can't Miss",
@@ -54,6 +62,7 @@ const posts = [
     }
 ];
 const tagColors = {
+    "This Weekend": "bg-orange-500 text-white",
     "City Guide": "bg-orange-50 text-orange-600",
     Cafes: "bg-amber-50 text-amber-600",
     "Hidden Gems": "bg-emerald-50 text-emerald-700",
@@ -63,6 +72,24 @@ function BlogIndex() {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
         className: "max-w-2xl mx-auto px-4 py-8 pb-24",
         children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"], {
+                href: "/",
+                className: "inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 mb-6 transition-colors",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$arrow$2d$left$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__default__as__ArrowLeft$3e$__["ArrowLeft"], {
+                        className: "h-4 w-4"
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/blog/page.tsx",
+                        lineNumber: 64,
+                        columnNumber: 9
+                    }, this),
+                    "Back"
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/app/blog/page.tsx",
+                lineNumber: 60,
+                columnNumber: 7
+            }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "mb-8",
                 children: [
@@ -71,7 +98,7 @@ function BlogIndex() {
                         children: "Bangalore Guides"
                     }, void 0, false, {
                         fileName: "[project]/src/app/blog/page.tsx",
-                        lineNumber: 52,
+                        lineNumber: 69,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -79,13 +106,13 @@ function BlogIndex() {
                         children: "Local picks for people who live here — not tourists."
                     }, void 0, false, {
                         fileName: "[project]/src/app/blog/page.tsx",
-                        lineNumber: 53,
+                        lineNumber: 70,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/blog/page.tsx",
-                lineNumber: 51,
+                lineNumber: 68,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -99,7 +126,7 @@ function BlogIndex() {
                                 children: post.tag
                             }, void 0, false, {
                                 fileName: "[project]/src/app/blog/page.tsx",
-                                lineNumber: 65,
+                                lineNumber: 82,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -107,7 +134,7 @@ function BlogIndex() {
                                 children: post.title
                             }, void 0, false, {
                                 fileName: "[project]/src/app/blog/page.tsx",
-                                lineNumber: 72,
+                                lineNumber: 89,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -115,24 +142,24 @@ function BlogIndex() {
                                 children: post.description
                             }, void 0, false, {
                                 fileName: "[project]/src/app/blog/page.tsx",
-                                lineNumber: 75,
+                                lineNumber: 92,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, post.slug, true, {
                         fileName: "[project]/src/app/blog/page.tsx",
-                        lineNumber: 60,
+                        lineNumber: 77,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/app/blog/page.tsx",
-                lineNumber: 58,
+                lineNumber: 75,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/blog/page.tsx",
-        lineNumber: 50,
+        lineNumber: 59,
         columnNumber: 5
     }, this);
 }

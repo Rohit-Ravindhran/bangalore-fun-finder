@@ -1,11 +1,1 @@
-{
-  "version": 4,
-  "routes": {},
-  "dynamicRoutes": {},
-  "notFoundRoutes": [],
-  "preview": {
-    "previewModeId": "c218217c9f78763142463e91fc111099",
-    "previewModeSigningKey": "a2e163bded3fc9e44c33a1a7772b75a4ac178b524cc710e0c676424d9899c0a8",
-    "previewModeEncryptionKey": "4ac6c473fab553a347bf4394eb534e4b1c38ff543168f9d87ce9857880490429"
-  }
-}
+{"version":4,"routes":{"/activity/106":{},"/activity/105":{},"/activity/104":{},"/activity/103":{},"/activity/102":{},"/activity/101":{},"/activity/100":{},"/activity/99":{},"/activity/98":{},"/activity/97":{},"/activity/96":{},"/activity/95":{},"/activity/94":{},"/activity/93":{},"/activity/92":{},"/activity/91":{},"/activity/90":{},"/activity/89":{},"/activity/88":{},"/activity/87":{},"/activity/86":{},"/activity/85":{},"/activity/84":{},"/activity/83":{},"/activity/82":{},"/activity/81":{},"/activity/80":{},"/activity/79":{},"/activity/78":{},"/activity/77":{},"/activity/76":{},"/activity/75":{},"/activity/74":{},"/activity/73":{},"/activity/72":{},"/activity/71":{},"/activity/70":{},"/activity/69":{},"/activity/68":{},"/activity/67":{},"/activity/66":{},"/activity/65":{},"/activity/64":{},"/activity/63":{},"/activity/62":{},"/activity/61":{},"/activity/60":{},"/activity/59":{},"/activity/58":{},"/activity/57":{},"/activity/56":{},"/activity/55":{},"/activity/107":{}},"dynamicRoutes":{"/activity/[id]":{"dataRoute":null,"dataRouteRegex":null,"fallback":null,"fallbackRevalidate":false,"fallbackSourceRoute":"/activity/[id]","routeRegex":"^\\/activity\\/([^/]+?)(?:\\/)?$","allowHeader":[]}},"notFoundRoutes":[],"preview":{"previewModeId":"d63f2b171b6db5735f3e014b728abec8","previewModeSigningKey":"ecf0fdca5b4a084106cc4c46806768dafd83928fc42280d85df67348a1dd4ebe","previewModeEncryptionKey":"f4aba72e84c95b3ae5e4cd7476f1ee0b77cce19f091db98d1dfb13d5dad87c77"}}
