@@ -75,7 +75,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {`window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', 'G-EFGR0JV14G');`}
+          if (!window.location.search.includes('noTrack=true')) {
+            gtag('config', 'G-EFGR0JV14G');
+          }`}
         </Script>
         {/* Service Worker */}
         <Script id="sw" strategy="afterInteractive">
