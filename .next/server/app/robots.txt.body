@@ -1,0 +1,23 @@
+User-Agent: Googlebot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-Agent: Bingbot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-Agent: Twitterbot
+Allow: /
+
+User-Agent: facebookexternalhit
+Allow: /
+
+User-Agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Crawl-delay: 1
+
+Sitemap: https://happeningsbangalore.com/sitemap.xml
