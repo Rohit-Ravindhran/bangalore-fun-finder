@@ -21,10 +21,11 @@ import TrendingSection from '@/components/TrendingSection';
 import LocationFilter from '@/components/LocationFilter';
 import BottomNav from '@/components/BottomNav';
 import HighlightsCarousel from '@/components/HighlightsCarousel';
-import { 
-  getFilteredActivitiesBySection, 
-  fetchCategories 
+import {
+  getFilteredActivitiesBySection,
+  fetchCategories
 } from '@/services/activityService';
+import { listTrending } from '@/services/trendingService';
 import { useAllSections, useCategories, activityKeys } from '@/hooks/useActivities';
 import { useToast } from '@/components/ui/use-toast';
 import { Dice6, Share2, Search, Loader2, Clock, Heart, Users, Utensils, Car, Briefcase, Compass, MapPin as MapPinIcon, Flame } from 'lucide-react';
@@ -269,6 +270,34 @@ const Index = ({
   const rawAllActivities = allActivitiesQuery.data || initialActivities;
   const rawUniqueExperiences = uniqueExperiencesQuery.data || [];
   const rawDateIdeas = dateIdeasQuery.data || [];
+
+  const { data: trendingData } = useQuery({
+    queryKey: ['trending'],
+    queryFn: async () => {
+      const { data } = await listTrending();
+      return data;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
+  // Map trending RPC results to the Activity shape TrendingSection expects
+  const trendingActivities = (trendingData ?? []).map((t) => ({
+    id: String(t.activity_id),
+    title: t.title,
+    image: t.image,
+    location: t.location,
+    priceRange: t.price_range,
+    date: t.date,
+    url: t.url,
+    tags: [] as string[],
+    categoryIds: [] as string[],
+    categoryNames: [] as string[],
+    description: '',
+    time: '',
+    mapLink: '',
+    contactInfo: '',
+    lastUpdated: '',
+  }));
 
   // Time-based filters
   const timeFilters = [
@@ -691,7 +720,7 @@ const Index = ({
         }} />
 
         {/* Trending Section */}
-        <TrendingSection activities={rawAllActivities} />
+        {trendingActivities.length > 0 && <TrendingSection activities={trendingActivities} />}
 
         {/* Sticky Filters Container */}
         <div className="sticky top-[52px] z-30 bg-gray-50 -mx-4 px-4 py-2">

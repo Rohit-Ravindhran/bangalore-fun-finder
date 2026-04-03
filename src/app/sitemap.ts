@@ -16,6 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   const blogSlugs = [
+    'bangalore-weekend-april-4-5',
     'things-to-do-in-bangalore',
     'cafes-in-indiranagar',
     'hidden-places-in-bangalore',

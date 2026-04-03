@@ -34,6 +34,8 @@ import {
   ExternalLink,
   RefreshCw,
   Instagram,
+  TrendingUp,
+  X,
 } from "lucide-react";
 import {
   createActivity,
@@ -50,6 +52,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
 import ActivityImageGenerator from "@/components/ActivityImageGenerator";
 import AdminHighlights from "@/components/AdminHighlights";
+import { listTrending, addTrending, removeTrending, TrendingActivity } from "@/services/trendingService";
 
 // Client-side extractor for full Google Maps URLs (no network call needed)
 function extractGoogleMapsCoords(url: string): { lat: number; lng: number } | null {
@@ -64,7 +67,7 @@ function extractGoogleMapsCoords(url: string): { lat: number; lng: number } | nu
   return null;
 }
 
-type Section = "activities" | "import" | "instagram" | "bulk" | "highlights" | "marketing";
+type Section = "activities" | "import" | "instagram" | "bulk" | "highlights" | "marketing" | "trending";
 
 type CategoryItem = { id: number; name: string };
 type TagItem = { id: number; name: string };
@@ -113,6 +116,10 @@ const Admin = () => {
   const [downloadingActivityIds, setDownloadingActivityIds] = useState<Set<string>>(new Set());
   const [marketingPage, setMarketingPage] = useState(0);
   const MARKETING_PAGE_SIZE = 20;
+  const [trendingList, setTrendingList] = useState<TrendingActivity[]>([]);
+  const [trendingIds, setTrendingIds] = useState<Set<number>>(new Set());
+  const [isTrendingLoading, setIsTrendingLoading] = useState(false);
+  const [trendingSearch, setTrendingSearch] = useState("");
   const [isResolvingMap, setIsResolvingMap] = useState(false);
   const [coordsPreview, setCoordsPreview] = useState<{ lat: number; lng: number } | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -150,6 +157,44 @@ const Admin = () => {
       setTags(tgs);
     } catch {
       // non-fatal
+    }
+  };
+
+  const loadTrending = async () => {
+    setIsTrendingLoading(true);
+    try {
+      const { data, error } = await listTrending();
+      if (error) throw new Error(error);
+      setTrendingList(data);
+      setTrendingIds(new Set(data.map((t) => t.activity_id)));
+    } catch {
+      toast({ title: "Error loading trending list", variant: "destructive" });
+    } finally {
+      setIsTrendingLoading(false);
+    }
+  };
+
+  const handleAddTrending = async (activityId: string) => {
+    const adminId = getAdminId();
+    if (!adminId) return;
+    const { error } = await addTrending(activityId, adminId, trendingList.length);
+    if (error) {
+      toast({ title: "Failed to add to trending", description: error, variant: "destructive" });
+    } else {
+      toast({ title: "Added to trending" });
+      loadTrending();
+    }
+  };
+
+  const handleRemoveTrending = async (activityId: number) => {
+    const adminId = getAdminId();
+    if (!adminId) return;
+    const { error } = await removeTrending(activityId, adminId);
+    if (error) {
+      toast({ title: "Failed to remove from trending", description: error, variant: "destructive" });
+    } else {
+      toast({ title: "Removed from trending" });
+      loadTrending();
     }
   };
 
@@ -408,6 +453,7 @@ const Admin = () => {
   // ─── Sidebar nav items ──────────────────────────────────────────────────────
   const navItems: { id: Section; label: string; icon: React.ReactNode; badge?: string }[] = [
     { id: "activities", label: "Activities", icon: <Database className="h-4 w-4" /> },
+    { id: "trending",   label: "Trending", icon: <TrendingUp className="h-4 w-4" /> },
     { id: "import",     label: "Import from BMS", icon: <FileText className="h-4 w-4" /> },
     { id: "instagram",  label: "Import from Screenshots", icon: <Instagram className="h-4 w-4" /> },
     { id: "bulk",       label: "Bulk JSON Import", icon: <Upload className="h-4 w-4" /> },
@@ -433,7 +479,7 @@ const Admin = () => {
           {navItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => { setSection(item.id); resetForm(); }}
+              onClick={() => { setSection(item.id); resetForm(); if (item.id === "trending") loadTrending(); }}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left
                 ${section === item.id
                   ? "bg-orange-500 text-white"
@@ -491,6 +537,7 @@ const Admin = () => {
           <div>
             <h2 className="text-lg font-semibold text-gray-900">
               {section === "activities" && "Activities Database"}
+              {section === "trending"   && "Trending Activities"}
               {section === "import"     && "Import from BookMyShow"}
               {section === "instagram"  && "Import from Screenshots"}
               {section === "bulk"       && "Bulk JSON Import"}
@@ -499,6 +546,7 @@ const Admin = () => {
             </h2>
             <p className="text-xs text-gray-400 mt-0.5">
               {section === "activities" && `${activities.length} total activities`}
+              {section === "trending"   && `${trendingList.length} activities currently trending`}
               {section === "import"     && "Auto-fill from a BMS event link"}
               {section === "instagram"  && "Paste screenshots and let AI extract event details"}
               {section === "bulk"       && "Import multiple activities at once"}
@@ -687,6 +735,130 @@ const Admin = () => {
                           </TableCell>
                         </TableRow>
                       )}
+                    </TableBody>
+                  </Table>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* ── TRENDING ── */}
+          {section === "trending" && (
+            <div className="space-y-6 max-w-4xl">
+              {/* Current trending list */}
+              <div className="bg-white rounded-xl border shadow-sm p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold text-gray-900">Current Trending List</h3>
+                  <Button variant="ghost" size="sm" onClick={loadTrending} className="gap-1.5 text-gray-500">
+                    <RefreshCw className={`h-3.5 w-3.5 ${isTrendingLoading ? "animate-spin" : ""}`} />
+                    Refresh
+                  </Button>
+                </div>
+                {isTrendingLoading ? (
+                  <div className="flex justify-center py-10 text-gray-400">
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  </div>
+                ) : trendingList.length === 0 ? (
+                  <p className="text-sm text-gray-400 text-center py-8">No trending activities yet. Mark some below.</p>
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-gray-50">
+                        <TableHead className="w-8">#</TableHead>
+                        <TableHead>Activity</TableHead>
+                        <TableHead>Location</TableHead>
+                        <TableHead>Date</TableHead>
+                        <TableHead className="text-right w-20">Remove</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {trendingList.map((t, i) => (
+                        <TableRow key={t.trending_id} className="hover:bg-gray-50">
+                          <TableCell className="text-sm text-gray-400 font-mono">{i + 1}</TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-3">
+                              {t.image && (
+                                <img src={t.image} alt={t.title} className="h-9 w-14 object-cover rounded" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                              )}
+                              <span className="text-sm font-medium text-gray-900">{t.title}</span>
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-sm text-gray-500">{t.location}</TableCell>
+                          <TableCell className="text-sm text-gray-500">{t.date}</TableCell>
+                          <TableCell className="text-right">
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7 w-7 p-0 text-red-400 hover:text-red-600 hover:bg-red-50"
+                              onClick={() => handleRemoveTrending(t.activity_id)}
+                            >
+                              <X className="h-3.5 w-3.5" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+              </div>
+
+              {/* Add activities to trending */}
+              <div className="bg-white rounded-xl border shadow-sm p-6">
+                <h3 className="font-semibold text-gray-900 mb-4">Add Activity to Trending</h3>
+                <Input
+                  placeholder="Search activities..."
+                  value={trendingSearch}
+                  onChange={(e) => setTrendingSearch(e.target.value)}
+                  className="mb-4 max-w-sm h-8 text-sm"
+                />
+                {isLoading ? (
+                  <div className="flex justify-center py-8 text-gray-400">
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  </div>
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-gray-50">
+                        <TableHead>Title</TableHead>
+                        <TableHead>Location</TableHead>
+                        <TableHead>Date</TableHead>
+                        <TableHead className="text-right w-28">Status</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {activities
+                        .filter((a) => {
+                          if (!trendingSearch) return true;
+                          const q = trendingSearch.toLowerCase();
+                          return a.title?.toLowerCase().includes(q) || a.location?.toLowerCase().includes(q);
+                        })
+                        .slice(0, 50)
+                        .map((activity) => {
+                          const isT = trendingIds.has(Number(activity.id));
+                          return (
+                            <TableRow key={activity.id} className="hover:bg-gray-50">
+                              <TableCell className="font-medium text-sm">{activity.title}</TableCell>
+                              <TableCell className="text-sm text-gray-500">{activity.location}</TableCell>
+                              <TableCell className="text-sm text-gray-500">{activity.date}</TableCell>
+                              <TableCell className="text-right">
+                                {isT ? (
+                                  <span className="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
+                                    <TrendingUp className="h-3 w-3" /> Trending
+                                  </span>
+                                ) : (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-7 text-xs gap-1"
+                                    onClick={() => handleAddTrending(activity.id)}
+                                  >
+                                    <TrendingUp className="h-3 w-3" /> Mark Trending
+                                  </Button>
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
                     </TableBody>
                   </Table>
                 )}
