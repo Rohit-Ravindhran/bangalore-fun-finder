@@ -628,6 +628,36 @@ export type Database = {
         }
         Returns: boolean
       }
+      admin_list_trending: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          trending_id: number
+          display_order: number
+          added_at: string
+          activity_id: number
+          title: string
+          image: string | null
+          location: string | null
+          price_range: string | null
+          date: string | null
+          url: string | null
+        }[]
+      }
+      admin_add_trending: {
+        Args: {
+          p_activity_id: number
+          p_admin_id: string
+          p_order?: number
+        }
+        Returns: undefined
+      }
+      admin_remove_trending: {
+        Args: {
+          p_activity_id: number
+          p_admin_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       package_type_enum: "date" | "outing"
