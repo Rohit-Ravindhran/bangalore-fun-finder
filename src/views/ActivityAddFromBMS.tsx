@@ -366,6 +366,7 @@ export default function ActivityAddFromBMS() {
   const [isFetching, setIsFetching] = useState(false);
   const [isParsing, setIsParsing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [showRaw, setShowRaw] = useState(false);
   const [resolvingMap, setResolvingMap] = useState(false);
 
@@ -545,7 +546,7 @@ export default function ActivityAddFromBMS() {
           ? `"${preview.title}" added to scraped queue as a duplicate`
           : `"${preview.title}" added to scraped queue (quality: ${result.qualityScore}/100)`,
       });
-      router.push("/admin/scraped-events");
+      setSaved(true);
     } catch (err) {
       toast({
         title: "Save failed",
@@ -555,6 +556,14 @@ export default function ActivityAddFromBMS() {
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleAddAnother = () => {
+    setBmsUrl("");
+    setHtml("");
+    setPreview(null);
+    setStep("url");
+    setSaved(false);
   };
 
   // ─── Render ───────────────────────────────────────────────────────────
@@ -724,14 +733,31 @@ export default function ActivityAddFromBMS() {
           </div>
 
           {/* Actions */}
-          <div className="flex gap-2 pt-2">
-            <Button variant="outline" onClick={() => setStep(html ? "paste" : "url")} className="flex-1">
-              <RefreshCw className="h-4 w-4 mr-2" /> Re-parse
-            </Button>
-            <Button onClick={handleSave} disabled={isSaving || !preview.title || !preview.mapLink} className="flex-1 bg-orange-500 hover:bg-orange-600">
-              {isSaving ? <><Loader2 className="h-4 w-4 animate-spin mr-2" />Saving...</> : "Send to Review Queue"}
-            </Button>
-          </div>
+          {saved ? (
+            <div className="pt-2 space-y-3">
+              <div className="flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-3">
+                <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
+                <span className="text-sm font-medium">Sent to review queue</span>
+              </div>
+              <div className="flex gap-2">
+                <Button onClick={handleAddAnother} className="flex-1 bg-orange-500 hover:bg-orange-600">
+                  <RefreshCw className="h-4 w-4 mr-2" /> Add Another
+                </Button>
+                <Button variant="outline" onClick={() => router.push("/admin/scraped-events")} className="flex-1">
+                  View Queue
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex gap-2 pt-2">
+              <Button variant="outline" onClick={() => setStep(html ? "paste" : "url")} className="flex-1">
+                <RefreshCw className="h-4 w-4 mr-2" /> Re-parse
+              </Button>
+              <Button onClick={handleSave} disabled={isSaving || !preview.title || !preview.mapLink} className="flex-1 bg-orange-500 hover:bg-orange-600">
+                {isSaving ? <><Loader2 className="h-4 w-4 animate-spin mr-2" />Saving...</> : "Send to Review Queue"}
+              </Button>
+            </div>
+          )}
 
           {/* Raw HTML toggle */}
           <button className="text-xs text-gray-400 flex items-center gap-1 mt-2" onClick={() => setShowRaw((v) => !v)}>

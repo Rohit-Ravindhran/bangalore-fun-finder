@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Bangalore Blog — Local Guides & Hidden Spots | Happ'nin Bangalore",
@@ -8,6 +9,13 @@ export const metadata: Metadata = {
 };
 
 const posts = [
+  {
+    slug: "bangalore-weekend-april-4-5",
+    title: "Best Things to Do in Bangalore This Weekend — 4 & 5 April 2026",
+    description:
+      "Bollywood nights, a CBD run, live music, outdoor treks, and more happening across Bangalore this Saturday and Sunday.",
+    tag: "This Weekend",
+  },
   {
     slug: "things-to-do-in-bangalore",
     title: "27 Best Things to Do in Bangalore You Actually Can't Miss",
@@ -39,6 +47,7 @@ const posts = [
 ];
 
 const tagColors: Record<string, string> = {
+  "This Weekend": "bg-orange-500 text-white",
   "City Guide": "bg-orange-50 text-orange-600",
   Cafes: "bg-amber-50 text-amber-600",
   "Hidden Gems": "bg-emerald-50 text-emerald-700",
@@ -48,6 +57,14 @@ const tagColors: Record<string, string> = {
 export default function BlogIndex() {
   return (
     <main className="max-w-2xl mx-auto px-4 py-8 pb-24">
+      <Link
+        href="/"
+        className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 mb-6 transition-colors"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back
+      </Link>
+
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-1">Bangalore Guides</h1>
         <p className="text-gray-500 text-sm">
