@@ -33,8 +33,8 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          <p className="text-gray-700 mb-6 text-[15px] font-medium leading-relaxed">
-            Happ'nin in Bangalore is your personal city guide to hidden and trending things to do – curated just for you.
+          <p className="text-gray-700 dark:text-gray-400 mb-6 text-[15px] font-medium leading-relaxed">
+            Happenin Bangalore is your personal city guide to hidden and trending things to do – curated just for you.
           </p>
           
           <div className="mb-8 px-4 flex flex-col items-center">
@@ -58,7 +58,7 @@ const Footer: React.FC = () => {
             <Link href="/favorites" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">Favorites</Link>
           </div>
           <p className="text-xs text-gray-500 mt-5 font-medium">
-            © {new Date().getFullYear()} Happenings Bangalore
+            © {new Date().getFullYear()} Happenin Bangalore
           </p>
         </div>
       </div>

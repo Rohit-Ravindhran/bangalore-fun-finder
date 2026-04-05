@@ -246,7 +246,8 @@ const Index = ({
   
   // Tab-related states
   const [currentTab, setCurrentTab] = useState('all');
-  
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
   // Pagination states for display
   const [allActivitiesPage, setAllActivitiesPage] = useState(1);
   const [uniqueExperiencesPage, setUniqueExperiencesPage] = useState(1);
@@ -704,23 +705,24 @@ const Index = ({
       <Header
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
+        onSearchStateChange={setIsSearchOpen}
       />
 
       <main className="container px-4 pt-4 pb-8 lg:max-w-6xl mx-auto">
         <SubscribePopup isOpen={showSubscribe} onClose={() => setShowSubscribe(false)} />
 
-        {/* Highlights Carousel */}
-        <div className="overflow-hidden">
-          <HighlightsCarousel />
-        </div>
+        {/* Highlights Carousel, Quick Explore and Trending — hidden when search is active */}
+        {!isSearchOpen && (
+          <>
+            <div className="overflow-hidden">
+              <HighlightsCarousel />
+            </div>
 
-        {/* Quick Explore Section */}
-        <QuickExplore onItemClick={(id) => {
-          toast({ title: `${id} coming soon!`, description: 'This feature is under development', duration: 2000 });
-        }} />
+            <QuickExplore />
 
-        {/* Trending Section */}
-        {trendingActivities.length > 0 && <TrendingSection activities={trendingActivities} />}
+            {trendingActivities.length > 0 && <TrendingSection activities={trendingActivities} />}
+          </>
+        )}
 
         {/* Sticky Filters Container */}
         <div className="sticky top-[52px] z-30 bg-gray-50 dark:bg-gray-950 -mx-4 px-4 py-2">

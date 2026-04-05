@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Bangalore Blog — Local Guides & Hidden Spots | Happ'nin Bangalore",
+  title: "Bangalore Guide — Local Picks & Hidden Spots | Happenin Bangalore",
   description:
     "Guides, lists, and local picks for things to do in Bangalore. Cafes, morning spots, hidden gems, and more — written for people who actually live here.",
 };
@@ -31,6 +31,20 @@ const posts = [
     tag: "Cafes",
   },
   {
+    slug: "rooftop-spots-bangalore",
+    title: "Best Rooftop Bars & Sunset Spots in Bangalore",
+    description:
+      "High-altitude sundowners, skyline views, and the city below you — the best rooftops in Bangalore for evenings worth remembering.",
+    tag: "Nightlife",
+  },
+  {
+    slug: "weekend-treks-bangalore",
+    title: "Best Weekend Treks Near Bangalore Under 100 km",
+    description:
+      "Skandagiri by moonlight, Savandurga's granite monolith, Nandi Hills above the clouds — everything you need for a proper Bangalore trek.",
+    tag: "Outdoors",
+  },
+  {
     slug: "hidden-places-in-bangalore",
     title: "Hidden Places in Bangalore Most Locals Don't Know About",
     description:
@@ -47,11 +61,13 @@ const posts = [
 ];
 
 const tagColors: Record<string, string> = {
-  "This Weekend": "bg-orange-500 text-white",
-  "City Guide": "bg-orange-50 text-orange-600",
-  Cafes: "bg-amber-50 text-amber-600",
-  "Hidden Gems": "bg-emerald-50 text-emerald-700",
-  Mornings: "bg-sky-50 text-sky-600",
+  "This Weekend": "bg-[#FFD60A] text-black",
+  "City Guide": "bg-orange-50 text-orange-600 dark:bg-orange-950/40 dark:text-orange-400",
+  Cafes: "bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400",
+  "Hidden Gems": "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400",
+  Mornings: "bg-sky-50 text-sky-600 dark:bg-sky-950/40 dark:text-sky-400",
+  Nightlife: "bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-400",
+  Outdoors: "bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-400",
 };
 
 export default function BlogIndex() {
@@ -59,37 +75,37 @@ export default function BlogIndex() {
     <main className="max-w-2xl mx-auto px-4 py-8 pb-24">
       <Link
         href="/"
-        className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 mb-6 transition-colors"
+        className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white mb-6 transition-colors"
       >
         <ArrowLeft className="h-4 w-4" />
         Back
       </Link>
 
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">Bangalore Guides</h1>
-        <p className="text-gray-500 text-sm">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Bangalore Guide</h1>
+        <p className="text-gray-500 dark:text-gray-400 text-sm">
           Local picks for people who live here — not tourists.
         </p>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         {posts.map((post) => (
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="block rounded-2xl border border-gray-100 bg-white p-5 hover:border-orange-200 hover:shadow-sm transition-all"
+            className="block rounded-2xl border border-gray-100 dark:border-white/[0.06] bg-white dark:bg-white/[0.03] p-5 hover:border-[#FFD60A]/40 dark:hover:border-[#FFD60A]/30 hover:shadow-sm dark:hover:bg-white/[0.05] transition-all"
           >
             <span
               className={`inline-block text-xs font-semibold px-2.5 py-0.5 rounded-full mb-2 ${
-                tagColors[post.tag] ?? "bg-gray-100 text-gray-600"
+                tagColors[post.tag] ?? "bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-gray-400"
               }`}
             >
               {post.tag}
             </span>
-            <h2 className="text-base font-semibold text-gray-900 mb-1 leading-snug">
+            <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-1 leading-snug">
               {post.title}
             </h2>
-            <p className="text-sm text-gray-500 leading-relaxed">{post.description}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{post.description}</p>
           </Link>
         ))}
       </div>
