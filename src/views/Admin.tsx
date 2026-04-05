@@ -469,7 +469,7 @@ const Admin = () => {
         <div className="px-5 py-5 border-b border-gray-700">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Admin</p>
           <h1 className="text-lg font-bold text-white leading-tight">
-            Happ'nin <span className="text-orange-400">Bangalore</span>
+            Happenin <span className="text-[#FFD60A]">Bangalore</span>
           </h1>
         </div>
 
@@ -482,7 +482,7 @@ const Admin = () => {
               onClick={() => { setSection(item.id); resetForm(); if (item.id === "trending") loadTrending(); }}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left
                 ${section === item.id
-                  ? "bg-orange-500 text-white"
+                  ? "bg-[#FFD60A] text-black"
                   : "text-gray-300 hover:bg-gray-800 hover:text-white"}`}
             >
               {item.icon}

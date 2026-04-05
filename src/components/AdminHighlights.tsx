@@ -437,7 +437,7 @@ const AdminHighlights: React.FC = () => {
                 placeholder="https://example.com/banner.jpg"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Recommended aspect ratio: 16:9 (e.g., 1200x675 pixels)
+                Recommended aspect ratio: 3:1 (e.g., 1200x400 px). Images are cropped to fill — avoid important content near the edges.
               </p>
             </div>
 
