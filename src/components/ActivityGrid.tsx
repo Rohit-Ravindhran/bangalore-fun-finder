@@ -93,7 +93,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
         return (
           <div 
             key={activity.id}
-            className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer border border-gray-100"
+            className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer border border-gray-100 dark:border-gray-700"
             onClick={() => handleCardClick(activity.id)}
           >
             {/* Image */}
@@ -110,42 +110,42 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
             {/* Content */}
             <div className="p-4">
               {/* Title - Bold and prominent */}
-              <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-2 leading-tight">
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1 line-clamp-2 leading-tight">
                 {activity.title}
               </h3>
-              
+
               {/* Description - Lighter and smaller */}
               {activity.description && (
-                <p className="text-xs text-gray-400 mb-3 line-clamp-2">
+                <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-2">
                   {truncateText(activity.description, 100)}
                 </p>
               )}
-              
+
               {/* Location */}
-              <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+              <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-2">
                 <MapPin className="h-3.5 w-3.5 text-orange-400" />
                 <span className="font-medium">{activity.location}</span>
               </div>
-              
+
               {/* Date & Time */}
-              <div className="flex items-center gap-3 text-xs text-gray-500 mb-3">
+              <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 mb-3">
                 {activity.date && (
                   <div className="flex items-center gap-1.5">
-                    <Calendar className="h-3.5 w-3.5 text-gray-400" />
+                    <Calendar className="h-3.5 w-3.5 text-gray-400 dark:text-gray-500" />
                     <span>{activity.date}</span>
                   </div>
                 )}
                 {formattedTime && (
                   <div className="flex items-center gap-1.5">
-                    <Clock className="h-3.5 w-3.5 text-gray-400" />
+                    <Clock className="h-3.5 w-3.5 text-gray-400 dark:text-gray-500" />
                     <span>{formattedTime}</span>
                   </div>
                 )}
               </div>
-              
+
               {/* Price and Show More */}
-              <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                <span className="font-bold text-sm text-gray-900">
+              <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700">
+                <span className="font-bold text-sm text-gray-900 dark:text-white">
                   {activity.priceRange || 'Free'}
                 </span>
                 <button 

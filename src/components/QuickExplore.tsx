@@ -30,7 +30,7 @@ const QuickExplore: React.FC<QuickExploreProps> = ({ onItemClick }) => {
   return (
     <div className="mb-6">
       <div className="flex items-center gap-2 mb-3">
-        <h2 className="text-base font-bold text-gray-900">Explore Bangalore</h2>
+        <h2 className="text-base font-bold text-gray-900 dark:text-white">Explore Bangalore</h2>
         <span className="inline-flex items-center gap-1 bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full text-[10px] font-medium">
           <Sparkles className="h-3 w-3" />
           Coming Soon
@@ -50,9 +50,9 @@ const QuickExplore: React.FC<QuickExploreProps> = ({ onItemClick }) => {
               )}
             >
               <Icon className={cn("h-6 w-6 mb-1", item.iconColor)} />
-              <span className="text-[10px] font-medium text-gray-700 whitespace-nowrap">{item.label}</span>
+              <span className="text-[10px] font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">{item.label}</span>
               {item.comingSoon && (
-                <span className="text-[8px] text-gray-400 mt-0.5">Soon</span>
+                <span className="text-[8px] text-gray-400 dark:text-gray-500 mt-0.5">Soon</span>
               )}
             </button>
           );

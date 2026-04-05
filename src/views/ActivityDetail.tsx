@@ -4,7 +4,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, ArrowRight, MapPin, Clock, Calendar } from 'lucide-react';
+import { ArrowLeft, ArrowRight, MapPin, Clock, Calendar, Map } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Activity } from '@/components/ActivityCard';
@@ -81,14 +81,14 @@ const ActivityDetail = ({ initialActivity }: { initialActivity?: Activity | null
   
   if (isLoading && !displayActivity) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
         <div className="text-center">
           <div className="flex justify-center items-center space-x-2 mb-4">
             <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
             <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
             <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
           </div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
         </div>
       </div>
     );
@@ -96,10 +96,10 @@ const ActivityDetail = ({ initialActivity }: { initialActivity?: Activity | null
 
   if (!displayActivity) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4 text-gray-900">Activity not found</h1>
-          <Button onClick={() => router.push('/')} className="bg-gray-900 text-white">
+          <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Activity not found</h1>
+          <Button onClick={() => router.push('/')} className="bg-gray-900 dark:bg-gray-100 dark:text-gray-900 text-white">
             Back to Home
           </Button>
         </div>
@@ -109,12 +109,12 @@ const ActivityDetail = ({ initialActivity }: { initialActivity?: Activity | null
   const formattedTime = formatTimeTo12Hour(displayActivity.time);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       {/* Header with back button */}
-      <div className="sticky top-0 z-40 bg-white border-b border-gray-100 px-4 py-3">
+      <div className="sticky top-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 px-4 py-3">
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-gray-700 hover:text-gray-900"
+          className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
         >
           <ArrowLeft className="h-5 w-5" />
           <span className="font-medium">Back</span>
@@ -134,24 +134,24 @@ const ActivityDetail = ({ initialActivity }: { initialActivity?: Activity | null
       {/* Content */}
       <div className="px-4 pt-6 pb-24 max-w-2xl mx-auto">
         {/* Title */}
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">{displayActivity.title}</h1>
-        
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{displayActivity.title}</h1>
+
         {/* Description */}
-        <p className="text-gray-600 mb-6 leading-relaxed">{displayActivity.description}</p>
-        
+        <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">{displayActivity.description}</p>
+
         {/* Event Tag */}
         {displayActivity.categoryNames && displayActivity.categoryNames.length > 0 && (
           <div className="mb-6">
-            <span className="inline-block bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full">
+            <span className="inline-block bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm px-3 py-1 rounded-full">
               {displayActivity.categoryNames[0]}
             </span>
           </div>
         )}
-        
+
         {/* Price Section */}
-        <div className="bg-gray-50 rounded-xl p-6 mb-6 text-center">
-          <p className="text-sm text-gray-500 mb-1">Price</p>
-          <p className="text-2xl font-bold text-gray-900">{displayActivity.priceRange || 'Check website'}</p>
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 mb-6 text-center">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Price</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">{displayActivity.priceRange || 'Check website'}</p>
         </div>
         
         {/* Details Sections */}
@@ -159,51 +159,66 @@ const ActivityDetail = ({ initialActivity }: { initialActivity?: Activity | null
           {/* Date */}
           {displayActivity.date && (
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-orange-50 dark:bg-orange-950/40 rounded-lg flex items-center justify-center flex-shrink-0">
                 <Calendar className="h-5 w-5 text-orange-500" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Date</p>
-                <p className="font-medium text-gray-900">{displayActivity.date}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Date</p>
+                <p className="font-medium text-gray-900 dark:text-white">{displayActivity.date}</p>
               </div>
             </div>
           )}
-          
+
           {/* Time */}
           {formattedTime && (
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-orange-50 dark:bg-orange-950/40 rounded-lg flex items-center justify-center flex-shrink-0">
                 <Clock className="h-5 w-5 text-orange-500" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">Time</p>
-                <p className="font-medium text-gray-900">{formattedTime}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Time</p>
+                <p className="font-medium text-gray-900 dark:text-white">{formattedTime}</p>
               </div>
             </div>
           )}
-          
+
           {/* Location */}
           <div className="flex items-start gap-4">
-            <div className="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 bg-orange-50 dark:bg-orange-950/40 rounded-lg flex items-center justify-center flex-shrink-0">
               <MapPin className="h-5 w-5 text-orange-500" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Location</p>
-              <p className="font-medium text-gray-900">{displayActivity.location}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Location</p>
+              <p className="font-medium text-gray-900 dark:text-white">{displayActivity.location}</p>
             </div>
           </div>
         </div>
-        
-        {/* View More Details Button */}
-        {displayActivity.url && isSecureUrl(displayActivity.url) && (
-          <Button 
-            onClick={() => openSecureUrl(displayActivity.url!)}
-            className="w-full py-6 text-base font-medium bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center gap-2"
-          >
-            View More Details
-            <ArrowRight className="h-5 w-5" />
-          </Button>
-        )}
+
+        {/* Action Buttons */}
+        <div className="flex flex-col gap-3">
+          {/* View on Map Button */}
+          {displayActivity.mapLink && isSecureUrl(displayActivity.mapLink) && (
+            <Button
+              onClick={() => openSecureUrl(displayActivity.mapLink!)}
+              variant="outline"
+              className="w-full py-6 text-base font-medium border-orange-500 text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/40 flex items-center justify-center gap-2"
+            >
+              <Map className="h-5 w-5" />
+              View on Map
+            </Button>
+          )}
+
+          {/* View More Details Button */}
+          {displayActivity.url && isSecureUrl(displayActivity.url) && (
+            <Button
+              onClick={() => openSecureUrl(displayActivity.url!)}
+              className="w-full py-6 text-base font-medium bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center gap-2"
+            >
+              View More Details
+              <ArrowRight className="h-5 w-5" />
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
