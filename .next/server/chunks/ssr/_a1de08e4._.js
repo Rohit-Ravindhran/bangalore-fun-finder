@@ -52,16 +52,16 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$providers$2e$t
 ;
 ;
 const metadata = {
-    title: 'Happenings Bangalore | Discover & Book Fun Things To Do',
-    description: 'Explore the best things to do in Bangalore – from unique date packages, weekend getaways, and adventure activities to food trails. Curated experiences for everyone.',
+    title: 'Happenin Bangalore | Discover Things To Do',
+    description: 'Explore the best things to do in Bangalore – from unique date ideas, weekend events, and meetups to food trails. Curated experiences for everyone.',
     keywords: 'Things to do in Bangalore, Bangalore activities, Bangalore date ideas, couple packages Bangalore, Bangalore weekend plans, curated experiences, what to do in Bangalore today, Bangalore outings',
     authors: [
         {
-            name: 'Happenings Bangalore Team'
+            name: 'Happenin Bangalore Team'
         }
     ],
     openGraph: {
-        title: 'Happenings Bangalore | Discover Curated Experiences',
+        title: 'Happenin Bangalore | Discover Curated Experiences',
         description: "Plan your next day out in Bangalore with handpicked activities, events, and packages. From date ideas to fun with friends – we've got your weekend covered.",
         type: 'website',
         url: 'https://happeningsbangalore.com',
@@ -71,11 +71,11 @@ const metadata = {
             }
         ],
         locale: 'en_IN',
-        siteName: 'Happenings Bangalore'
+        siteName: 'Happenin Bangalore'
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Happenings Bangalore | Discover Curated Experiences',
+        title: 'Happenin Bangalore | Discover Curated Experiences',
         description: 'Plan your next day out in Bangalore with handpicked activities, events, and packages.',
         images: [
             'https://happeningsbangalore.com/assets/og-image.jpg'
@@ -92,13 +92,12 @@ const metadata = {
         'theme-color': '#234E52',
         'apple-mobile-web-app-capable': 'yes',
         'apple-mobile-web-app-status-bar-style': 'black-translucent',
-        'apple-mobile-web-app-title': 'Happenings'
+        'apple-mobile-web-app-title': 'Happenin'
     }
 };
 function RootLayout({ children }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("html", {
         lang: "en",
-        className: "dark",
         suppressHydrationWarning: true,
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("head", {

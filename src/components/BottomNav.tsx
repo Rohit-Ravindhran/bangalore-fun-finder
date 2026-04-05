@@ -10,38 +10,34 @@ const BottomNav: React.FC = () => {
   const pathname = usePathname();
 
   const leftItems = [
-    { id: 'blog', label: 'Blog', icon: BookOpen, path: '/blog', comingSoon: false },
-    { id: 'date-ideas', label: 'Date Ideas', icon: Heart, path: '/date-ideas', comingSoon: true },
+    { id: 'blog', label: 'Guide', icon: BookOpen, path: '/blog', comingSoon: false },
+    { id: 'date-ideas', label: 'Date Ideas', icon: Heart, path: '/date-ideas', comingSoon: false },
   ];
 
   const rightItems = [
-    { id: 'food', label: 'Food Spots', icon: Utensils, path: '/food', comingSoon: true },
-    { id: 'meetups', label: 'Meetups', icon: Users, path: '/meetups', comingSoon: true },
+    { id: 'food', label: 'Food Spots', icon: Utensils, path: '/food', comingSoon: false },
+    { id: 'meetups', label: 'Meetups', icon: Users, path: '/meetups', comingSoon: false },
   ];
 
   const NavButton = ({ item }: { item: typeof leftItems[0] }) => {
     const isActive = pathname === item.path;
     const Icon = item.icon;
-    
+
     return (
       <button
         onClick={() => router.push(item.path)}
         className={cn(
           "flex flex-col items-center justify-center flex-1 h-full relative",
-          isActive ? "text-orange-500" : "text-gray-500 dark:text-gray-400",
-          item.comingSoon && "opacity-60"
+          isActive ? "text-[#FFD60A]" : "text-gray-500 dark:text-gray-500",
         )}
       >
-        <Icon className={cn("h-5 w-5", isActive && "text-orange-500")} />
+        <Icon className={cn("h-5 w-5", isActive && "text-[#FFD60A]")} />
         <span className={cn(
           "text-[10px] mt-1 font-medium",
-          isActive && "text-orange-500"
+          isActive && "text-[#FFD60A]"
         )}>
           {item.label}
         </span>
-        {item.comingSoon && (
-          <span className="absolute -top-1 right-1/4 w-1.5 h-1.5 bg-orange-400 rounded-full" />
-        )}
       </button>
     );
   };
@@ -49,7 +45,7 @@ const BottomNav: React.FC = () => {
   const isExploreActive = pathname === '/';
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-50 pb-safe">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-[#0D0D0F] border-t border-gray-200 dark:border-white/[0.06] z-50 pb-safe">
       <div className="flex items-center justify-around h-16 max-w-lg mx-auto relative">
         {/* Left items */}
         {leftItems.map((item) => (
@@ -63,19 +59,19 @@ const BottomNav: React.FC = () => {
             className="absolute -top-6 flex flex-col items-center"
           >
             <div className={cn(
-              "w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all",
-              isExploreActive 
-                ? "bg-gradient-to-br from-orange-500 to-pink-500 shadow-orange-200"
-                : "bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 hover:border-orange-300"
+              "w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200",
+              isExploreActive
+                ? "bg-gradient-to-br from-[#FFD60A] to-[#FFAA00] shadow-[0_0_24px_rgba(255,214,10,0.45)]"
+                : "bg-white dark:bg-[#1A1A1C] border-2 border-[#FFD60A]/30 dark:border-[#FFD60A]/20 hover:border-[#FFD60A]/70 dark:hover:border-[#FFD60A]/50 shadow-md"
             )}>
               <Compass className={cn(
                 "h-6 w-6 transition-colors",
-                isExploreActive ? "text-white" : "text-orange-500"
+                isExploreActive ? "text-black" : "text-[#FFD60A]"
               )} />
             </div>
             <span className={cn(
               "text-[10px] mt-1.5 font-semibold",
-              isExploreActive ? "text-orange-500" : "text-gray-500 dark:text-gray-400"
+              isExploreActive ? "text-[#FFD60A]" : "text-gray-500 dark:text-gray-500"
             )}>
               Explore
             </span>

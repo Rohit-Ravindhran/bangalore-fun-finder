@@ -4,25 +4,25 @@ import { Providers } from './providers'
 import '../index.css'
 
 export const metadata: Metadata = {
-  title: 'Happenings Bangalore | Discover & Book Fun Things To Do',
+  title: 'Happenin Bangalore | Discover Things To Do',
   description:
-    'Explore the best things to do in Bangalore – from unique date packages, weekend getaways, and adventure activities to food trails. Curated experiences for everyone.',
+    'Explore the best things to do in Bangalore – from unique date ideas, weekend events, and meetups to food trails. Curated experiences for everyone.',
   keywords:
     'Things to do in Bangalore, Bangalore activities, Bangalore date ideas, couple packages Bangalore, Bangalore weekend plans, curated experiences, what to do in Bangalore today, Bangalore outings',
-  authors: [{ name: 'Happenings Bangalore Team' }],
+  authors: [{ name: 'Happenin Bangalore Team' }],
   openGraph: {
-    title: 'Happenings Bangalore | Discover Curated Experiences',
+    title: 'Happenin Bangalore | Discover Curated Experiences',
     description:
       "Plan your next day out in Bangalore with handpicked activities, events, and packages. From date ideas to fun with friends – we've got your weekend covered.",
     type: 'website',
     url: 'https://happeningsbangalore.com',
     images: [{ url: 'https://happeningsbangalore.com/assets/og-image.jpg' }],
     locale: 'en_IN',
-    siteName: 'Happenings Bangalore',
+    siteName: 'Happenin Bangalore',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Happenings Bangalore | Discover Curated Experiences',
+    title: 'Happenin Bangalore | Discover Curated Experiences',
     description:
       'Plan your next day out in Bangalore with handpicked activities, events, and packages.',
     images: ['https://happeningsbangalore.com/assets/og-image.jpg'],
@@ -38,13 +38,13 @@ export const metadata: Metadata = {
     'theme-color': '#234E52',
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'black-translucent',
-    'apple-mobile-web-app-title': 'Happenings',
+    'apple-mobile-web-app-title': 'Happenin',
   },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta
           name="viewport"

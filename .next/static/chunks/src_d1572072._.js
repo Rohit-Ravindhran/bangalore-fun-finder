@@ -229,6 +229,48 @@ const activitySchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modu
     contactInfo: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().max(500).optional(),
     url: urlSchema
 });
+// Returns true if the activity's date clearly indicates it has already passed
+const isExpiredActivity = (dateStr)=>{
+    if (!dateStr || dateStr.trim() === '') return false;
+    const lower = dateStr.toLowerCase().trim();
+    // Clearly ongoing / evergreen — never expired
+    const ongoingTerms = [
+        'ongoing',
+        'anytime',
+        'everyday',
+        'daily',
+        'weekly',
+        'monthly',
+        'always',
+        'open',
+        'permanent',
+        'year round',
+        'coming soon'
+    ];
+    if (ongoingTerms.some((t)=>lower.includes(t))) return false;
+    // Future-pointing terms — not expired
+    const futureTerms = [
+        'today',
+        'tonight',
+        'tomorrow',
+        'this weekend',
+        'this week',
+        'upcoming',
+        'next'
+    ];
+    if (futureTerms.some((t)=>lower.includes(t))) return false;
+    // Try native Date parse — only trust it when the year is explicit (avoids false positives)
+    const hasYear = /\b(202\d|203\d)\b/.test(dateStr);
+    if (hasYear) {
+        const parsed = new Date(dateStr);
+        if (!isNaN(parsed.getTime())) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return parsed < today;
+        }
+    }
+    return false;
+};
 // Helper to log errors only in development
 const logError = (message, error)=>{
     if ("TURBOPACK compile-time truthy", 1) {
@@ -329,8 +371,8 @@ async function getFilteredActivitiesBySection(sectionType) {
             // Return empty array as fallback
             return [];
         }
-        // Transform activities to frontend format
-        return transformActivities(data);
+        // Transform activities to frontend format, filtering out expired events
+        return transformActivities(data).filter((a)=>!isExpiredActivity(a.date));
     } catch (error) {
         logError('Error in getFilteredActivitiesBySection:', error);
         return [];
@@ -375,8 +417,8 @@ async function getFilteredActivities() {
             logError('Error fetching filtered activities:', error);
             return [];
         }
-        // Transform activities to frontend format
-        return transformActivities(data);
+        // Transform activities to frontend format, filtering out expired events
+        return transformActivities(data).filter((a)=>!isExpiredActivity(a.date));
     } catch (error) {
         logError('Error in getFilteredActivities:', error);
         return [];

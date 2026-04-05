@@ -19,6 +19,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     'bangalore-weekend-april-4-5',
     'things-to-do-in-bangalore',
     'cafes-in-indiranagar',
+    'rooftop-spots-bangalore',
+    'weekend-treks-bangalore',
     'hidden-places-in-bangalore',
     'bangalore-morning-spots',
   ]

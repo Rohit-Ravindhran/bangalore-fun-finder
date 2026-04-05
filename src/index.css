@@ -71,55 +71,56 @@
   }
 
   .dark {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 95%;
+    /* Deep charcoal — premium, not harsh */
+    --background: 240 7% 5%;       /* #0D0D0F */
+    --foreground: 0 0% 92%;
 
-    --card: 222 47% 9%;
-    --card-foreground: 210 40% 95%;
+    --card: 240 5% 8%;             /* slightly lighter card surface */
+    --card-foreground: 0 0% 92%;
 
-    --popover: 222 47% 9%;
-    --popover-foreground: 210 40% 95%;
+    --popover: 240 5% 8%;
+    --popover-foreground: 0 0% 92%;
 
-    --primary: 38 93% 52%;
-    --primary-foreground: 222 47% 6%;
+    --primary: 50 100% 52%;        /* #FFD60A — golden yellow */
+    --primary-foreground: 240 7% 5%;
 
-    --secondary: 222 30% 14%;
-    --secondary-foreground: 38 93% 65%;
+    --secondary: 240 5% 12%;
+    --secondary-foreground: 50 85% 65%;
 
-    --muted: 222 30% 14%;
-    --muted-foreground: 215 20% 55%;
+    --muted: 240 5% 12%;
+    --muted-foreground: 0 0% 50%;
 
-    --accent: 222 30% 17%;
-    --accent-foreground: 38 93% 65%;
+    --accent: 240 5% 14%;
+    --accent-foreground: 50 100% 60%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 222 30% 16%;
-    --input: 222 30% 16%;
-    --ring: 38 93% 52%;
+    --border: 240 5% 14%;
+    --input: 240 5% 14%;
+    --ring: 50 100% 52%;           /* #FFD60A ring */
 
     /* Dark liquid glass variables */
-    --glass-primary: rgba(255, 255, 255, 0.05);
+    --glass-primary: rgba(255, 255, 255, 0.04);
     --glass-secondary: rgba(255, 255, 255, 0.03);
     --glass-tertiary: rgba(255, 255, 255, 0.02);
-    --glass-border: rgba(255, 255, 255, 0.07);
+    --glass-border: rgba(255, 255, 255, 0.06);
     --glass-border-inner: rgba(255, 255, 255, 0.03);
-    --glass-shadow: rgba(0, 0, 0, 0.4);
-    --glass-shadow-medium: rgba(0, 0, 0, 0.5);
-    --glass-shadow-strong: rgba(0, 0, 0, 0.6);
-    --glass-highlight: rgba(255, 255, 255, 0.06);
-    --glass-inner-glow: rgba(255, 255, 255, 0.03);
+    --glass-shadow: rgba(0, 0, 0, 0.5);
+    --glass-shadow-medium: rgba(0, 0, 0, 0.6);
+    --glass-shadow-strong: rgba(0, 0, 0, 0.7);
+    --glass-highlight: rgba(255, 255, 255, 0.05);
+    --glass-inner-glow: rgba(255, 214, 10, 0.03);
 
-    /* Dark gradients */
-    --gradient-mist-primary: linear-gradient(135deg, #0d1117 0%, #0f172a 50%, #0a0f1e 100%);
-    --gradient-mist-warm: linear-gradient(135deg, #120a06 0%, #1a0f08 50%, #1e1008 100%);
-    --gradient-mist-cool: linear-gradient(135deg, #06091a 0%, #080e22 50%, #060c1e 100%);
-    --gradient-accent: linear-gradient(135deg, #ff9a56 0%, #ff6b9d 50%, #c44bd4 100%);
+    /* Dark gradients using charcoal base */
+    --gradient-mist-primary: linear-gradient(135deg, #0D0D0F 0%, #111113 50%, #0D0D0F 100%);
+    --gradient-mist-warm: linear-gradient(135deg, #0D0D0F 0%, #13100D 50%, #0D0D0F 100%);
+    --gradient-mist-cool: linear-gradient(135deg, #0D0D0F 0%, #0D0F13 50%, #0D0D0F 100%);
+    --gradient-accent: linear-gradient(135deg, #FFD60A 0%, #FFAA00 50%, #FF8C00 100%);
 
-    --glass-tint-warm: rgba(255, 100, 20, 0.05);
-    --glass-tint-cool: rgba(20, 60, 120, 0.05);
-    --glass-tint-accent: rgba(255, 154, 86, 0.07);
+    --glass-tint-warm: rgba(255, 214, 10, 0.03);
+    --glass-tint-cool: rgba(255, 214, 10, 0.02);
+    --glass-tint-accent: rgba(255, 214, 10, 0.05);
   }
 }
 
@@ -157,10 +158,11 @@
   }
 
   .dark body::before {
+    /* Golden ambient glow — premium feel */
     background:
-      radial-gradient(circle at 20% 80%, rgba(255, 154, 86, 0.04) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(255, 107, 157, 0.03) 0%, transparent 45%),
-      radial-gradient(circle at 40% 40%, rgba(196, 75, 212, 0.02) 0%, transparent 40%);
+      radial-gradient(ellipse 80% 40% at 50% -10%, rgba(255, 214, 10, 0.08) 0%, transparent 70%),
+      radial-gradient(circle at 15% 85%, rgba(255, 214, 10, 0.04) 0%, transparent 40%),
+      radial-gradient(circle at 85% 15%, rgba(255, 170, 0, 0.03) 0%, transparent 35%);
   }
 
   body::after {

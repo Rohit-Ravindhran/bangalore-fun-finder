@@ -23,6 +23,34 @@ const activitySchema = z.object({
   url: urlSchema
 });
 
+// Returns true if the activity's date clearly indicates it has already passed
+const isExpiredActivity = (dateStr: string | undefined | null): boolean => {
+  if (!dateStr || dateStr.trim() === '') return false;
+
+  const lower = dateStr.toLowerCase().trim();
+
+  // Clearly ongoing / evergreen — never expired
+  const ongoingTerms = ['ongoing', 'anytime', 'everyday', 'daily', 'weekly', 'monthly', 'always', 'open', 'permanent', 'year round', 'coming soon'];
+  if (ongoingTerms.some((t) => lower.includes(t))) return false;
+
+  // Future-pointing terms — not expired
+  const futureTerms = ['today', 'tonight', 'tomorrow', 'this weekend', 'this week', 'upcoming', 'next'];
+  if (futureTerms.some((t) => lower.includes(t))) return false;
+
+  // Try native Date parse — only trust it when the year is explicit (avoids false positives)
+  const hasYear = /\b(202\d|203\d)\b/.test(dateStr);
+  if (hasYear) {
+    const parsed = new Date(dateStr);
+    if (!isNaN(parsed.getTime())) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return parsed < today;
+    }
+  }
+
+  return false;
+};
+
 // Helper to log errors only in development
 const logError = (message: string, error: unknown) => {
   if (process.env.NODE_ENV === 'development') {
@@ -128,8 +156,8 @@ export async function getFilteredActivitiesBySection(sectionType: string, sortOp
       return [];
     }
     
-    // Transform activities to frontend format
-    return transformActivities(data);
+    // Transform activities to frontend format, filtering out expired events
+    return transformActivities(data).filter((a) => !isExpiredActivity(a.date));
   } catch (error) {
     logError('Error in getFilteredActivitiesBySection:', error);
     return [];
@@ -170,8 +198,8 @@ export async function getFilteredActivities(filter = {}, sortOption = 'newest') 
       return [];
     }
     
-    // Transform activities to frontend format
-    return transformActivities(data);
+    // Transform activities to frontend format, filtering out expired events
+    return transformActivities(data).filter((a) => !isExpiredActivity(a.date));
   } catch (error) {
     logError('Error in getFilteredActivities:', error);
     return [];
