@@ -90,8 +90,8 @@ const LocationFilter: React.FC<LocationFilterProps> = ({
   return (
     <div className="mb-4">
       <div className="flex items-center gap-2 mb-2">
-        <MapPin className="h-4 w-4 text-gray-500" />
-        <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Location</span>
+        <MapPin className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+        <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Location</span>
         {geoError && (
           <span className="text-xs text-red-400 ml-1">{geoError}</span>
         )}
@@ -105,7 +105,7 @@ const LocationFilter: React.FC<LocationFilterProps> = ({
             "flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border",
             nearYouActive
               ? "bg-orange-500 text-white border-orange-500"
-              : "bg-white text-gray-600 border-gray-200 hover:border-orange-300 hover:text-orange-500"
+              : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-orange-300 hover:text-orange-500"
           )}
         >
           {locating ? (
@@ -117,7 +117,7 @@ const LocationFilter: React.FC<LocationFilterProps> = ({
         </button>
 
         {/* Divider */}
-        <div className="flex-shrink-0 w-px h-6 bg-gray-200 self-center" />
+        <div className="flex-shrink-0 w-px h-6 bg-gray-200 dark:bg-gray-700 self-center" />
 
         {/* All Areas */}
         <button
@@ -129,8 +129,8 @@ const LocationFilter: React.FC<LocationFilterProps> = ({
           className={cn(
             "flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all border",
             selectedLocation === null && !nearYouActive
-              ? "bg-gray-900 text-white border-gray-900"
-              : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+              ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white"
+              : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-gray-300"
           )}
         >
           All Areas
@@ -147,8 +147,8 @@ const LocationFilter: React.FC<LocationFilterProps> = ({
             className={cn(
               "flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all border",
               selectedLocation === location.id && !nearYouActive
-                ? "bg-gray-900 text-white border-gray-900"
-                : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white"
+                : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-gray-300"
             )}
           >
             {location.label}

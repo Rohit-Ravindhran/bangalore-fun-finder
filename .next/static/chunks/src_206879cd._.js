@@ -96,7 +96,7 @@ const Header = (param)=>{
         onSearchChange === null || onSearchChange === void 0 ? void 0 : onSearchChange('');
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
-        className: "bg-white sticky top-0 z-40 border-b border-gray-100 transition-all duration-200",
+        className: "bg-white dark:bg-gray-900 sticky top-0 z-40 border-b border-gray-100 dark:border-gray-800 transition-all duration-200",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "max-w-6xl mx-auto px-4 md:px-8",
             children: [
@@ -108,7 +108,7 @@ const Header = (param)=>{
                             onClick: ()=>router.push('/'),
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "text-xl md:text-2xl font-bold text-gray-900",
+                                    className: "text-xl md:text-2xl font-bold text-gray-900 dark:text-white",
                                     children: "Happ'nin"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Header.tsx",
@@ -144,7 +144,7 @@ const Header = (param)=>{
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
                                         type: "text",
                                         placeholder: "Search places, events, food...",
-                                        className: "w-full h-10 pl-9 pr-8 text-sm rounded-full bg-gray-50 border-gray-200",
+                                        className: "w-full h-10 pl-9 pr-8 text-sm rounded-full bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-500",
                                         value: searchQuery,
                                         onChange: (e)=>onSearchChange === null || onSearchChange === void 0 ? void 0 : onSearchChange(e.target.value),
                                         autoFocus: true
@@ -184,9 +184,9 @@ const Header = (param)=>{
                             children: [
                                 showCompactMode && !searchExpanded && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: ()=>setSearchExpanded(true),
-                                    className: "p-2 rounded-full hover:bg-gray-100 transition-colors",
+                                    className: "p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors",
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$search$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Search$3e$__["Search"], {
-                                        className: "h-5 w-5 text-gray-600"
+                                        className: "h-5 w-5 text-gray-600 dark:text-gray-400"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Header.tsx",
                                         lineNumber: 105,
@@ -199,7 +199,7 @@ const Header = (param)=>{
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 !searchExpanded && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: ()=>router.push('/blog'),
-                                    className: "flex items-center gap-1 px-2.5 py-1.5 rounded-full text-sm font-medium text-gray-600 hover:bg-orange-50 hover:text-orange-500 transition-colors",
+                                    className: "flex items-center gap-1 px-2.5 py-1.5 rounded-full text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-500 transition-colors",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__["BookOpen"], {
                                             className: "h-4 w-4"
@@ -257,7 +257,7 @@ const Header = (param)=>{
                             className: "pb-3",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                                    className: "text-lg font-semibold text-gray-900 mb-1",
+                                    className: "text-lg font-semibold text-gray-900 dark:text-white mb-1",
                                     children: "Discover things to do in Bangalore"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Header.tsx",
@@ -265,7 +265,7 @@ const Header = (param)=>{
                                     columnNumber: 11
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-sm text-gray-500",
+                                    className: "text-sm text-gray-500 dark:text-gray-400",
                                     children: "Dates • Meetups • Food • Events • Friends"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Header.tsx",
@@ -293,7 +293,7 @@ const Header = (param)=>{
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
                                         type: "text",
                                         placeholder: "Search places, events, food...",
-                                        className: "w-full pl-10 pr-4 py-5 bg-gray-50 border-gray-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-orange-500/20",
+                                        className: "w-full pl-10 pr-4 py-5 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl text-sm dark:text-gray-100 dark:placeholder-gray-500 focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-orange-500/20",
                                         value: searchQuery,
                                         onChange: (e)=>onSearchChange === null || onSearchChange === void 0 ? void 0 : onSearchChange(e.target.value),
                                         onFocus: handleSearchFocus
@@ -456,7 +456,7 @@ const ActivityCard = (param)=>{
     };
     const formattedTime = formatTimeTo12Hour(activity.time);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("w-full max-w-md mx-auto bg-white rounded-2xl overflow-hidden shadow-lg transition-all duration-300", isLeaving === 'left' ? 'translate-x-[-100%] opacity-0' : isLeaving === 'right' ? 'translate-x-[100%] opacity-0' : ''),
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("w-full max-w-md mx-auto bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg transition-all duration-300", isLeaving === 'left' ? 'translate-x-[-100%] opacity-0' : isLeaving === 'right' ? 'translate-x-[100%] opacity-0' : ''),
         onTouchStart: handleTouchStart,
         onTouchMove: handleTouchMove,
         children: [
@@ -524,7 +524,7 @@ const ActivityCard = (param)=>{
                 className: "p-5",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                        className: "font-semibold text-xl text-gray-900 mb-2",
+                        className: "font-semibold text-xl text-gray-900 dark:text-white mb-2",
                         children: activity.title
                     }, void 0, false, {
                         fileName: "[project]/src/components/ActivityCard.tsx",
@@ -532,7 +532,7 @@ const ActivityCard = (param)=>{
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     activity.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        className: "text-sm text-gray-600 mb-4 line-clamp-2",
+                        className: "text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2",
                         children: truncateText(activity.description, 120)
                     }, void 0, false, {
                         fileName: "[project]/src/components/ActivityCard.tsx",
@@ -540,10 +540,10 @@ const ActivityCard = (param)=>{
                         columnNumber: 11
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center gap-2 text-sm text-gray-500 mb-2",
+                        className: "flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-2",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__["MapPin"], {
-                                className: "h-4 w-4 text-gray-400"
+                                className: "h-4 w-4 text-gray-400 dark:text-gray-500"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ActivityCard.tsx",
                                 lineNumber: 202,
@@ -563,13 +563,13 @@ const ActivityCard = (param)=>{
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center gap-4 text-sm text-gray-500 mb-4",
+                        className: "flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4",
                         children: [
                             activity.date && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "flex items-center gap-2",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__["Calendar"], {
-                                        className: "h-4 w-4 text-gray-400"
+                                        className: "h-4 w-4 text-gray-400 dark:text-gray-500"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ActivityCard.tsx",
                                         lineNumber: 210,
@@ -592,7 +592,7 @@ const ActivityCard = (param)=>{
                                 className: "flex items-center gap-2",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
-                                        className: "h-4 w-4 text-gray-400"
+                                        className: "h-4 w-4 text-gray-400 dark:text-gray-500"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ActivityCard.tsx",
                                         lineNumber: 216,
@@ -618,10 +618,10 @@ const ActivityCard = (param)=>{
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center justify-between pt-4 border-t border-gray-100",
+                        className: "flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "font-semibold text-gray-900",
+                                className: "font-semibold text-gray-900 dark:text-white",
                                 children: activity.priceRange || 'Check website for pricing'
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ActivityCard.tsx",
@@ -754,7 +754,7 @@ const ActivityGrid = (param)=>{
         children: activities.map((activity)=>{
             const formattedTime = formatTimeTo12Hour(activity.time);
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer border border-gray-100",
+                className: "bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer border border-gray-100 dark:border-gray-700",
                 onClick: ()=>handleCardClick(activity.id),
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -779,7 +779,7 @@ const ActivityGrid = (param)=>{
                         className: "p-4",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                className: "font-bold text-lg text-gray-900 mb-1 line-clamp-2 leading-tight",
+                                className: "font-bold text-lg text-gray-900 dark:text-white mb-1 line-clamp-2 leading-tight",
                                 children: activity.title
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ActivityGrid.tsx",
@@ -787,7 +787,7 @@ const ActivityGrid = (param)=>{
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             activity.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                className: "text-xs text-gray-400 mb-3 line-clamp-2",
+                                className: "text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-2",
                                 children: truncateText(activity.description, 100)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ActivityGrid.tsx",
@@ -795,7 +795,7 @@ const ActivityGrid = (param)=>{
                                 columnNumber: 17
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex items-center gap-2 text-xs text-gray-500 mb-2",
+                                className: "flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-2",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__["MapPin"], {
                                         className: "h-3.5 w-3.5 text-orange-400"
@@ -819,13 +819,13 @@ const ActivityGrid = (param)=>{
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex items-center gap-3 text-xs text-gray-500 mb-3",
+                                className: "flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 mb-3",
                                 children: [
                                     activity.date && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "flex items-center gap-1.5",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__["Calendar"], {
-                                                className: "h-3.5 w-3.5 text-gray-400"
+                                                className: "h-3.5 w-3.5 text-gray-400 dark:text-gray-500"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ActivityGrid.tsx",
                                                 lineNumber: 134,
@@ -848,7 +848,7 @@ const ActivityGrid = (param)=>{
                                         className: "flex items-center gap-1.5",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
-                                                className: "h-3.5 w-3.5 text-gray-400"
+                                                className: "h-3.5 w-3.5 text-gray-400 dark:text-gray-500"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ActivityGrid.tsx",
                                                 lineNumber: 140,
@@ -874,10 +874,10 @@ const ActivityGrid = (param)=>{
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex items-center justify-between pt-3 border-t border-gray-100",
+                                className: "flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        className: "font-bold text-sm text-gray-900",
+                                        className: "font-bold text-sm text-gray-900 dark:text-white",
                                         children: activity.priceRange || 'Free'
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ActivityGrid.tsx",
@@ -963,12 +963,12 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$
 const ViewToggle = (param)=>{
     let { currentView, onViewChange, disabled = false } = param;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "flex items-center gap-1 bg-gray-100 rounded-lg p-1",
+        className: "flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                 onClick: ()=>!disabled && onViewChange('grid'),
                 disabled: disabled,
-                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("p-2 rounded-md transition-all", currentView === 'grid' ? "bg-white shadow-sm text-gray-900" : "text-gray-500 hover:text-gray-700", disabled && "opacity-50 cursor-not-allowed"),
+                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("p-2 rounded-md transition-all", currentView === 'grid' ? "bg-white dark:bg-gray-700 shadow-sm text-gray-900 dark:text-white" : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200", disabled && "opacity-50 cursor-not-allowed"),
                 "aria-label": "Grid view",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$layout$2d$grid$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LayoutGrid$3e$__["LayoutGrid"], {
                     className: "h-4 w-4"
@@ -985,7 +985,7 @@ const ViewToggle = (param)=>{
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                 onClick: ()=>!disabled && onViewChange('card'),
                 disabled: disabled,
-                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("p-2 rounded-md transition-all", currentView === 'card' ? "bg-white shadow-sm text-gray-900" : "text-gray-500 hover:text-gray-700", disabled && "opacity-50 cursor-not-allowed"),
+                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("p-2 rounded-md transition-all", currentView === 'card' ? "bg-white dark:bg-gray-700 shadow-sm text-gray-900 dark:text-white" : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200", disabled && "opacity-50 cursor-not-allowed"),
                 "aria-label": "Card view",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$layers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Layers$3e$__["Layers"], {
                     className: "h-4 w-4"
@@ -1001,7 +1001,7 @@ const ViewToggle = (param)=>{
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                 onClick: ()=>onViewChange('map'),
-                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("p-2 rounded-md transition-all", currentView === 'map' ? "bg-white shadow-sm text-orange-500" : "text-gray-500 hover:text-gray-700"),
+                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("p-2 rounded-md transition-all", currentView === 'map' ? "bg-white dark:bg-gray-700 shadow-sm text-orange-500" : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"),
                 "aria-label": "Map view",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Map$3e$__["Map"], {
                     className: "h-4 w-4"
@@ -1396,7 +1396,7 @@ const QuickExplore = (param)=>{
                 className: "flex items-center gap-2 mb-3",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                        className: "text-base font-bold text-gray-900",
+                        className: "text-base font-bold text-gray-900 dark:text-white",
                         children: "Explore Bangalore"
                     }, void 0, false, {
                         fileName: "[project]/src/components/QuickExplore.tsx",
@@ -1445,7 +1445,7 @@ const QuickExplore = (param)=>{
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "text-[10px] font-medium text-gray-700 whitespace-nowrap",
+                                className: "text-[10px] font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap",
                                 children: item.label
                             }, void 0, false, {
                                 fileName: "[project]/src/components/QuickExplore.tsx",
@@ -1453,7 +1453,7 @@ const QuickExplore = (param)=>{
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             item.comingSoon && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "text-[8px] text-gray-400 mt-0.5",
+                                className: "text-[8px] text-gray-400 dark:text-gray-500 mt-0.5",
                                 children: "Soon"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/QuickExplore.tsx",
@@ -1523,7 +1523,7 @@ const TrendingSection = (param)=>{
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                        className: "text-base font-bold text-gray-900",
+                        className: "text-base font-bold text-gray-900 dark:text-white",
                         children: "Trending in Bangalore"
                     }, void 0, false, {
                         fileName: "[project]/src/components/TrendingSection.tsx",
@@ -1543,7 +1543,7 @@ const TrendingSection = (param)=>{
                 },
                 children: trendingItems.map((activity, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         onClick: ()=>router.push("/activity/".concat(activity.id)),
-                        className: "flex-shrink-0 w-[200px] bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-all active:scale-[0.98]",
+                        className: "flex-shrink-0 w-[200px] bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl overflow-hidden hover:shadow-md transition-all active:scale-[0.98]",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "relative h-24 overflow-hidden",
@@ -1579,7 +1579,7 @@ const TrendingSection = (param)=>{
                                 className: "p-3",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                        className: "font-semibold text-sm text-gray-900 line-clamp-1 text-left",
+                                        className: "font-semibold text-sm text-gray-900 dark:text-white line-clamp-1 text-left",
                                         children: activity.title
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/TrendingSection.tsx",
@@ -1587,7 +1587,7 @@ const TrendingSection = (param)=>{
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-xs text-gray-500 mt-1 text-left",
+                                        className: "text-xs text-gray-500 dark:text-gray-400 mt-1 text-left",
                                         children: activity.location
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/TrendingSection.tsx",
@@ -1751,14 +1751,14 @@ const LocationFilter = (param)=>{
                 className: "flex items-center gap-2 mb-2",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__["MapPin"], {
-                        className: "h-4 w-4 text-gray-500"
+                        className: "h-4 w-4 text-gray-500 dark:text-gray-400"
                     }, void 0, false, {
                         fileName: "[project]/src/components/LocationFilter.tsx",
                         lineNumber: 93,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                        className: "text-xs font-medium text-gray-500 uppercase tracking-wider",
+                        className: "text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider",
                         children: "Location"
                     }, void 0, false, {
                         fileName: "[project]/src/components/LocationFilter.tsx",
@@ -1788,7 +1788,7 @@ const LocationFilter = (param)=>{
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         onClick: handleNearYou,
                         disabled: locating,
-                        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border", nearYouActive ? "bg-orange-500 text-white border-orange-500" : "bg-white text-gray-600 border-gray-200 hover:border-orange-300 hover:text-orange-500"),
+                        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border", nearYouActive ? "bg-orange-500 text-white border-orange-500" : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-orange-300 hover:text-orange-500"),
                         children: [
                             locating ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
                                 className: "h-3 w-3 animate-spin"
@@ -1811,7 +1811,7 @@ const LocationFilter = (param)=>{
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex-shrink-0 w-px h-6 bg-gray-200 self-center"
+                        className: "flex-shrink-0 w-px h-6 bg-gray-200 dark:bg-gray-700 self-center"
                     }, void 0, false, {
                         fileName: "[project]/src/components/LocationFilter.tsx",
                         lineNumber: 120,
@@ -1823,7 +1823,7 @@ const LocationFilter = (param)=>{
                             setNearYouActive(false);
                             onUserLocation === null || onUserLocation === void 0 ? void 0 : onUserLocation(null);
                         },
-                        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all border", selectedLocation === null && !nearYouActive ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"),
+                        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all border", selectedLocation === null && !nearYouActive ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white" : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-gray-300"),
                         children: "All Areas"
                     }, void 0, false, {
                         fileName: "[project]/src/components/LocationFilter.tsx",
@@ -1836,7 +1836,7 @@ const LocationFilter = (param)=>{
                                 setNearYouActive(false);
                                 onUserLocation === null || onUserLocation === void 0 ? void 0 : onUserLocation(null);
                             },
-                            className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all border", selectedLocation === location.id && !nearYouActive ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"),
+                            className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all border", selectedLocation === location.id && !nearYouActive ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white" : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-gray-300"),
                             children: location.label
                         }, location.id, false, {
                             fileName: "[project]/src/components/LocationFilter.tsx",
@@ -1928,7 +1928,7 @@ const BottomNav = ()=>{
         const Icon = item.icon;
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
             onClick: ()=>router.push(item.path),
-            className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex flex-col items-center justify-center flex-1 h-full relative", isActive ? "text-orange-500" : "text-gray-500", item.comingSoon && "opacity-60"),
+            className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex flex-col items-center justify-center flex-1 h-full relative", isActive ? "text-orange-500" : "text-gray-500 dark:text-gray-400", item.comingSoon && "opacity-60"),
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icon, {
                     className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("h-5 w-5", isActive && "text-orange-500")
@@ -1961,7 +1961,7 @@ const BottomNav = ()=>{
     };
     const isExploreActive = pathname === '/';
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
-        className: "fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 pb-safe",
+        className: "fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-50 pb-safe",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "flex items-center justify-around h-16 max-w-lg mx-auto relative",
             children: [
@@ -1979,7 +1979,7 @@ const BottomNav = ()=>{
                         className: "absolute -top-6 flex flex-col items-center",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all", isExploreActive ? "bg-gradient-to-br from-orange-500 to-pink-500 shadow-orange-200" : "bg-white border-2 border-gray-200 hover:border-orange-300"),
+                                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all", isExploreActive ? "bg-gradient-to-br from-orange-500 to-pink-500 shadow-orange-200" : "bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 hover:border-orange-300"),
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$compass$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Compass$3e$__["Compass"], {
                                     className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("h-6 w-6 transition-colors", isExploreActive ? "text-white" : "text-orange-500")
                                 }, void 0, false, {
@@ -1993,7 +1993,7 @@ const BottomNav = ()=>{
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("text-[10px] mt-1.5 font-semibold", isExploreActive ? "text-orange-500" : "text-gray-500"),
+                                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("text-[10px] mt-1.5 font-semibold", isExploreActive ? "text-orange-500" : "text-gray-500 dark:text-gray-400"),
                                 children: "Explore"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/BottomNav.tsx",
@@ -4452,7 +4452,7 @@ const Index = function() {
     });
     const lastUpdatedDate = yesterday.toLocaleDateString();
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "min-h-screen bg-gray-50 pb-20",
+        className: "min-h-screen bg-gray-50 dark:bg-gray-950 pb-20",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Header$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                 searchQuery: searchQuery,
@@ -4506,7 +4506,7 @@ const Index = function() {
                         columnNumber: 43
                     }, _this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "sticky top-[52px] z-30 bg-gray-50 -mx-4 px-4 py-2",
+                        className: "sticky top-[52px] z-30 bg-gray-50 dark:bg-gray-950 -mx-4 px-4 py-2",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$LocationFilter$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                 selectedLocation: selectedLocation,
@@ -4529,7 +4529,7 @@ const Index = function() {
                                         children: [
                                             customQuickFilters.map((filter)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                     onClick: ()=>handleQuickFilterSelect(filter.id),
-                                                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition-all border", selectedQuickFilters.has(filter.id) ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"),
+                                                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition-all border", selectedQuickFilters.has(filter.id) ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white" : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-300"),
                                                     children: filter.label
                                                 }, filter.id, false, {
                                                     fileName: "[project]/src/views/Index.tsx",
@@ -4537,7 +4537,7 @@ const Index = function() {
                                                     columnNumber: 19
                                                 }, _this)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "flex-shrink-0 w-px h-6 bg-gray-200 self-center mx-1"
+                                                className: "flex-shrink-0 w-px h-6 bg-gray-200 dark:bg-gray-700 self-center mx-1"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/views/Index.tsx",
                                                 lineNumber: 755,
@@ -4545,7 +4545,7 @@ const Index = function() {
                                             }, _this),
                                             categories.map((category)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                     onClick: ()=>handleCategorySelect(category.id),
-                                                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium flex items-center gap-1.5 transition-all border", selectedCategories.has(category.id) ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"),
+                                                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium flex items-center gap-1.5 transition-all border", selectedCategories.has(category.id) ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white" : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-300"),
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             children: category.emoji
@@ -4606,7 +4606,7 @@ const Index = function() {
                                                 columnNumber: 15
                                             }, _this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                                className: "text-lg font-bold text-gray-900",
+                                                className: "text-lg font-bold text-gray-900 dark:text-white",
                                                 children: "Events & Activities"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/views/Index.tsx",
@@ -4614,7 +4614,7 @@ const Index = function() {
                                                 columnNumber: 15
                                             }, _this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "text-xs text-gray-400 font-medium",
+                                                className: "text-xs text-gray-400 dark:text-gray-500 font-medium",
                                                 children: [
                                                     "(",
                                                     allActivities.length,
@@ -4659,10 +4659,10 @@ const Index = function() {
                                 lineNumber: 794,
                                 columnNumber: 13
                             }, _this) : allActivities.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "bg-white rounded-2xl p-8 text-center border border-gray-100",
+                                className: "bg-white dark:bg-gray-800 rounded-2xl p-8 text-center border border-gray-100 dark:border-gray-700",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                        className: "text-lg font-semibold mb-2 text-gray-900",
+                                        className: "text-lg font-semibold mb-2 text-gray-900 dark:text-white",
                                         children: "No activities found"
                                     }, void 0, false, {
                                         fileName: "[project]/src/views/Index.tsx",
@@ -4670,7 +4670,7 @@ const Index = function() {
                                         columnNumber: 15
                                     }, _this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-sm text-gray-500 mb-4",
+                                        className: "text-sm text-gray-500 dark:text-gray-400 mb-4",
                                         children: "Try a different filter or location"
                                     }, void 0, false, {
                                         fileName: "[project]/src/views/Index.tsx",

@@ -1,8 +1,7 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/about/page": "app/about/page.js",
-  "/admin/instagram-import/page": "app/admin/instagram-import/page.js",
-  "/admin/login/page": "app/admin/login/page.js",
-  "/admin/page": "app/admin/page.js",
+  "/activity/[id]/page": "app/activity/[id]/page.js",
+  "/contact/page": "app/contact/page.js",
   "/page": "app/page.js"
 }

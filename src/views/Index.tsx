@@ -700,7 +700,7 @@ const Index = ({
   const lastUpdatedDate = yesterday.toLocaleDateString();
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pb-20">
       <Header
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
@@ -723,7 +723,7 @@ const Index = ({
         {trendingActivities.length > 0 && <TrendingSection activities={trendingActivities} />}
 
         {/* Sticky Filters Container */}
-        <div className="sticky top-[52px] z-30 bg-gray-50 -mx-4 px-4 py-2">
+        <div className="sticky top-[52px] z-30 bg-gray-50 dark:bg-gray-950 -mx-4 px-4 py-2">
           {/* Location Filter */}
           <LocationFilter
             selectedLocation={selectedLocation}
@@ -743,8 +743,8 @@ const Index = ({
                     className={cn(
                       "flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition-all border",
                       selectedQuickFilters.has(filter.id)
-                        ? "bg-gray-900 text-white border-gray-900"
-                        : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
+                        ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white"
+                        : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-300"
                     )}
                   >
                     {filter.label}
@@ -752,7 +752,7 @@ const Index = ({
                 ))}
                 
                 {/* Divider */}
-                <div className="flex-shrink-0 w-px h-6 bg-gray-200 self-center mx-1" />
+                <div className="flex-shrink-0 w-px h-6 bg-gray-200 dark:bg-gray-700 self-center mx-1" />
                 
                 {/* Category Filters */}
                 {categories.map((category) => (
@@ -762,8 +762,8 @@ const Index = ({
                     className={cn(
                       "flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium flex items-center gap-1.5 transition-all border",
                       selectedCategories.has(category.id)
-                        ? "bg-gray-900 text-white border-gray-900"
-                        : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
+                        ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white"
+                        : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-300"
                     )}
                   >
                     <span>{category.emoji}</span>
@@ -781,8 +781,8 @@ const Index = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Flame className="h-5 w-5 text-orange-500" />
-              <h2 className="text-lg font-bold text-gray-900">Events & Activities</h2>
-              <span className="text-xs text-gray-400 font-medium">({allActivities.length})</span>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Events & Activities</h2>
+              <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">({allActivities.length})</span>
             </div>
             <ViewToggle
               selectedMode={viewMode}
@@ -795,9 +795,9 @@ const Index = ({
               <Loader2 className="h-10 w-10 animate-spin text-orange-500" />
             </div>
           ) : allActivities.length === 0 ? (
-            <div className="bg-white rounded-2xl p-8 text-center border border-gray-100">
-              <h3 className="text-lg font-semibold mb-2 text-gray-900">No activities found</h3>
-              <p className="text-sm text-gray-500 mb-4">Try a different filter or location</p>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center border border-gray-100 dark:border-gray-700">
+              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">No activities found</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Try a different filter or location</p>
               <button 
                 onClick={() => {
                   setSelectedQuickFilters(new Set());

@@ -53,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="bg-white sticky top-0 z-40 border-b border-gray-100 transition-all duration-200">
+    <header className="bg-white dark:bg-gray-900 sticky top-0 z-40 border-b border-gray-100 dark:border-gray-800 transition-all duration-200">
       <div className="max-w-6xl mx-auto px-4 md:px-8">
       {/* Top row with logo and profile */}
       <div className="flex items-center justify-between py-3 gap-2">
@@ -63,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-1 cursor-pointer flex-shrink-0"
             onClick={() => router.push('/')}
           >
-            <span className="text-xl md:text-2xl font-bold text-gray-900">
+            <span className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
               Happ'nin
             </span>
             <span className="text-xl md:text-2xl font-bold text-orange-500">
@@ -80,7 +80,7 @@ const Header: React.FC<HeaderProps> = ({
               <Input 
                 type="text" 
                 placeholder="Search places, events, food..." 
-                className="w-full h-10 pl-9 pr-8 text-sm rounded-full bg-gray-50 border-gray-200"
+                className="w-full h-10 pl-9 pr-8 text-sm rounded-full bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-500"
                 value={searchQuery}
                 onChange={(e) => onSearchChange?.(e.target.value)}
                 autoFocus
@@ -100,9 +100,9 @@ const Header: React.FC<HeaderProps> = ({
           {showCompactMode && !searchExpanded && (
             <button
               onClick={() => setSearchExpanded(true)}
-              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
-              <Search className="h-5 w-5 text-gray-600" />
+              <Search className="h-5 w-5 text-gray-600 dark:text-gray-400" />
             </button>
           )}
 
@@ -110,7 +110,7 @@ const Header: React.FC<HeaderProps> = ({
           {!searchExpanded && (
             <button
               onClick={() => router.push('/blog')}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-sm font-medium text-gray-600 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-500 transition-colors"
             >
               <BookOpen className="h-4 w-4" />
               <span className="hidden sm:inline">Blog</span>
@@ -130,10 +130,10 @@ const Header: React.FC<HeaderProps> = ({
       {/* Hero text and search - animated show/hide */}
       <div className={`overflow-hidden transition-all duration-200 ease-out ${showCompactMode ? 'max-h-0 opacity-0' : 'max-h-40 opacity-100'}`}>
         <div className="pb-3">
-          <h1 className="text-lg font-semibold text-gray-900 mb-1">
+          <h1 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
             Discover things to do in Bangalore
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             Dates • Meetups • Food • Events • Friends
           </p>
         </div>
@@ -145,7 +145,7 @@ const Header: React.FC<HeaderProps> = ({
             <Input 
               type="text" 
               placeholder="Search places, events, food..." 
-              className="w-full pl-10 pr-4 py-5 bg-gray-50 border-gray-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-orange-500/20"
+              className="w-full pl-10 pr-4 py-5 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl text-sm dark:text-gray-100 dark:placeholder-gray-500 focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-orange-500/20"
               value={searchQuery}
               onChange={(e) => onSearchChange?.(e.target.value)}
               onFocus={handleSearchFocus}

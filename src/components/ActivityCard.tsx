@@ -150,7 +150,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   return (
     <div 
       className={cn(
-        "w-full max-w-md mx-auto bg-white rounded-2xl overflow-hidden shadow-lg transition-all duration-300",
+        "w-full max-w-md mx-auto bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg transition-all duration-300",
         isLeaving === 'left' ? 'translate-x-[-100%] opacity-0' : isLeaving === 'right' ? 'translate-x-[100%] opacity-0' : ''
       )}
       onTouchStart={handleTouchStart}
@@ -188,40 +188,40 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
       {/* Content */}
       <div className="p-5">
         {/* Title */}
-        <h3 className="font-semibold text-xl text-gray-900 mb-2">{activity.title}</h3>
-        
+        <h3 className="font-semibold text-xl text-gray-900 dark:text-white mb-2">{activity.title}</h3>
+
         {/* Description */}
         {activity.description && (
-          <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
             {truncateText(activity.description, 120)}
           </p>
         )}
-        
+
         {/* Location */}
-        <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-          <MapPin className="h-4 w-4 text-gray-400" />
+        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-2">
+          <MapPin className="h-4 w-4 text-gray-400 dark:text-gray-500" />
           <span>{activity.location}</span>
         </div>
-        
+
         {/* Date & Time */}
-        <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+        <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
           {activity.date && (
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-gray-400" />
+              <Calendar className="h-4 w-4 text-gray-400 dark:text-gray-500" />
               <span>{activity.date}</span>
             </div>
           )}
           {formattedTime && (
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-gray-400" />
+              <Clock className="h-4 w-4 text-gray-400 dark:text-gray-500" />
               <span>{formattedTime}</span>
             </div>
           )}
         </div>
-        
+
         {/* Price and Show More */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <span className="font-semibold text-gray-900">
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+          <span className="font-semibold text-gray-900 dark:text-white">
             {activity.priceRange || 'Check website for pricing'}
           </span>
           <button 
