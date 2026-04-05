@@ -13,15 +13,15 @@ interface ViewToggleProps {
 
 const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange, disabled = false }) => {
   return (
-    <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+    <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
       <button
         onClick={() => !disabled && onViewChange('grid')}
         disabled={disabled}
         className={cn(
           "p-2 rounded-md transition-all",
           currentView === 'grid'
-            ? "bg-white shadow-sm text-gray-900"
-            : "text-gray-500 hover:text-gray-700",
+            ? "bg-white dark:bg-gray-700 shadow-sm text-gray-900 dark:text-white"
+            : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200",
           disabled && "opacity-50 cursor-not-allowed"
         )}
         aria-label="Grid view"
@@ -34,8 +34,8 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange, disa
         className={cn(
           "p-2 rounded-md transition-all",
           currentView === 'card'
-            ? "bg-white shadow-sm text-gray-900"
-            : "text-gray-500 hover:text-gray-700",
+            ? "bg-white dark:bg-gray-700 shadow-sm text-gray-900 dark:text-white"
+            : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200",
           disabled && "opacity-50 cursor-not-allowed"
         )}
         aria-label="Card view"
@@ -47,8 +47,8 @@ const ViewToggle: React.FC<ViewToggleProps> = ({ currentView, onViewChange, disa
         className={cn(
           "p-2 rounded-md transition-all",
           currentView === 'map'
-            ? "bg-white shadow-sm text-orange-500"
-            : "text-gray-500 hover:text-gray-700"
+            ? "bg-white dark:bg-gray-700 shadow-sm text-orange-500"
+            : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
         )}
         aria-label="Map view"
       >

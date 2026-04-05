@@ -28,7 +28,7 @@ const BottomNav: React.FC = () => {
         onClick={() => router.push(item.path)}
         className={cn(
           "flex flex-col items-center justify-center flex-1 h-full relative",
-          isActive ? "text-orange-500" : "text-gray-500",
+          isActive ? "text-orange-500" : "text-gray-500 dark:text-gray-400",
           item.comingSoon && "opacity-60"
         )}
       >
@@ -49,7 +49,7 @@ const BottomNav: React.FC = () => {
   const isExploreActive = pathname === '/';
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 pb-safe">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-50 pb-safe">
       <div className="flex items-center justify-around h-16 max-w-lg mx-auto relative">
         {/* Left items */}
         {leftItems.map((item) => (
@@ -65,8 +65,8 @@ const BottomNav: React.FC = () => {
             <div className={cn(
               "w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all",
               isExploreActive 
-                ? "bg-gradient-to-br from-orange-500 to-pink-500 shadow-orange-200" 
-                : "bg-white border-2 border-gray-200 hover:border-orange-300"
+                ? "bg-gradient-to-br from-orange-500 to-pink-500 shadow-orange-200"
+                : "bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 hover:border-orange-300"
             )}>
               <Compass className={cn(
                 "h-6 w-6 transition-colors",
@@ -75,7 +75,7 @@ const BottomNav: React.FC = () => {
             </div>
             <span className={cn(
               "text-[10px] mt-1.5 font-semibold",
-              isExploreActive ? "text-orange-500" : "text-gray-500"
+              isExploreActive ? "text-orange-500" : "text-gray-500 dark:text-gray-400"
             )}>
               Explore
             </span>
