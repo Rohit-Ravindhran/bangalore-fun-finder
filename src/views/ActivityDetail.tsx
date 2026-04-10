@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Activity } from '@/components/ActivityCard';
 import { useActivity } from '@/hooks/useActivities';
+import { idFromSlug } from '@/lib/utils';
+import ActivityImage from '@/components/ActivityImage';
 
 // Validate URL is safe to open (only http/https protocols)
 const isSecureUrl = (url: string): boolean => {
@@ -28,7 +30,9 @@ const openSecureUrl = (url: string) => {
 };
 
 const ActivityDetail = ({ initialActivity }: { initialActivity?: Activity | null } = {}) => {
-  const params = useParams(); const id = params?.id as string;
+  const params = useParams();
+  const slug = params?.slug as string;
+  const id = slug ? idFromSlug(slug) : '';
   const router = useRouter();
   const { toast } = useToast();
 
@@ -41,9 +45,6 @@ const ActivityDetail = ({ initialActivity }: { initialActivity?: Activity | null
     window.scrollTo(0, 0);
   }, [id]);
   
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = '/placeholder.svg';
-  };
   
   useEffect(() => {
     if (error) {
@@ -123,11 +124,11 @@ const ActivityDetail = ({ initialActivity }: { initialActivity?: Activity | null
       
       {/* Image */}
       <div className="w-full aspect-[16/9] overflow-hidden">
-        <img 
+        <ActivityImage
           src={displayActivity.image}
-          alt={displayActivity.title}
+          title={displayActivity.title}
           className="w-full h-full object-cover"
-          onError={handleImageError}
+          loading="eager"
         />
       </div>
       

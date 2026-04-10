@@ -31,7 +31,8 @@ const DateIdeas: React.FC = () => {
   };
 
   const handleShare = async (id: string) => {
-    const url = `${window.location.origin}/activity/${id}`;
+    const activity = activities.find((a) => a.id === id);
+    const url = `${window.location.origin}/activity/${activity?.slug ?? id}`;
     try {
       if (navigator.share) {
         await navigator.share({ title: 'Date Ideas in Bangalore', url });

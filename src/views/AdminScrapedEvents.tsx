@@ -23,7 +23,7 @@ import {
 import {
   Eye, Check, X, Edit, Loader2, RefreshCw, ArrowLeft,
   ExternalLink, MapPin, Calendar, Clock, Tag, DollarSign,
-  Image as ImageIcon, Info, Wand2, Play,
+  Image as ImageIcon, Info, Wand2, Play, Upload,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -33,6 +33,7 @@ import {
   rejectScrapedActivity,
   updateScrapedActivity,
 } from "@/services/scrapedActivityService";
+import { uploadActivityImage } from "@/services/activityService";
 
 type StatusFilter = "all" | "pending" | "approved" | "rejected" | "duplicate";
 
@@ -344,10 +345,21 @@ function EditModal({
     map_link:    item.map_link || "",
     image:       item.image || "",
   });
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const set = (k: string) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setF((p) => ({ ...p, [k]: e.target.value }));
+
+  const handleImageUpload = async (file: File) => {
+    setIsUploadingImage(true);
+    setUploadError(null);
+    const { url, error } = await uploadActivityImage(file);
+    setIsUploadingImage(false);
+    if (url) setF((p) => ({ ...p, image: url }));
+    if (error) setUploadError(error);
+  };
 
   return (
     <Dialog open onOpenChange={onClose}>
@@ -370,7 +382,27 @@ function EditModal({
             <LabeledInput label="Location / Venue" value={f.location} onChange={set("location")} />
             <LabeledInput label="Price" value={f.price_range} onChange={set("price_range")} />
           </div>
-          <LabeledInput label="Image URL" value={f.image} onChange={set("image")} />
+          <div>
+            <label className="text-xs text-gray-500 mb-1 block">Image URL</label>
+            <div className="flex gap-2">
+              <Input value={f.image} onChange={set("image")} placeholder="https://... or upload" className="flex-1" />
+              <label className="flex-shrink-0 cursor-pointer">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => { const file = e.target.files?.[0]; if (file) handleImageUpload(file); e.target.value = ""; }}
+                />
+                <Button type="button" variant="outline" size="sm" disabled={isUploadingImage} className="h-10 gap-1.5 pointer-events-none">
+                  {isUploadingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                  {isUploadingImage ? "Uploading…" : "Upload"}
+                </Button>
+              </label>
+            </div>
+            {uploadError && (
+              <p className="text-xs text-red-600 mt-1">{uploadError}</p>
+            )}
+          </div>
           {f.image && (
             <img
               src={f.image}
