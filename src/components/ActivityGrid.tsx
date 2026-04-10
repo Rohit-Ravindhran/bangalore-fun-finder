@@ -6,6 +6,7 @@ import { MapPin, Calendar, Clock, ArrowRight } from 'lucide-react';
 import { Activity } from '@/components/ActivityCard';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import ActivityImage from '@/components/ActivityImage';
 
 interface ActivityGridProps {
   activities: Activity[];
@@ -26,22 +27,8 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
 }) => {
   const router = useRouter();
 
-  const handleCardClick = (activityId: string) => {
-    router.push(`/activity/${activityId}`);
-  };
-
-  // Function to handle image loading error - use title-based placeholder
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>, title: string) => {
-    if (title) {
-      let hash = 0;
-      for (let i = 0; i < title.length; i++) {
-        hash = title.charCodeAt(i) + ((hash << 5) - hash);
-      }
-      const backgroundColor = Math.abs(hash).toString(16).substring(0, 6);
-      e.currentTarget.src = `https://via.placeholder.com/400x300/${backgroundColor}/FFFFFF?text=${encodeURIComponent(title.substring(0, 20))}`;
-    } else {
-      e.currentTarget.src = '/placeholder.svg';
-    }
+  const handleCardClick = (activitySlug: string) => {
+    router.push(`/activity/${activitySlug}`);
   };
 
   // Improved format time to 12-hour format with better validation
@@ -94,16 +81,15 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
           <div 
             key={activity.id}
             className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer border border-gray-100 dark:border-gray-700"
-            onClick={() => handleCardClick(activity.id)}
+            onClick={() => handleCardClick(activity.slug)}
           >
             {/* Image */}
             <div className="relative aspect-[16/10] overflow-hidden">
-              <img 
-                src={activity.image || '/placeholder.svg'} 
-                alt={activity.title} 
+              <ActivityImage
+                src={activity.image}
+                title={activity.title}
                 className="w-full h-full object-cover"
                 loading="lazy"
-                onError={(e) => handleImageError(e, activity.title)}
               />
             </div>
             
@@ -152,7 +138,7 @@ const ActivityGrid: React.FC<ActivityGridProps> = ({
                   className="flex items-center gap-1 text-orange-500 hover:text-orange-600 font-semibold text-xs"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleCardClick(activity.id);
+                    handleCardClick(activity.slug);
                   }}
                 >
                   Details

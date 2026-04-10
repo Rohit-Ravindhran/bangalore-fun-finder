@@ -421,7 +421,7 @@ const ActivityCard = (param)=>{
     const [isLeaving, setIsLeaving] = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].useState(null);
     const [touchStart, setTouchStart] = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].useState(null);
     const handleViewDetails = ()=>{
-        router.push("/activity/".concat(activity.id));
+        router.push("/activity/".concat(activity.slug));
     };
     const handleSwipeLeft = ()=>{
         setIsLeaving('left');
@@ -517,7 +517,7 @@ const ActivityCard = (param)=>{
                         onError: handleImageError
                     }, void 0, false, {
                         fileName: "[project]/src/components/ActivityCard.tsx",
-                        lineNumber: 161,
+                        lineNumber: 162,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     showSwipeHint && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -532,12 +532,12 @@ const ActivityCard = (param)=>{
                                     className: "h-5 w-5 text-white"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/ActivityCard.tsx",
-                                    lineNumber: 176,
+                                    lineNumber: 177,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ActivityCard.tsx",
-                                lineNumber: 172,
+                                lineNumber: 173,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -550,12 +550,12 @@ const ActivityCard = (param)=>{
                                     className: "h-5 w-5 text-white"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/ActivityCard.tsx",
-                                    lineNumber: 182,
+                                    lineNumber: 183,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ActivityCard.tsx",
-                                lineNumber: 178,
+                                lineNumber: 179,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
@@ -563,7 +563,7 @@ const ActivityCard = (param)=>{
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/ActivityCard.tsx",
-                lineNumber: 160,
+                lineNumber: 161,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -574,7 +574,7 @@ const ActivityCard = (param)=>{
                         children: activity.title
                     }, void 0, false, {
                         fileName: "[project]/src/components/ActivityCard.tsx",
-                        lineNumber: 191,
+                        lineNumber: 192,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     activity.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -582,7 +582,7 @@ const ActivityCard = (param)=>{
                         children: truncateText(activity.description, 120)
                     }, void 0, false, {
                         fileName: "[project]/src/components/ActivityCard.tsx",
-                        lineNumber: 195,
+                        lineNumber: 196,
                         columnNumber: 11
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -592,20 +592,20 @@ const ActivityCard = (param)=>{
                                 className: "h-4 w-4 text-gray-400 dark:text-gray-500"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ActivityCard.tsx",
-                                lineNumber: 202,
+                                lineNumber: 203,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: activity.location
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ActivityCard.tsx",
-                                lineNumber: 203,
+                                lineNumber: 204,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/ActivityCard.tsx",
-                        lineNumber: 201,
+                        lineNumber: 202,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -618,20 +618,20 @@ const ActivityCard = (param)=>{
                                         className: "h-4 w-4 text-gray-400 dark:text-gray-500"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ActivityCard.tsx",
-                                        lineNumber: 210,
+                                        lineNumber: 211,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: activity.date
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ActivityCard.tsx",
-                                        lineNumber: 211,
+                                        lineNumber: 212,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/ActivityCard.tsx",
-                                lineNumber: 209,
+                                lineNumber: 210,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0)),
                             formattedTime && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -641,26 +641,26 @@ const ActivityCard = (param)=>{
                                         className: "h-4 w-4 text-gray-400 dark:text-gray-500"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ActivityCard.tsx",
-                                        lineNumber: 216,
+                                        lineNumber: 217,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: formattedTime
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ActivityCard.tsx",
-                                        lineNumber: 217,
+                                        lineNumber: 218,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/ActivityCard.tsx",
-                                lineNumber: 215,
+                                lineNumber: 216,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/ActivityCard.tsx",
-                        lineNumber: 207,
+                        lineNumber: 208,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -671,7 +671,7 @@ const ActivityCard = (param)=>{
                                 children: activity.priceRange || 'Check website for pricing'
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ActivityCard.tsx",
-                                lineNumber: 224,
+                                lineNumber: 225,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -683,31 +683,31 @@ const ActivityCard = (param)=>{
                                         className: "h-4 w-4"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ActivityCard.tsx",
-                                        lineNumber: 232,
+                                        lineNumber: 233,
                                         columnNumber: 13
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/ActivityCard.tsx",
-                                lineNumber: 227,
+                                lineNumber: 228,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/ActivityCard.tsx",
-                        lineNumber: 223,
+                        lineNumber: 224,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/ActivityCard.tsx",
-                lineNumber: 189,
+                lineNumber: 190,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/ActivityCard.tsx",
-        lineNumber: 151,
+        lineNumber: 152,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -746,21 +746,8 @@ const ActivityGrid = (param)=>{
     let { activities, onLike, likedActivities, onShare, columns = 2, sectionType } = param;
     _s();
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
-    const handleCardClick = (activityId)=>{
-        router.push("/activity/".concat(activityId));
-    };
-    // Function to handle image loading error - use title-based placeholder
-    const handleImageError = (e, title)=>{
-        if (title) {
-            let hash = 0;
-            for(let i = 0; i < title.length; i++){
-                hash = title.charCodeAt(i) + ((hash << 5) - hash);
-            }
-            const backgroundColor = Math.abs(hash).toString(16).substring(0, 6);
-            e.currentTarget.src = "https://via.placeholder.com/400x300/".concat(backgroundColor, "/FFFFFF?text=").concat(encodeURIComponent(title.substring(0, 20)));
-        } else {
-            e.currentTarget.src = '/placeholder.svg';
-        }
+    const handleCardClick = (activitySlug)=>{
+        router.push("/activity/".concat(activitySlug));
     };
     // Improved format time to 12-hour format with better validation
     const formatTimeTo12Hour = (timeString)=>{
@@ -801,7 +788,7 @@ const ActivityGrid = (param)=>{
             const formattedTime = formatTimeTo12Hour(activity.time);
             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer border border-gray-100 dark:border-gray-700",
-                onClick: ()=>handleCardClick(activity.id),
+                onClick: ()=>handleCardClick(activity.slug),
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "relative aspect-[16/10] overflow-hidden",
@@ -813,12 +800,12 @@ const ActivityGrid = (param)=>{
                             onError: (e)=>handleImageError(e, activity.title)
                         }, void 0, false, {
                             fileName: "[project]/src/components/ActivityGrid.tsx",
-                            lineNumber: 101,
+                            lineNumber: 88,
                             columnNumber: 15
                         }, ("TURBOPACK compile-time value", void 0))
                     }, void 0, false, {
                         fileName: "[project]/src/components/ActivityGrid.tsx",
-                        lineNumber: 100,
+                        lineNumber: 87,
                         columnNumber: 13
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -829,7 +816,7 @@ const ActivityGrid = (param)=>{
                                 children: activity.title
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ActivityGrid.tsx",
-                                lineNumber: 113,
+                                lineNumber: 100,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             activity.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -837,7 +824,7 @@ const ActivityGrid = (param)=>{
                                 children: truncateText(activity.description, 100)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ActivityGrid.tsx",
-                                lineNumber: 119,
+                                lineNumber: 106,
                                 columnNumber: 17
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -847,7 +834,7 @@ const ActivityGrid = (param)=>{
                                         className: "h-3.5 w-3.5 text-orange-400"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ActivityGrid.tsx",
-                                        lineNumber: 126,
+                                        lineNumber: 113,
                                         columnNumber: 17
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -855,13 +842,13 @@ const ActivityGrid = (param)=>{
                                         children: activity.location
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ActivityGrid.tsx",
-                                        lineNumber: 127,
+                                        lineNumber: 114,
                                         columnNumber: 17
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/ActivityGrid.tsx",
-                                lineNumber: 125,
+                                lineNumber: 112,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -874,20 +861,20 @@ const ActivityGrid = (param)=>{
                                                 className: "h-3.5 w-3.5 text-gray-400 dark:text-gray-500"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ActivityGrid.tsx",
-                                                lineNumber: 134,
+                                                lineNumber: 121,
                                                 columnNumber: 21
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: activity.date
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ActivityGrid.tsx",
-                                                lineNumber: 135,
+                                                lineNumber: 122,
                                                 columnNumber: 21
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/ActivityGrid.tsx",
-                                        lineNumber: 133,
+                                        lineNumber: 120,
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     formattedTime && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -897,26 +884,26 @@ const ActivityGrid = (param)=>{
                                                 className: "h-3.5 w-3.5 text-gray-400 dark:text-gray-500"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ActivityGrid.tsx",
-                                                lineNumber: 140,
+                                                lineNumber: 127,
                                                 columnNumber: 21
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: formattedTime
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ActivityGrid.tsx",
-                                                lineNumber: 141,
+                                                lineNumber: 128,
                                                 columnNumber: 21
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/ActivityGrid.tsx",
-                                        lineNumber: 139,
+                                        lineNumber: 126,
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/ActivityGrid.tsx",
-                                lineNumber: 131,
+                                lineNumber: 118,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -927,14 +914,14 @@ const ActivityGrid = (param)=>{
                                         children: activity.priceRange || 'Free'
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ActivityGrid.tsx",
-                                        lineNumber: 148,
+                                        lineNumber: 135,
                                         columnNumber: 17
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         className: "flex items-center gap-1 text-orange-500 hover:text-orange-600 font-semibold text-xs",
                                         onClick: (e)=>{
                                             e.stopPropagation();
-                                            handleCardClick(activity.id);
+                                            handleCardClick(activity.slug);
                                         },
                                         children: [
                                             "Details",
@@ -942,37 +929,37 @@ const ActivityGrid = (param)=>{
                                                 className: "h-3.5 w-3.5"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ActivityGrid.tsx",
-                                                lineNumber: 159,
+                                                lineNumber: 146,
                                                 columnNumber: 19
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/ActivityGrid.tsx",
-                                        lineNumber: 151,
+                                        lineNumber: 138,
                                         columnNumber: 17
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/ActivityGrid.tsx",
-                                lineNumber: 147,
+                                lineNumber: 134,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/ActivityGrid.tsx",
-                        lineNumber: 111,
+                        lineNumber: 98,
                         columnNumber: 13
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, activity.id, true, {
                 fileName: "[project]/src/components/ActivityGrid.tsx",
-                lineNumber: 94,
+                lineNumber: 81,
                 columnNumber: 11
             }, ("TURBOPACK compile-time value", void 0));
         })
     }, void 0, false, {
         fileName: "[project]/src/components/ActivityGrid.tsx",
-        lineNumber: 89,
+        lineNumber: 76,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -1559,7 +1546,7 @@ const TrendingSection = (param)=>{
                     scrollbarWidth: 'none'
                 },
                 children: trendingItems.map((activity, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        onClick: ()=>router.push("/activity/".concat(activity.id)),
+                        onClick: ()=>router.push("/activity/".concat(activity.slug)),
                         className: "flex-shrink-0 w-[200px] bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl overflow-hidden hover:shadow-md transition-all active:scale-[0.98]",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2658,6 +2645,8 @@ __turbopack_context__.s([
     ()=>fetchTagsFromTable,
     "getActivityById",
     ()=>getActivityById,
+    "getActivityBySlug",
+    ()=>getActivityBySlug,
     "getCategoryNames",
     ()=>getCategoryNames,
     "getFilteredActivities",
@@ -2667,12 +2656,16 @@ __turbopack_context__.s([
     "subscribeUser",
     ()=>subscribeUser,
     "updateActivity",
-    ()=>updateActivity
+    ()=>updateActivity,
+    "uploadActivityImage",
+    ()=>uploadActivityImage
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$data$2f$mockData$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/data/mockData.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$integrations$2f$supabase$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/integrations/supabase/client.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__ = __turbopack_context__.i("[project]/node_modules/zod/v3/external.js [app-client] (ecmascript) <export * as z>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/utils.ts [app-client] (ecmascript)");
+;
 ;
 ;
 ;
@@ -2755,6 +2748,7 @@ const transformActivities = (activities)=>{
         var _act_latitude, _act_longitude;
         return {
             id: String(act.id),
+            slug: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["activitySlug"])(act.title || '', act.id),
             title: act.title || '',
             image: act.image || '/placeholder.svg',
             tags: act.tags || [],
@@ -2917,6 +2911,7 @@ async function getActivityById(id) {
         // Transform to frontend format
         return {
             id: String(data.id),
+            slug: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["activitySlug"])(data.title || '', data.id),
             title: data.title,
             image: data.image,
             tags: data.tags || [],
@@ -2937,6 +2932,68 @@ async function getActivityById(id) {
         return null;
     }
 }
+async function getActivityBySlug(slug) {
+    const parts = slug.split('-');
+    const id = parts[parts.length - 1];
+    if (!id || isNaN(Number(id))) return null;
+    return getActivityById(id);
+}
+const STORAGE_BUCKET = 'activity_images';
+const uploadActivityImage = async (file)=>{
+    try {
+        var _uploadResult_error_message, _uploadResult_error, _uploadResult_error_message1, _uploadResult_error1;
+        const ext = file.name.split('.').pop() || 'jpg';
+        const fileName = "".concat(Date.now(), "-").concat(Math.random().toString(36).substring(2, 8), ".").concat(ext);
+        // Try the upload directly first
+        let uploadResult = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$integrations$2f$supabase$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].storage.from(STORAGE_BUCKET).upload(fileName, file, {
+            cacheControl: '3600',
+            upsert: false
+        });
+        // If the bucket doesn't exist yet, create it then retry once
+        if (((_uploadResult_error = uploadResult.error) === null || _uploadResult_error === void 0 ? void 0 : (_uploadResult_error_message = _uploadResult_error.message) === null || _uploadResult_error_message === void 0 ? void 0 : _uploadResult_error_message.toLowerCase().includes('bucket not found')) || ((_uploadResult_error1 = uploadResult.error) === null || _uploadResult_error1 === void 0 ? void 0 : (_uploadResult_error_message1 = _uploadResult_error1.message) === null || _uploadResult_error_message1 === void 0 ? void 0 : _uploadResult_error_message1.toLowerCase().includes('not found'))) {
+            const { error: bucketError } = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$integrations$2f$supabase$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].storage.createBucket(STORAGE_BUCKET, {
+                public: true,
+                fileSizeLimit: 10485760,
+                allowedMimeTypes: [
+                    'image/jpeg',
+                    'image/png',
+                    'image/webp',
+                    'image/gif'
+                ]
+            });
+            if (bucketError && !bucketError.message.toLowerCase().includes('already exists')) {
+                logError('Bucket creation error:', bucketError);
+                return {
+                    url: null,
+                    error: "Storage bucket could not be created: ".concat(bucketError.message, '. Please create an "activity-images" public bucket in your Supabase dashboard → Storage.')
+                };
+            }
+            // Retry the upload now that the bucket exists
+            uploadResult = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$integrations$2f$supabase$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].storage.from(STORAGE_BUCKET).upload(fileName, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
+        }
+        if (uploadResult.error) {
+            logError('Image upload error:', uploadResult.error);
+            return {
+                url: null,
+                error: uploadResult.error.message
+            };
+        }
+        const { data: urlData } = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$integrations$2f$supabase$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].storage.from(STORAGE_BUCKET).getPublicUrl(uploadResult.data.path);
+        return {
+            url: urlData.publicUrl,
+            error: null
+        };
+    } catch (error) {
+        logError('Error in uploadActivityImage:', error);
+        return {
+            url: null,
+            error: 'Upload failed unexpectedly'
+        };
+    }
+};
 const createActivity = async (activity, adminId)=>{
     try {
         // Validate input
@@ -4014,10 +4071,11 @@ const Index = function() {
                 activityData = dateIdeas.find((activity)=>activity.id === id);
             }
             if (!activityData) return;
+            var _activityData_slug;
             const shareData = {
                 title: "Check out ".concat(activityData.title || 'this activity', " on What2Do Bangalore"),
                 text: activityData.description || 'Discover fun activities in Bangalore',
-                url: window.location.origin + "/activity/".concat(id)
+                url: window.location.origin + "/activity/".concat((_activityData_slug = activityData.slug) !== null && _activityData_slug !== void 0 ? _activityData_slug : id)
             };
             if (navigator.share && navigator.canShare(shareData)) {
                 await navigator.share(shareData);
@@ -4577,7 +4635,7 @@ const Index = function() {
         columnNumber: 5
     }, _this);
 };
-_s(Index, "ImI5MH0lyD1IOIrrFLUJ7WqjnS4=", false, function() {
+_s(Index, "gxsM0cwQiTakNaNNh3kaPAPTV9M=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useToast"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useActivities$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCategories"],

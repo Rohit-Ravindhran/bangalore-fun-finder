@@ -1,12 +1,11 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/about/page": "app/about/page.js",
-  "/activity/[id]/page": "app/activity/[id]/page.js",
-  "/blog/bangalore-weekend-april-4-5/page": "app/blog/bangalore-weekend-april-4-5/page.js",
-  "/blog/page": "app/blog/page.js",
-  "/blog/things-to-do-in-bangalore/page": "app/blog/things-to-do-in-bangalore/page.js",
-  "/date-ideas/page": "app/date-ideas/page.js",
-  "/food/page": "app/food/page.js",
-  "/meetups/page": "app/meetups/page.js",
+  "/activity/[slug]/page": "app/activity/[slug]/page.js",
+  "/admin/login/page": "app/admin/login/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/admin/scraped-events/page": "app/admin/scraped-events/page.js",
+  "/api/admin/upload-image/route": "app/api/admin/upload-image/route.js",
+  "/contact/page": "app/contact/page.js",
   "/page": "app/page.js"
 }

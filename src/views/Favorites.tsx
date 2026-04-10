@@ -86,7 +86,7 @@ const Favorites: React.FC = () => {
       const shareData = {
         title: `Check out ${activityData.title} on Happenings Bangalore`,
         text: activityData.description || 'Discover fun activities in Bangalore',
-        url: window.location.origin + `/activity/${id}`
+        url: window.location.origin + `/activity/${activityData.slug ?? id}`
       };
       
       if (navigator.share && navigator.canShare(shareData)) {

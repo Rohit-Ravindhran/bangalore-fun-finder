@@ -44,6 +44,7 @@ import {
   updateActivity,
   fetchCategoriesFromTable,
   fetchTagsFromTable,
+  uploadActivityImage,
 } from "@/services/activityService";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link"
@@ -123,6 +124,7 @@ const Admin = () => {
   const [isResolvingMap, setIsResolvingMap] = useState(false);
   const [coordsPreview, setCoordsPreview] = useState<{ lat: number; lng: number } | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   const { toast } = useToast();
   const { logout, getAdminId, adminUsername } = useAuth();
@@ -244,6 +246,18 @@ const Admin = () => {
       toast({ title: "Location extraction failed", variant: "destructive", duration: 3000 });
     } finally {
       setIsResolvingMap(false);
+    }
+  };
+
+  const handleImageUpload = async (file: File) => {
+    setIsUploadingImage(true);
+    const { url, error } = await uploadActivityImage(file);
+    setIsUploadingImage(false);
+    if (error) {
+      toast({ title: "Image upload failed", description: error, variant: "destructive" });
+    } else if (url) {
+      setCurrentActivity((p) => ({ ...p, image: url }));
+      toast({ title: "Image uploaded" });
     }
   };
 
@@ -583,8 +597,27 @@ const Admin = () => {
                         <Input name="title" value={currentActivity.title || ""} onChange={handleInputChange} required />
                       </div>
                       <div className="col-span-2">
-                        <label className="block mb-1 text-xs font-medium text-gray-600">Image URL *</label>
-                        <Input name="image" value={currentActivity.image || ""} onChange={handleInputChange} required placeholder="https://..." />
+                        <label className="block mb-1 text-xs font-medium text-gray-600">Image *</label>
+                        <div className="flex gap-2">
+                          <Input name="image" value={currentActivity.image || ""} onChange={handleInputChange} placeholder="https://... or upload below" className="flex-1" />
+                          <label className="flex-shrink-0">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageUpload(f); e.target.value = ""; }}
+                            />
+                            <Button type="button" variant="outline" size="sm" disabled={isUploadingImage} className="h-10 gap-1.5" asChild>
+                              <span className="cursor-pointer">
+                                {isUploadingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                                {isUploadingImage ? "Uploading…" : "Upload"}
+                              </span>
+                            </Button>
+                          </label>
+                        </div>
+                        {currentActivity.image && (
+                          <img src={currentActivity.image} alt="preview" className="mt-2 h-24 w-full object-cover rounded-lg" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        )}
                       </div>
                       <div className="col-span-2">
                         <label className="block mb-1 text-xs font-medium text-gray-600">Description</label>

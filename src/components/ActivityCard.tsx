@@ -5,9 +5,11 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, MapPin, Calendar, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import ActivityImage from '@/components/ActivityImage';
 
 export interface Activity {
   id: string;
+  slug: string;
   title: string;
   image: string;
   tags: string[];
@@ -50,7 +52,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   const [touchStart, setTouchStart] = React.useState<number | null>(null);
   
   const handleViewDetails = () => {
-    router.push(`/activity/${activity.id}`);
+    router.push(`/activity/${activity.slug}`);
   };
 
   const handleSwipeLeft = () => {
@@ -104,19 +106,6 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
     }
   };
 
-  // Handle image loading errors
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    if (activity.title) {
-      let hash = 0;
-      for (let i = 0; i < activity.title.length; i++) {
-        hash = activity.title.charCodeAt(i) + ((hash << 5) - hash);
-      }
-      const backgroundColor = Math.abs(hash).toString(16).substring(0, 6);
-      e.currentTarget.src = `https://via.placeholder.com/400x300/${backgroundColor}/FFFFFF?text=${encodeURIComponent(activity.title.substring(0, 20))}`;
-    } else {
-      e.currentTarget.src = '/placeholder.svg';
-    }
-  };
 
   // Touch gesture handling
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -158,12 +147,11 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
     >
       {/* Image */}
       <div className="relative aspect-[16/10] overflow-hidden">
-        <img 
-          src={activity.image} 
-          alt={activity.title} 
+        <ActivityImage
+          src={activity.image}
+          title={activity.title}
           className="w-full h-full object-cover"
           loading="lazy"
-          onError={handleImageError}
         />
         
         {/* Swipe hint arrows */}

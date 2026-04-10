@@ -193,6 +193,8 @@ __turbopack_context__.s([
     ()=>fetchTagsFromTable,
     "getActivityById",
     ()=>getActivityById,
+    "getActivityBySlug",
+    ()=>getActivityBySlug,
     "getCategoryNames",
     ()=>getCategoryNames,
     "getFilteredActivities",
@@ -202,12 +204,16 @@ __turbopack_context__.s([
     "subscribeUser",
     ()=>subscribeUser,
     "updateActivity",
-    ()=>updateActivity
+    ()=>updateActivity,
+    "uploadActivityImage",
+    ()=>uploadActivityImage
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$data$2f$mockData$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/data/mockData.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$integrations$2f$supabase$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/integrations/supabase/client.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v3$2f$external$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__ = __turbopack_context__.i("[project]/node_modules/zod/v3/external.js [app-client] (ecmascript) <export * as z>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/utils.ts [app-client] (ecmascript)");
+;
 ;
 ;
 ;
@@ -290,6 +296,7 @@ const transformActivities = (activities)=>{
         var _act_latitude, _act_longitude;
         return {
             id: String(act.id),
+            slug: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["activitySlug"])(act.title || '', act.id),
             title: act.title || '',
             image: act.image || '/placeholder.svg',
             tags: act.tags || [],
@@ -452,6 +459,7 @@ async function getActivityById(id) {
         // Transform to frontend format
         return {
             id: String(data.id),
+            slug: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["activitySlug"])(data.title || '', data.id),
             title: data.title,
             image: data.image,
             tags: data.tags || [],
@@ -472,6 +480,68 @@ async function getActivityById(id) {
         return null;
     }
 }
+async function getActivityBySlug(slug) {
+    const parts = slug.split('-');
+    const id = parts[parts.length - 1];
+    if (!id || isNaN(Number(id))) return null;
+    return getActivityById(id);
+}
+const STORAGE_BUCKET = 'activity_images';
+const uploadActivityImage = async (file)=>{
+    try {
+        var _uploadResult_error_message, _uploadResult_error, _uploadResult_error_message1, _uploadResult_error1;
+        const ext = file.name.split('.').pop() || 'jpg';
+        const fileName = "".concat(Date.now(), "-").concat(Math.random().toString(36).substring(2, 8), ".").concat(ext);
+        // Try the upload directly first
+        let uploadResult = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$integrations$2f$supabase$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].storage.from(STORAGE_BUCKET).upload(fileName, file, {
+            cacheControl: '3600',
+            upsert: false
+        });
+        // If the bucket doesn't exist yet, create it then retry once
+        if (((_uploadResult_error = uploadResult.error) === null || _uploadResult_error === void 0 ? void 0 : (_uploadResult_error_message = _uploadResult_error.message) === null || _uploadResult_error_message === void 0 ? void 0 : _uploadResult_error_message.toLowerCase().includes('bucket not found')) || ((_uploadResult_error1 = uploadResult.error) === null || _uploadResult_error1 === void 0 ? void 0 : (_uploadResult_error_message1 = _uploadResult_error1.message) === null || _uploadResult_error_message1 === void 0 ? void 0 : _uploadResult_error_message1.toLowerCase().includes('not found'))) {
+            const { error: bucketError } = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$integrations$2f$supabase$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].storage.createBucket(STORAGE_BUCKET, {
+                public: true,
+                fileSizeLimit: 10485760,
+                allowedMimeTypes: [
+                    'image/jpeg',
+                    'image/png',
+                    'image/webp',
+                    'image/gif'
+                ]
+            });
+            if (bucketError && !bucketError.message.toLowerCase().includes('already exists')) {
+                logError('Bucket creation error:', bucketError);
+                return {
+                    url: null,
+                    error: "Storage bucket could not be created: ".concat(bucketError.message, '. Please create an "activity-images" public bucket in your Supabase dashboard → Storage.')
+                };
+            }
+            // Retry the upload now that the bucket exists
+            uploadResult = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$integrations$2f$supabase$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].storage.from(STORAGE_BUCKET).upload(fileName, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
+        }
+        if (uploadResult.error) {
+            logError('Image upload error:', uploadResult.error);
+            return {
+                url: null,
+                error: uploadResult.error.message
+            };
+        }
+        const { data: urlData } = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$integrations$2f$supabase$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].storage.from(STORAGE_BUCKET).getPublicUrl(uploadResult.data.path);
+        return {
+            url: urlData.publicUrl,
+            error: null
+        };
+    } catch (error) {
+        logError('Error in uploadActivityImage:', error);
+        return {
+            url: null,
+            error: 'Upload failed unexpectedly'
+        };
+    }
+};
 const createActivity = async (activity, adminId)=>{
     try {
         // Validate input
@@ -990,10 +1060,12 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$b
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/components/ui/use-toast.ts [app-client] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/hooks/use-toast.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useActivities$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/hooks/useActivities.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/utils.ts [app-client] (ecmascript)");
 var _this = ("TURBOPACK compile-time value", void 0);
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
+;
 ;
 ;
 ;
@@ -1023,7 +1095,8 @@ const ActivityDetail = function() {
     let { initialActivity } = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
     _s();
     const params = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"])();
-    const id = params === null || params === void 0 ? void 0 : params.id;
+    const slug = params === null || params === void 0 ? void 0 : params.slug;
+    const id = slug ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["idFromSlug"])(slug) : '';
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const { toast } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useToast"])();
     // Use the custom hook with automatic caching; seed from server-fetched initialActivity
@@ -1038,9 +1111,6 @@ const ActivityDetail = function() {
     }["ActivityDetail.useEffect"], [
         id
     ]);
-    const handleImageError = (e)=>{
-        e.currentTarget.src = '/placeholder.svg';
-    };
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "ActivityDetail.useEffect": ()=>{
             if (error) {
@@ -1090,7 +1160,7 @@ const ActivityDetail = function() {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                lineNumber: 87,
+                                lineNumber: 88,
                                 columnNumber: 13
                             }, _this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1100,7 +1170,7 @@ const ActivityDetail = function() {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                lineNumber: 88,
+                                lineNumber: 89,
                                 columnNumber: 13
                             }, _this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1110,13 +1180,13 @@ const ActivityDetail = function() {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                lineNumber: 89,
+                                lineNumber: 90,
                                 columnNumber: 13
                             }, _this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                        lineNumber: 86,
+                        lineNumber: 87,
                         columnNumber: 11
                     }, _this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1124,18 +1194,18 @@ const ActivityDetail = function() {
                         children: "Loading..."
                     }, void 0, false, {
                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                        lineNumber: 91,
+                        lineNumber: 92,
                         columnNumber: 11
                     }, _this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                lineNumber: 85,
+                lineNumber: 86,
                 columnNumber: 9
             }, _this)
         }, void 0, false, {
             fileName: "[project]/src/views/ActivityDetail.tsx",
-            lineNumber: 84,
+            lineNumber: 85,
             columnNumber: 7
         }, _this);
     }
@@ -1150,7 +1220,7 @@ const ActivityDetail = function() {
                         children: "Activity not found"
                     }, void 0, false, {
                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                        lineNumber: 101,
+                        lineNumber: 102,
                         columnNumber: 11
                     }, _this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1159,18 +1229,18 @@ const ActivityDetail = function() {
                         children: "Back to Home"
                     }, void 0, false, {
                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                        lineNumber: 102,
+                        lineNumber: 103,
                         columnNumber: 11
                     }, _this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                lineNumber: 100,
+                lineNumber: 101,
                 columnNumber: 9
             }, _this)
         }, void 0, false, {
             fileName: "[project]/src/views/ActivityDetail.tsx",
-            lineNumber: 99,
+            lineNumber: 100,
             columnNumber: 7
         }, _this);
     }
@@ -1188,7 +1258,7 @@ const ActivityDetail = function() {
                             className: "h-5 w-5"
                         }, void 0, false, {
                             fileName: "[project]/src/views/ActivityDetail.tsx",
-                            lineNumber: 119,
+                            lineNumber: 120,
                             columnNumber: 11
                         }, _this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1196,18 +1266,18 @@ const ActivityDetail = function() {
                             children: "Back"
                         }, void 0, false, {
                             fileName: "[project]/src/views/ActivityDetail.tsx",
-                            lineNumber: 120,
+                            lineNumber: 121,
                             columnNumber: 11
                         }, _this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/views/ActivityDetail.tsx",
-                    lineNumber: 115,
+                    lineNumber: 116,
                     columnNumber: 9
                 }, _this)
             }, void 0, false, {
                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                lineNumber: 114,
+                lineNumber: 115,
                 columnNumber: 7
             }, _this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1219,12 +1289,12 @@ const ActivityDetail = function() {
                     onError: handleImageError
                 }, void 0, false, {
                     fileName: "[project]/src/views/ActivityDetail.tsx",
-                    lineNumber: 126,
+                    lineNumber: 127,
                     columnNumber: 9
                 }, _this)
             }, void 0, false, {
                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                lineNumber: 125,
+                lineNumber: 126,
                 columnNumber: 7
             }, _this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1235,7 +1305,7 @@ const ActivityDetail = function() {
                         children: displayActivity.title
                     }, void 0, false, {
                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                        lineNumber: 137,
+                        lineNumber: 138,
                         columnNumber: 9
                     }, _this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1243,7 +1313,7 @@ const ActivityDetail = function() {
                         children: displayActivity.description
                     }, void 0, false, {
                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                        lineNumber: 140,
+                        lineNumber: 141,
                         columnNumber: 9
                     }, _this),
                     displayActivity.categoryNames && displayActivity.categoryNames.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1253,12 +1323,12 @@ const ActivityDetail = function() {
                             children: displayActivity.categoryNames[0]
                         }, void 0, false, {
                             fileName: "[project]/src/views/ActivityDetail.tsx",
-                            lineNumber: 145,
+                            lineNumber: 146,
                             columnNumber: 13
                         }, _this)
                     }, void 0, false, {
                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                        lineNumber: 144,
+                        lineNumber: 145,
                         columnNumber: 11
                     }, _this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1269,7 +1339,7 @@ const ActivityDetail = function() {
                                 children: "Price"
                             }, void 0, false, {
                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                lineNumber: 153,
+                                lineNumber: 154,
                                 columnNumber: 11
                             }, _this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1277,13 +1347,13 @@ const ActivityDetail = function() {
                                 children: displayActivity.priceRange || 'Check website'
                             }, void 0, false, {
                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                lineNumber: 154,
+                                lineNumber: 155,
                                 columnNumber: 11
                             }, _this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                        lineNumber: 152,
+                        lineNumber: 153,
                         columnNumber: 9
                     }, _this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1298,12 +1368,12 @@ const ActivityDetail = function() {
                                             className: "h-5 w-5 text-orange-500"
                                         }, void 0, false, {
                                             fileName: "[project]/src/views/ActivityDetail.tsx",
-                                            lineNumber: 163,
+                                            lineNumber: 164,
                                             columnNumber: 17
                                         }, _this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                                        lineNumber: 162,
+                                        lineNumber: 163,
                                         columnNumber: 15
                                     }, _this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1313,7 +1383,7 @@ const ActivityDetail = function() {
                                                 children: "Date"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                                lineNumber: 166,
+                                                lineNumber: 167,
                                                 columnNumber: 17
                                             }, _this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1321,19 +1391,19 @@ const ActivityDetail = function() {
                                                 children: displayActivity.date
                                             }, void 0, false, {
                                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                                lineNumber: 167,
+                                                lineNumber: 168,
                                                 columnNumber: 17
                                             }, _this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                                        lineNumber: 165,
+                                        lineNumber: 166,
                                         columnNumber: 15
                                     }, _this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                lineNumber: 161,
+                                lineNumber: 162,
                                 columnNumber: 13
                             }, _this),
                             formattedTime && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1345,12 +1415,12 @@ const ActivityDetail = function() {
                                             className: "h-5 w-5 text-orange-500"
                                         }, void 0, false, {
                                             fileName: "[project]/src/views/ActivityDetail.tsx",
-                                            lineNumber: 176,
+                                            lineNumber: 177,
                                             columnNumber: 17
                                         }, _this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                                        lineNumber: 175,
+                                        lineNumber: 176,
                                         columnNumber: 15
                                     }, _this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1360,7 +1430,7 @@ const ActivityDetail = function() {
                                                 children: "Time"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                                lineNumber: 179,
+                                                lineNumber: 180,
                                                 columnNumber: 17
                                             }, _this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1368,19 +1438,19 @@ const ActivityDetail = function() {
                                                 children: formattedTime
                                             }, void 0, false, {
                                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                                lineNumber: 180,
+                                                lineNumber: 181,
                                                 columnNumber: 17
                                             }, _this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                                        lineNumber: 178,
+                                        lineNumber: 179,
                                         columnNumber: 15
                                     }, _this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                lineNumber: 174,
+                                lineNumber: 175,
                                 columnNumber: 13
                             }, _this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1392,12 +1462,12 @@ const ActivityDetail = function() {
                                             className: "h-5 w-5 text-orange-500"
                                         }, void 0, false, {
                                             fileName: "[project]/src/views/ActivityDetail.tsx",
-                                            lineNumber: 188,
+                                            lineNumber: 189,
                                             columnNumber: 15
                                         }, _this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                                        lineNumber: 187,
+                                        lineNumber: 188,
                                         columnNumber: 13
                                     }, _this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1407,7 +1477,7 @@ const ActivityDetail = function() {
                                                 children: "Location"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                                lineNumber: 191,
+                                                lineNumber: 192,
                                                 columnNumber: 15
                                             }, _this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1415,25 +1485,25 @@ const ActivityDetail = function() {
                                                 children: displayActivity.location
                                             }, void 0, false, {
                                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                                lineNumber: 192,
+                                                lineNumber: 193,
                                                 columnNumber: 15
                                             }, _this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                                        lineNumber: 190,
+                                        lineNumber: 191,
                                         columnNumber: 13
                                     }, _this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                lineNumber: 186,
+                                lineNumber: 187,
                                 columnNumber: 11
                             }, _this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                        lineNumber: 158,
+                        lineNumber: 159,
                         columnNumber: 9
                     }, _this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1448,14 +1518,14 @@ const ActivityDetail = function() {
                                         className: "h-5 w-5"
                                     }, void 0, false, {
                                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                                        lineNumber: 206,
+                                        lineNumber: 207,
                                         columnNumber: 15
                                     }, _this),
                                     "View on Map"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                lineNumber: 201,
+                                lineNumber: 202,
                                 columnNumber: 13
                             }, _this),
                             displayActivity.url && isSecureUrl(displayActivity.url) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1467,31 +1537,31 @@ const ActivityDetail = function() {
                                         className: "h-5 w-5"
                                     }, void 0, false, {
                                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                                        lineNumber: 218,
+                                        lineNumber: 219,
                                         columnNumber: 15
                                     }, _this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                                lineNumber: 213,
+                                lineNumber: 214,
                                 columnNumber: 13
                             }, _this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/views/ActivityDetail.tsx",
-                        lineNumber: 198,
+                        lineNumber: 199,
                         columnNumber: 9
                     }, _this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/views/ActivityDetail.tsx",
-                lineNumber: 135,
+                lineNumber: 136,
                 columnNumber: 7
             }, _this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/views/ActivityDetail.tsx",
-        lineNumber: 112,
+        lineNumber: 113,
         columnNumber: 5
     }, _this);
 };

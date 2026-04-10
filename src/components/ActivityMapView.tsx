@@ -194,7 +194,7 @@ const ActivityMapView: React.FC<ActivityMapViewProps> = ({ activities, userLocat
                     <div className="text-xs font-semibold text-gray-800">{activity.priceRange}</div>
                   )}
                   <button
-                    onClick={() => router.push(`/activity/${activity.id}`)}
+                    onClick={() => router.push(`/activity/${activity.slug}`)}
                     className="mt-1 w-full bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold py-1.5 px-3 rounded-lg transition-colors"
                   >
                     View Details

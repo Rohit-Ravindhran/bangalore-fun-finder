@@ -2,6 +2,7 @@ import { categories } from '@/data/mockData';
 import { supabase } from '@/integrations/supabase/client';
 import { Activity } from '@/components/ActivityCard';
 import { z } from 'zod';
+import { activitySlug } from '@/lib/utils';
 
 // =============================================
 // Input Validation Schemas
@@ -72,8 +73,9 @@ export const getCategoryNames = (categoryIds: string[]) => {
 const transformActivities = (activities: any[]): Activity[] => {
   return activities.map(act => ({
     id: String(act.id),
+    slug: activitySlug(act.title || '', act.id),
     title: act.title || '',
-    image: act.image || '/placeholder.svg',
+    image: act.image || '',
     tags: act.tags || [],
     priceRange: act.price_range || 'Free',
     location: act.location || 'Bangalore',
@@ -247,6 +249,7 @@ export async function getActivityById(id: string) {
     // Transform to frontend format
     return {
       id: String(data.id),
+      slug: activitySlug(data.title || '', data.id),
       title: data.title,
       image: data.image,
       tags: data.tags || [],
@@ -267,6 +270,38 @@ export async function getActivityById(id: string) {
     return null;
   }
 }
+
+// Get a single activity by slug (extracts the numeric id from the end of the slug)
+export async function getActivityBySlug(slug: string) {
+  const parts = slug.split('-');
+  const id = parts[parts.length - 1];
+  if (!id || isNaN(Number(id))) return null;
+  return getActivityById(id);
+}
+
+// Upload an activity image via the server-side API route.
+// The route uses the Supabase service role key so RLS is never an issue.
+export const uploadActivityImage = async (
+  file: File
+): Promise<{ url: string | null; error: string | null }> => {
+  try {
+    const body = new FormData();
+    body.append('file', file);
+
+    const res = await fetch('/api/admin/upload-image', { method: 'POST', body });
+    const json = await res.json();
+
+    if (!res.ok) {
+      logError('Image upload API error:', json.error);
+      return { url: null, error: json.error || 'Upload failed' };
+    }
+
+    return { url: json.url, error: null };
+  } catch (error) {
+    logError('Error in uploadActivityImage:', error);
+    return { url: null, error: 'Upload failed unexpectedly' };
+  }
+};
 
 // Create an activity (admin only - uses secure RPC)
 export const createActivity = async (activity: Partial<Activity>, adminId?: string) => {
