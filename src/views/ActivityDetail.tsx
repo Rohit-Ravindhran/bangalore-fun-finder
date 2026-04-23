@@ -10,7 +10,8 @@ import { useToast } from '@/components/ui/use-toast';
 import { Activity } from '@/components/ActivityCard';
 import { useActivity } from '@/hooks/useActivities';
 import { idFromSlug } from '@/lib/utils';
-import ActivityImage from '@/components/ActivityImage';
+import ActivityImage from '@/components/ActivityImage'
+import { sendEvent } from '@/lib/analytics';
 
 // Validate URL is safe to open (only http/https protocols)
 const isSecureUrl = (url: string): boolean => {
@@ -44,6 +45,16 @@ const ActivityDetail = ({ initialActivity }: { initialActivity?: Activity | null
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
+
+  // Track activity_view once the activity data is available
+  useEffect(() => {
+    if (!displayActivity) return
+    sendEvent({
+      event_type: 'activity_view',
+      activity_id: String(displayActivity.id),
+      activity_title: displayActivity.title,
+    })
+  }, [displayActivity?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   
   
   useEffect(() => {
