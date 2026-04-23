@@ -547,6 +547,14 @@ const Admin = () => {
           <div className="pt-3">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest px-2 pb-2">Tools</p>
             <Link
+              href="/admin/content-hub"
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
+            >
+              <Sparkles className="h-4 w-4" />
+              Content Hub
+              <ChevronRight className="h-3.5 w-3.5 ml-auto opacity-50" />
+            </Link>
+            <Link
               href="/admin/scraped-events"
               className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
             >
