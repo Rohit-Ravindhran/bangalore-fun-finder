@@ -34,7 +34,7 @@ import { Input } from '@/components/ui/input';
 import { Activity } from '@/components/ActivityCard';
 import { Category } from '@/components/CategoryFilter';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
+import { cn, activitySlug } from '@/lib/utils';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -284,6 +284,7 @@ const Index = ({
   // Map trending RPC results to the Activity shape TrendingSection expects
   const trendingActivities = (trendingData ?? []).map((t) => ({
     id: String(t.activity_id),
+    slug: activitySlug(t.title, t.activity_id),
     title: t.title,
     image: t.image,
     location: t.location,
@@ -520,7 +521,7 @@ const Index = ({
       const shareData = {
         title: `Check out ${activityData.title || 'this activity'} on What2Do Bangalore`,
         text: activityData.description || 'Discover fun activities in Bangalore',
-        url: window.location.origin + `/activity/${id}`,
+        url: window.location.origin + `/activity/${activityData.slug ?? id}`,
       };
 
       if (navigator.share && navigator.canShare(shareData)) {

@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { MapPin, Calendar, Clock, ExternalLink, Pin } from 'lucide-react';
+import ActivityImage from '@/components/ActivityImage';
 
 interface ActivityDetailContentProps {
   activity: Activity;
@@ -37,9 +38,6 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
     }
   };
 
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = '/placeholder.svg';
-  };
 
   // Function to validate and format time
   const isValidTime = (timeString: string | undefined): boolean => {
@@ -81,11 +79,10 @@ const ActivityDetailContent: React.FC<ActivityDetailContentProps> = ({ activity 
       </div>
       
       <div className="relative">
-        <img
-          src={activity.image || '/placeholder.svg'}
-          alt={activity.title}
+        <ActivityImage
+          src={activity.image}
+          title={activity.title}
           className="w-full h-64 md:h-80 object-cover border-b-2 border-amber-200"
-          onError={handleImageError}
         />
         <div className="absolute top-4 left-4 flex flex-col gap-2">
           {activity.tags.includes('trending') && (

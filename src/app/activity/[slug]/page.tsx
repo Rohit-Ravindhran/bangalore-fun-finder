@@ -1,21 +1,22 @@
 import type { Metadata } from 'next'
-import { getActivityById, fetchActivities } from '@/services/activityService'
+import { getActivityBySlug, fetchActivities } from '@/services/activityService'
+import { activitySlug } from '@/lib/utils'
 import ActivityDetail from '@/views/ActivityDetail'
 
 export const revalidate = 3600 // 1 hour
 
 export async function generateStaticParams() {
   const activities = await fetchActivities()
-  return activities.map((a) => ({ id: a.id }))
+  return activities.map((a) => ({ slug: activitySlug(a.title, a.id) }))
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
-  const { id } = await params
-  const activity = await getActivityById(id)
+  const { slug } = await params
+  const activity = await getActivityBySlug(slug)
 
   if (!activity) return { title: 'Activity Not Found | Happenings Bangalore' }
 
@@ -31,7 +32,7 @@ export async function generateMetadata({
       title: activity.title,
       description,
       type: 'article',
-      url: `https://happeningsbangalore.com/activity/${id}`,
+      url: `https://happeningsbangalore.com/activity/${slug}`,
       images: activity.image
         ? [{ url: activity.image, alt: activity.title }]
         : [{ url: 'https://happeningsbangalore.com/assets/og-image.jpg' }],
@@ -45,8 +46,8 @@ export async function generateMetadata({
   }
 }
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  const activity = await getActivityById(id)
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const activity = await getActivityBySlug(slug)
   return <ActivityDetail initialActivity={activity} />
 }

@@ -36,6 +36,11 @@ import {
   Instagram,
   TrendingUp,
   X,
+  BarChart2,
+  Users,
+  Eye,
+  Clock,
+  MousePointerClick,
 } from "lucide-react";
 import {
   createActivity,
@@ -44,6 +49,7 @@ import {
   updateActivity,
   fetchCategoriesFromTable,
   fetchTagsFromTable,
+  uploadActivityImage,
 } from "@/services/activityService";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link"
@@ -67,7 +73,24 @@ function extractGoogleMapsCoords(url: string): { lat: number; lng: number } | nu
   return null;
 }
 
-type Section = "activities" | "import" | "instagram" | "bulk" | "highlights" | "marketing" | "trending";
+type Section = "activities" | "import" | "instagram" | "bulk" | "highlights" | "marketing" | "trending" | "insights";
+
+type AnalyticsEvent = {
+  id: string
+  event_type: string
+  session_id: string
+  pathname: string | null
+  activity_id: string | null
+  activity_title: string | null
+  os: string | null
+  referrer: string | null
+  landing_method: string | null
+  utm_source: string | null
+  utm_medium: string | null
+  utm_campaign: string | null
+  duration_seconds: number | null
+  created_at: string
+}
 
 type CategoryItem = { id: number; name: string };
 type TagItem = { id: number; name: string };
@@ -123,6 +146,10 @@ const Admin = () => {
   const [isResolvingMap, setIsResolvingMap] = useState(false);
   const [coordsPreview, setCoordsPreview] = useState<{ lat: number; lng: number } | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsEvent[] | null>(null);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const [analyticsDays, setAnalyticsDays] = useState(30);
 
   const { toast } = useToast();
   const { logout, getAdminId, adminUsername } = useAuth();
@@ -171,6 +198,20 @@ const Admin = () => {
       toast({ title: "Error loading trending list", variant: "destructive" });
     } finally {
       setIsTrendingLoading(false);
+    }
+  };
+
+  const loadAnalytics = async (days = analyticsDays) => {
+    setAnalyticsLoading(true);
+    try {
+      const res = await fetch(`/api/analytics?days=${days}`);
+      const json = await res.json();
+      if (json.error) throw new Error(json.error);
+      setAnalyticsData(json.data);
+    } catch {
+      toast({ title: "Error loading analytics", variant: "destructive" });
+    } finally {
+      setAnalyticsLoading(false);
     }
   };
 
@@ -244,6 +285,18 @@ const Admin = () => {
       toast({ title: "Location extraction failed", variant: "destructive", duration: 3000 });
     } finally {
       setIsResolvingMap(false);
+    }
+  };
+
+  const handleImageUpload = async (file: File) => {
+    setIsUploadingImage(true);
+    const { url, error } = await uploadActivityImage(file);
+    setIsUploadingImage(false);
+    if (error) {
+      toast({ title: "Image upload failed", description: error, variant: "destructive" });
+    } else if (url) {
+      setCurrentActivity((p) => ({ ...p, image: url }));
+      toast({ title: "Image uploaded" });
     }
   };
 
@@ -454,6 +507,7 @@ const Admin = () => {
   const navItems: { id: Section; label: string; icon: React.ReactNode; badge?: string }[] = [
     { id: "activities", label: "Activities", icon: <Database className="h-4 w-4" /> },
     { id: "trending",   label: "Trending", icon: <TrendingUp className="h-4 w-4" /> },
+    { id: "insights",   label: "Insights", icon: <BarChart2 className="h-4 w-4" /> },
     { id: "import",     label: "Import from BMS", icon: <FileText className="h-4 w-4" /> },
     { id: "instagram",  label: "Import from Screenshots", icon: <Instagram className="h-4 w-4" /> },
     { id: "bulk",       label: "Bulk JSON Import", icon: <Upload className="h-4 w-4" /> },
@@ -479,7 +533,7 @@ const Admin = () => {
           {navItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => { setSection(item.id); resetForm(); if (item.id === "trending") loadTrending(); }}
+              onClick={() => { setSection(item.id); resetForm(); if (item.id === "trending") loadTrending(); if (item.id === "insights") loadAnalytics(); }}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left
                 ${section === item.id
                   ? "bg-[#FFD60A] text-black"
@@ -492,6 +546,14 @@ const Admin = () => {
 
           <div className="pt-3">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest px-2 pb-2">Tools</p>
+            <Link
+              href="/admin/content-hub"
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
+            >
+              <Sparkles className="h-4 w-4" />
+              Content Hub
+              <ChevronRight className="h-3.5 w-3.5 ml-auto opacity-50" />
+            </Link>
             <Link
               href="/admin/scraped-events"
               className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
@@ -538,6 +600,7 @@ const Admin = () => {
             <h2 className="text-lg font-semibold text-gray-900">
               {section === "activities" && "Activities Database"}
               {section === "trending"   && "Trending Activities"}
+              {section === "insights"   && "Insights"}
               {section === "import"     && "Import from BookMyShow"}
               {section === "instagram"  && "Import from Screenshots"}
               {section === "bulk"       && "Bulk JSON Import"}
@@ -547,6 +610,7 @@ const Admin = () => {
             <p className="text-xs text-gray-400 mt-0.5">
               {section === "activities" && `${activities.length} total activities`}
               {section === "trending"   && `${trendingList.length} activities currently trending`}
+              {section === "insights"   && `Analytics for the last ${analyticsDays} days`}
               {section === "import"     && "Auto-fill from a BMS event link"}
               {section === "instagram"  && "Paste screenshots and let AI extract event details"}
               {section === "bulk"       && "Import multiple activities at once"}
@@ -583,8 +647,27 @@ const Admin = () => {
                         <Input name="title" value={currentActivity.title || ""} onChange={handleInputChange} required />
                       </div>
                       <div className="col-span-2">
-                        <label className="block mb-1 text-xs font-medium text-gray-600">Image URL *</label>
-                        <Input name="image" value={currentActivity.image || ""} onChange={handleInputChange} required placeholder="https://..." />
+                        <label className="block mb-1 text-xs font-medium text-gray-600">Image *</label>
+                        <div className="flex gap-2">
+                          <Input name="image" value={currentActivity.image || ""} onChange={handleInputChange} placeholder="https://... or upload below" className="flex-1" />
+                          <label className="flex-shrink-0">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageUpload(f); e.target.value = ""; }}
+                            />
+                            <Button type="button" variant="outline" size="sm" disabled={isUploadingImage} className="h-10 gap-1.5" asChild>
+                              <span className="cursor-pointer">
+                                {isUploadingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                                {isUploadingImage ? "Uploading…" : "Upload"}
+                              </span>
+                            </Button>
+                          </label>
+                        </div>
+                        {currentActivity.image && (
+                          <img src={currentActivity.image} alt="preview" className="mt-2 h-24 w-full object-cover rounded-lg" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                        )}
                       </div>
                       <div className="col-span-2">
                         <label className="block mb-1 text-xs font-medium text-gray-600">Description</label>
@@ -954,6 +1037,274 @@ const Admin = () => {
               </div>
             </div>
           )}
+
+          {/* ── INSIGHTS ── */}
+          {section === "insights" && (() => {
+            const topN = (map: Map<string, number>, n = 10) =>
+              [...map.entries()].sort((a, b) => b[1] - a[1]).slice(0, n);
+
+            const fmt = (n: number) => n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
+
+            let statCards = { sessions: 0, pageViews: 0, clicks: 0, avgDuration: "—" };
+            let topPages: [string, number][] = [];
+            let topActivities: [string, number][] = [];
+            let sources: [string, number][] = [];
+            let osCounts: [string, number][] = [];
+            let eventTypeCounts: [string, number][] = [];
+            let dailyViews: { date: string; count: number }[] = [];
+
+            if (analyticsData) {
+              const sessions = new Set(analyticsData.map((e) => e.session_id));
+              const pageViews = analyticsData.filter((e) => e.event_type === "page_view");
+              const clicks = analyticsData.filter((e) => e.event_type === "activity_click" || e.event_type === "click");
+              const durations = analyticsData
+                .filter((e) => e.duration_seconds != null && e.duration_seconds > 0)
+                .map((e) => e.duration_seconds as number);
+              const avgSec = durations.length
+                ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length)
+                : null;
+              const avgDurationStr = avgSec != null
+                ? avgSec >= 60 ? `${Math.floor(avgSec / 60)}m ${avgSec % 60}s` : `${avgSec}s`
+                : "—";
+
+              const pageMap = new Map<string, number>();
+              pageViews.forEach((e) => {
+                const key = e.pathname ?? "(unknown)";
+                pageMap.set(key, (pageMap.get(key) ?? 0) + 1);
+              });
+
+              const actMap = new Map<string, number>();
+              analyticsData
+                .filter((e) => e.activity_title)
+                .forEach((e) => {
+                  const key = e.activity_title!;
+                  actMap.set(key, (actMap.get(key) ?? 0) + 1);
+                });
+
+              const srcMap = new Map<string, number>();
+              analyticsData.forEach((e) => {
+                const src = e.utm_source ?? (e.referrer ? new URL(e.referrer.startsWith("http") ? e.referrer : `https://${e.referrer}`).hostname.replace(/^www\./, "") : null) ?? "Direct";
+                srcMap.set(src, (srcMap.get(src) ?? 0) + 1);
+              });
+
+              const osMap = new Map<string, number>();
+              analyticsData.forEach((e) => {
+                const key = e.os ?? "Unknown";
+                osMap.set(key, (osMap.get(key) ?? 0) + 1);
+              });
+
+              const etMap = new Map<string, number>();
+              analyticsData.forEach((e) => {
+                etMap.set(e.event_type, (etMap.get(e.event_type) ?? 0) + 1);
+              });
+
+              // Daily page views (last N days buckets)
+              const buckets = new Map<string, number>();
+              pageViews.forEach((e) => {
+                const day = e.created_at.slice(0, 10);
+                buckets.set(day, (buckets.get(day) ?? 0) + 1);
+              });
+              const sortedDays = [...buckets.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+              dailyViews = sortedDays.map(([date, count]) => ({ date, count }));
+
+              statCards = { sessions: sessions.size, pageViews: pageViews.length, clicks: clicks.length, avgDuration: avgDurationStr };
+              topPages = topN(pageMap);
+              topActivities = topN(actMap);
+              sources = topN(srcMap, 8);
+              osCounts = topN(osMap, 6);
+              eventTypeCounts = topN(etMap, 8);
+            }
+
+            const maxDailyCount = Math.max(...dailyViews.map((d) => d.count), 1);
+
+            return (
+              <div className="space-y-6">
+                {/* Controls */}
+                <div className="flex items-center gap-3">
+                  <select
+                    value={analyticsDays}
+                    onChange={(e) => {
+                      const d = Number(e.target.value);
+                      setAnalyticsDays(d);
+                      loadAnalytics(d);
+                    }}
+                    className="text-sm border rounded-lg px-3 py-1.5 bg-white shadow-sm"
+                  >
+                    <option value={7}>Last 7 days</option>
+                    <option value={30}>Last 30 days</option>
+                    <option value={90}>Last 90 days</option>
+                  </select>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => loadAnalytics()}
+                    disabled={analyticsLoading}
+                    className="gap-1.5"
+                  >
+                    <RefreshCw className={`h-3.5 w-3.5 ${analyticsLoading ? "animate-spin" : ""}`} />
+                    Refresh
+                  </Button>
+                  {analyticsData && (
+                    <span className="text-xs text-gray-400">{analyticsData.length.toLocaleString()} events loaded</span>
+                  )}
+                </div>
+
+                {analyticsLoading ? (
+                  <div className="flex items-center justify-center py-24">
+                    <Loader2 className="h-7 w-7 animate-spin text-gray-400" />
+                  </div>
+                ) : !analyticsData ? (
+                  <div className="flex flex-col items-center justify-center py-24 text-gray-400 gap-2">
+                    <BarChart2 className="h-10 w-10 opacity-30" />
+                    <p className="text-sm">No data loaded yet — click Refresh to load analytics.</p>
+                  </div>
+                ) : analyticsData.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-24 text-gray-400 gap-2">
+                    <BarChart2 className="h-10 w-10 opacity-30" />
+                    <p className="text-sm">No events recorded in this period.</p>
+                  </div>
+                ) : (
+                  <>
+                    {/* ── Stat cards ── */}
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                      {[
+                        { label: "Unique Sessions", value: fmt(statCards.sessions), icon: <Users className="h-4 w-4 text-blue-500" /> },
+                        { label: "Page Views", value: fmt(statCards.pageViews), icon: <Eye className="h-4 w-4 text-green-500" /> },
+                        { label: "Activity Clicks", value: fmt(statCards.clicks), icon: <MousePointerClick className="h-4 w-4 text-orange-500" /> },
+                        { label: "Avg Session Duration", value: statCards.avgDuration, icon: <Clock className="h-4 w-4 text-purple-500" /> },
+                      ].map(({ label, value, icon }) => (
+                        <div key={label} className="bg-white rounded-xl border shadow-sm p-5 flex items-center gap-4">
+                          <div className="p-2.5 bg-gray-50 rounded-lg">{icon}</div>
+                          <div>
+                            <p className="text-2xl font-bold text-gray-900">{value}</p>
+                            <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* ── Daily page views sparkline ── */}
+                    {dailyViews.length > 1 && (
+                      <div className="bg-white rounded-xl border shadow-sm p-6">
+                        <p className="text-sm font-semibold text-gray-700 mb-4">Page Views Over Time</p>
+                        <div className="flex items-end gap-1 h-24">
+                          {dailyViews.map(({ date, count }) => (
+                            <div key={date} className="flex-1 flex flex-col items-center gap-1 group relative">
+                              <div
+                                className="w-full bg-orange-400 rounded-t group-hover:bg-orange-500 transition-colors"
+                                style={{ height: `${Math.max(4, Math.round((count / maxDailyCount) * 88))}px` }}
+                              />
+                              <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none z-10">
+                                {date}: {count}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="flex justify-between mt-1 text-xs text-gray-400">
+                          <span>{dailyViews[0]?.date}</span>
+                          <span>{dailyViews[dailyViews.length - 1]?.date}</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ── Two-column tables ── */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                      {/* Top Pages */}
+                      <div className="bg-white rounded-xl border shadow-sm p-6">
+                        <p className="text-sm font-semibold text-gray-700 mb-3">Top Pages</p>
+                        <div className="space-y-2">
+                          {topPages.map(([page, count]) => {
+                            const pct = Math.round((count / (topPages[0]?.[1] ?? 1)) * 100);
+                            return (
+                              <div key={page} className="space-y-0.5">
+                                <div className="flex items-center justify-between text-sm">
+                                  <span className="text-gray-700 truncate max-w-[70%]" title={page}>{page}</span>
+                                  <span className="text-gray-500 font-medium">{count.toLocaleString()}</span>
+                                </div>
+                                <div className="h-1 bg-gray-100 rounded-full">
+                                  <div className="h-1 bg-orange-400 rounded-full" style={{ width: `${pct}%` }} />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Top Activities */}
+                      <div className="bg-white rounded-xl border shadow-sm p-6">
+                        <p className="text-sm font-semibold text-gray-700 mb-3">Most Viewed Activities</p>
+                        <div className="space-y-2">
+                          {topActivities.length === 0 ? (
+                            <p className="text-xs text-gray-400">No activity views recorded.</p>
+                          ) : topActivities.map(([title, count]) => {
+                            const pct = Math.round((count / (topActivities[0]?.[1] ?? 1)) * 100);
+                            return (
+                              <div key={title} className="space-y-0.5">
+                                <div className="flex items-center justify-between text-sm">
+                                  <span className="text-gray-700 truncate max-w-[70%]" title={title}>{title}</span>
+                                  <span className="text-gray-500 font-medium">{count.toLocaleString()}</span>
+                                </div>
+                                <div className="h-1 bg-gray-100 rounded-full">
+                                  <div className="h-1 bg-blue-400 rounded-full" style={{ width: `${pct}%` }} />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Traffic Sources */}
+                      <div className="bg-white rounded-xl border shadow-sm p-6">
+                        <p className="text-sm font-semibold text-gray-700 mb-3">Traffic Sources</p>
+                        <div className="space-y-2">
+                          {sources.map(([src, count]) => {
+                            const pct = Math.round((count / (sources[0]?.[1] ?? 1)) * 100);
+                            return (
+                              <div key={src} className="space-y-0.5">
+                                <div className="flex items-center justify-between text-sm">
+                                  <span className="text-gray-700 truncate max-w-[70%]">{src}</span>
+                                  <span className="text-gray-500 font-medium">{count.toLocaleString()}</span>
+                                </div>
+                                <div className="h-1 bg-gray-100 rounded-full">
+                                  <div className="h-1 bg-green-400 rounded-full" style={{ width: `${pct}%` }} />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* OS & Event Types */}
+                      <div className="space-y-4">
+                        <div className="bg-white rounded-xl border shadow-sm p-6">
+                          <p className="text-sm font-semibold text-gray-700 mb-3">OS Breakdown</p>
+                          <div className="flex flex-wrap gap-2">
+                            {osCounts.map(([os, count]) => (
+                              <span key={os} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 text-xs font-medium text-gray-700">
+                                {os}
+                                <span className="bg-white rounded-full px-1.5 py-0.5 text-gray-500">{count}</span>
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="bg-white rounded-xl border shadow-sm p-6">
+                          <p className="text-sm font-semibold text-gray-700 mb-3">Event Types</p>
+                          <div className="flex flex-wrap gap-2">
+                            {eventTypeCounts.map(([et, count]) => (
+                              <span key={et} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-50 border border-orange-100 text-xs font-medium text-orange-700">
+                                {et.replace(/_/g, " ")}
+                                <span className="bg-orange-100 rounded-full px-1.5 py-0.5">{count}</span>
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })()}
 
           {/* ── HIGHLIGHTS ── */}
           {section === "highlights" && <AdminHighlights />}

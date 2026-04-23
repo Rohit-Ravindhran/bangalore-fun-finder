@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { fetchActivities } from '@/services/activityService'
+import { activitySlug } from '@/lib/utils'
 
 const BASE_URL = 'https://happeningsbangalore.com'
 
@@ -9,7 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const activities = await fetchActivities()
 
   const activityUrls: MetadataRoute.Sitemap = activities.map((a) => ({
-    url: `${BASE_URL}/activity/${a.id}`,
+    url: `${BASE_URL}/activity/${activitySlug(a.title, a.id)}`,
     lastModified: new Date(),
     changeFrequency: 'daily',
     priority: 0.8,

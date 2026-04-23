@@ -4,6 +4,7 @@ import React from 'react';
 import { TrendingUp, ChevronRight } from 'lucide-react';
 import { Activity } from '@/components/ActivityCard';
 import { useRouter } from 'next/navigation';
+import ActivityImage from '@/components/ActivityImage';
 
 interface TrendingSectionProps {
   activities: Activity[];
@@ -28,13 +29,13 @@ const TrendingSection: React.FC<TrendingSectionProps> = ({ activities }) => {
         {trendingItems.map((activity, index) => (
           <button
             key={activity.id}
-            onClick={() => router.push(`/activity/${activity.id}`)}
+            onClick={() => router.push(`/activity/${activity.slug}`)}
             className="flex-shrink-0 w-[200px] bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl overflow-hidden hover:shadow-md transition-all active:scale-[0.98]"
           >
             <div className="relative h-24 overflow-hidden">
-              <img 
-                src={activity.image || '/placeholder.svg'} 
-                alt={activity.title}
+              <ActivityImage
+                src={activity.image}
+                title={activity.title}
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
