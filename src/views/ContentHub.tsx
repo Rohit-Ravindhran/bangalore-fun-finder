@@ -461,9 +461,13 @@ export default function ContentHub() {
     setSlides((prev) => prev.map((s, i) => (i === activeIdx ? { ...s, ...patch } : s)));
   };
 
-  const addSlide = () => {
-    const s = newSlide();
-    setSlides((prev) => [...prev, s]);
+  const addSlide = (kind: Variant = "content") => {
+    const s = kind === "cover" ? newCoverSlide() : kind === "end" ? newEndSlide() : newContentSlide();
+    setSlides((prev) => {
+      // Covers typically go first, end slides last — but if user explicitly adds, append
+      const next = [...prev, s];
+      return next;
+    });
     setActiveIdx(slides.length);
   };
 
@@ -761,12 +765,29 @@ export default function ContentHub() {
           {/* Slide editor */}
           <section className="bg-white rounded-xl border p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold">Slide {activeIdx + 1} of {slides.length}</h2>
+              <h2 className="text-sm font-semibold">
+                Slide {activeIdx + 1} of {slides.length}
+                <span className="ml-2 text-[10px] uppercase tracking-widest font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">{active.variant}</span>
+              </h2>
               <div className="flex gap-1">
                 <Button size="sm" variant="ghost" onClick={() => setActiveIdx(Math.max(0, activeIdx - 1))} disabled={activeIdx === 0}><ChevronLeft className="h-4 w-4" /></Button>
                 <Button size="sm" variant="ghost" onClick={() => setActiveIdx(Math.min(slides.length - 1, activeIdx + 1))} disabled={activeIdx === slides.length - 1}><ChevronRight className="h-4 w-4" /></Button>
               </div>
             </div>
+
+            {/* Variant-specific top fields */}
+            {active.variant === "cover" && (
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-medium text-gray-600">Top badge</label>
+                  <Input value={active.topBadge ?? ""} onChange={(e) => updateActive({ topBadge: e.target.value })} className="mt-1 text-sm" placeholder="THIS WEEK'S" />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-600">Date line</label>
+                  <Input value={active.dateLine ?? ""} onChange={(e) => updateActive({ dateLine: e.target.value })} className="mt-1 text-sm" placeholder="11 – 13 April, 2026" />
+                </div>
+              </div>
+            )}
 
             <div>
               <label className="text-xs font-medium text-gray-600">Headline <span className="text-gray-400">(wrap accent words in **like this**)</span></label>
@@ -786,47 +807,124 @@ export default function ContentHub() {
                 className="text-sm mt-1"
               />
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-xs font-medium text-gray-600">Pill badge</label>
-                <Input value={active.badge} onChange={(e) => updateActive({ badge: e.target.value })} className="mt-1 text-sm" />
+
+            {active.variant === "cover" && (
+              <>
+                <div>
+                  <label className="text-xs font-medium text-gray-600">Category chips</label>
+                  <div className="space-y-1.5 mt-1">
+                    {(active.chips ?? []).map((chip, idx) => (
+                      <div key={idx} className="flex gap-1.5 items-center">
+                        <Input
+                          value={chip.label}
+                          onChange={(e) => {
+                            const next = [...(active.chips ?? [])];
+                            next[idx] = { ...chip, label: e.target.value };
+                            updateActive({ chips: next });
+                          }}
+                          className="text-sm flex-1"
+                          placeholder="LABEL"
+                        />
+                        <input type="color" value={chip.bg} onChange={(e) => {
+                          const next = [...(active.chips ?? [])];
+                          next[idx] = { ...chip, bg: e.target.value };
+                          updateActive({ chips: next });
+                        }} className="h-9 w-9 rounded border border-gray-200 cursor-pointer" title="Background" />
+                        <input type="color" value={chip.fg} onChange={(e) => {
+                          const next = [...(active.chips ?? [])];
+                          next[idx] = { ...chip, fg: e.target.value };
+                          updateActive({ chips: next });
+                        }} className="h-9 w-9 rounded border border-gray-200 cursor-pointer" title="Text" />
+                        <Button size="sm" variant="ghost" onClick={() => {
+                          const next = (active.chips ?? []).filter((_, i) => i !== idx);
+                          updateActive({ chips: next });
+                        }} className="h-9 w-9 p-0 text-red-500 hover:bg-red-50"><Trash2 className="h-3.5 w-3.5" /></Button>
+                      </div>
+                    ))}
+                    <Button size="sm" variant="outline" onClick={() => {
+                      const next = [...(active.chips ?? []), { label: "NEW", bg: "#0a0a0a", fg: "#ffffff" }];
+                      updateActive({ chips: next });
+                    }} className="gap-1 w-full"><Plus className="h-3.5 w-3.5" /> Add chip</Button>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-600">Curated by</label>
+                  <Input value={active.curatedBy ?? ""} onChange={(e) => updateActive({ curatedBy: e.target.value })} className="mt-1 text-sm" placeholder="Happenin Bangalore" />
+                </div>
+              </>
+            )}
+
+            {active.variant === "end" && (
+              <div className="space-y-3">
+                <div>
+                  <label className="text-xs font-medium text-gray-600">End title</label>
+                  <Input value={active.endTitle ?? ""} onChange={(e) => updateActive({ endTitle: e.target.value })} className="mt-1 text-sm" placeholder="Follow for more" />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-medium text-gray-600">Instagram handle</label>
+                    <Input value={active.handle ?? ""} onChange={(e) => updateActive({ handle: e.target.value })} className="mt-1 text-sm" placeholder="@happeningsbangalore" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-gray-600">Website</label>
+                    <Input value={active.website ?? ""} onChange={(e) => updateActive({ website: e.target.value })} className="mt-1 text-sm" placeholder="happeningsbangalore.com" />
+                  </div>
+                </div>
               </div>
-              <div>
-                <label className="text-xs font-medium text-gray-600">CTA (bottom-right)</label>
-                <Input value={active.cta} onChange={(e) => updateActive({ cta: e.target.value })} className="mt-1 text-sm" />
+            )}
+
+            {active.variant === "content" && (
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-medium text-gray-600">Pill badge</label>
+                  <Input value={active.badge} onChange={(e) => updateActive({ badge: e.target.value })} className="mt-1 text-sm" />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-gray-600">CTA (bottom-right)</label>
+                  <Input value={active.cta} onChange={(e) => updateActive({ cta: e.target.value })} className="mt-1 text-sm" />
+                </div>
               </div>
-              <div className="col-span-2">
-                <label className="text-xs font-medium text-gray-600">Footer handle</label>
-                <Input value={active.footer} onChange={(e) => updateActive({ footer: e.target.value })} className="mt-1 text-sm" />
-              </div>
-            </div>
+            )}
 
             <div>
-              <label className="text-xs font-medium text-gray-600 flex items-center gap-1"><ImageIcon className="h-3.5 w-3.5" /> Image</label>
-              <div className="flex gap-2 mt-1">
-                <label className="flex-1">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageUpload(f); e.target.value = ""; }}
-                  />
-                  <Button type="button" variant="outline" size="sm" className="w-full gap-1.5" asChild>
-                    <span className="cursor-pointer"><Upload className="h-3.5 w-3.5" /> Upload</span>
-                  </Button>
-                </label>
-                {active.image && (
-                  <Button size="sm" variant="outline" onClick={() => updateActive({ image: null })} className="gap-1">
-                    <Trash2 className="h-3.5 w-3.5" /> Clear
-                  </Button>
-                )}
-              </div>
+              <label className="text-xs font-medium text-gray-600">Footer handle</label>
+              <Input value={active.footer} onChange={(e) => updateActive({ footer: e.target.value })} className="mt-1 text-sm" />
             </div>
 
-            <div className="flex gap-2 pt-2 border-t">
-              <Button size="sm" variant="outline" onClick={addSlide} className="gap-1 flex-1"><Plus className="h-3.5 w-3.5" /> Add</Button>
-              <Button size="sm" variant="outline" onClick={duplicateSlide} className="gap-1 flex-1"><Copy className="h-3.5 w-3.5" /> Duplicate</Button>
-              <Button size="sm" variant="outline" onClick={() => removeSlide(activeIdx)} disabled={slides.length === 1} className="gap-1 text-red-600 hover:text-red-700 hover:bg-red-50"><Trash2 className="h-3.5 w-3.5" /></Button>
+            {active.variant === "content" && (
+              <div>
+                <label className="text-xs font-medium text-gray-600 flex items-center gap-1"><ImageIcon className="h-3.5 w-3.5" /> Image</label>
+                <div className="flex gap-2 mt-1">
+                  <label className="flex-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageUpload(f); e.target.value = ""; }}
+                    />
+                    <Button type="button" variant="outline" size="sm" className="w-full gap-1.5" asChild>
+                      <span className="cursor-pointer"><Upload className="h-3.5 w-3.5" /> Upload</span>
+                    </Button>
+                  </label>
+                  {active.image && (
+                    <Button size="sm" variant="outline" onClick={() => updateActive({ image: null })} className="gap-1">
+                      <Trash2 className="h-3.5 w-3.5" /> Clear
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <div className="pt-2 border-t space-y-2">
+              <div className="grid grid-cols-3 gap-1.5">
+                <Button size="sm" variant="outline" onClick={() => addSlide("cover")} className="gap-1"><Plus className="h-3.5 w-3.5" /> Cover</Button>
+                <Button size="sm" variant="outline" onClick={() => addSlide("content")} className="gap-1"><Plus className="h-3.5 w-3.5" /> Content</Button>
+                <Button size="sm" variant="outline" onClick={() => addSlide("end")} className="gap-1"><Plus className="h-3.5 w-3.5" /> End</Button>
+              </div>
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline" onClick={duplicateSlide} className="gap-1 flex-1"><Copy className="h-3.5 w-3.5" /> Duplicate</Button>
+                <Button size="sm" variant="outline" onClick={() => removeSlide(activeIdx)} disabled={slides.length === 1} className="gap-1 text-red-600 hover:text-red-700 hover:bg-red-50"><Trash2 className="h-3.5 w-3.5" /></Button>
+              </div>
             </div>
           </section>
         </div>
@@ -842,12 +940,13 @@ export default function ContentHub() {
                 className={`flex-shrink-0 rounded-lg border-2 overflow-hidden transition ${i === activeIdx ? "border-yellow-500" : "border-transparent hover:border-gray-300"}`}
                 style={{ width: 64, height: theme.format === "portrait" ? 114 : 64 }}
               >
-                <div className="w-full h-full" style={{ background: theme.bgColor, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: theme.textColor, fontWeight: 700 }}>
-                  {i + 1}
+                <div className="w-full h-full flex-col" style={{ background: theme.bgColor, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: theme.textColor, fontWeight: 700 }}>
+                  <span>{i + 1}</span>
+                  <span style={{ fontSize: 7, opacity: 0.6, textTransform: "uppercase", letterSpacing: "0.1em" }}>{s.variant}</span>
                 </div>
               </button>
             ))}
-            <button onClick={addSlide} className="flex-shrink-0 rounded-lg border-2 border-dashed border-gray-200 hover:border-gray-400 flex items-center justify-center text-gray-400" style={{ width: 64, height: theme.format === "portrait" ? 114 : 64 }}>
+            <button onClick={() => addSlide("content")} className="flex-shrink-0 rounded-lg border-2 border-dashed border-gray-200 hover:border-gray-400 flex items-center justify-center text-gray-400" style={{ width: 64, height: theme.format === "portrait" ? 114 : 64 }}>
               <Plus className="h-4 w-4" />
             </button>
           </div>
