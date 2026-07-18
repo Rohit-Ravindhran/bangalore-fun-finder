@@ -4,7 +4,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { X, Heart } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui-kit';
+import { BRAND, SIDE_MENU_LINKS } from '@/constants';
 
 interface SideMenuProps {
   isOpen: boolean;
@@ -16,12 +17,12 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50" onClick={onClose}>
-      <div 
+      <div
         className="fixed top-0 left-0 h-full w-3/4 max-w-xs bg-white z-50 p-4 shadow-xl transform transition-transform duration-300 ease-in-out"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="font-nunito font-bold text-2xl text-primary">Happenings</h2>
+          <h2 className="font-nunito font-bold text-2xl text-primary">{BRAND.namePrimary}</h2>
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="h-6 w-6" />
           </Button>
@@ -29,68 +30,25 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
 
         <nav>
           <ul className="space-y-4">
-            <li>
-              <Link 
-                href="/" 
-                className="block py-2 text-primary hover:text-w2d-teal transition-colors"
-                onClick={onClose}
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link 
-                href="/favorites" 
-                className="block py-2 text-primary hover:text-w2d-teal transition-colors flex items-center gap-2"
-                onClick={onClose}
-              >
-                <Heart className="h-4 w-4" />
-                Favorites
-              </Link>
-            </li>
-            <li>
-              <Link 
-                href="/about" 
-                className="block py-2 text-primary hover:text-w2d-teal transition-colors"
-                onClick={onClose}
-              >
-                About Us
-              </Link>
-            </li>
-            <li>
-              <Link 
-                href="/contact" 
-                className="block py-2 text-primary hover:text-w2d-teal transition-colors"
-                onClick={onClose}
-              >
-                Contact Us
-              </Link>
-            </li>
-            <li>
-              <Link 
-                href="/privacy" 
-                className="block py-2 text-primary hover:text-w2d-teal transition-colors"
-                onClick={onClose}
-              >
-                Privacy Policy
-              </Link>
-            </li>
-            <li>
-              <Link 
-                href="/terms" 
-                className="block py-2 text-primary hover:text-w2d-teal transition-colors"
-                onClick={onClose}
-              >
-                Terms and Conditions
-              </Link>
-            </li>
+            {SIDE_MENU_LINKS.map((link) => (
+              <li key={link.path}>
+                <Link
+                  href={link.path}
+                  className="block py-2 text-primary hover:text-w2d-teal transition-colors flex items-center gap-2"
+                  onClick={onClose}
+                >
+                  {link.icon === 'heart' && <Heart className="h-4 w-4" />}
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
 
         <div className="absolute bottom-8 left-4 right-4">
           <div className="text-sm text-gray-500">
-            <p className="mb-4">Happenings in Bangalore is your personal city guide to hidden and trending things to do – curated just for you.</p>
-            <p>© {new Date().getFullYear()} Happenings</p>
+            <p className="mb-4">{BRAND.tagline}</p>
+            <p>{BRAND.copyright()}</p>
           </div>
         </div>
       </div>

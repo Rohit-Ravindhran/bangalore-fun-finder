@@ -1,44 +1,41 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
 import { Providers } from './providers'
+import { SEO_DEFAULTS } from '@/constants'
 import '../index.css'
 
 export const metadata: Metadata = {
-  title: 'Happenin Bangalore | Discover Things To Do',
-  description:
-    'Explore the best things to do in Bangalore – from unique date ideas, weekend events, and meetups to food trails. Curated experiences for everyone.',
-  keywords:
-    'Things to do in Bangalore, Bangalore activities, Bangalore date ideas, couple packages Bangalore, Bangalore weekend plans, curated experiences, what to do in Bangalore today, Bangalore outings',
-  authors: [{ name: 'Happenin Bangalore Team' }],
+  title: SEO_DEFAULTS.title,
+  description: SEO_DEFAULTS.description,
+  keywords: SEO_DEFAULTS.keywords,
+  authors: [{ name: SEO_DEFAULTS.author }],
   openGraph: {
-    title: 'Happenin Bangalore | Discover Curated Experiences',
-    description:
-      "Plan your next day out in Bangalore with handpicked activities, events, and packages. From date ideas to fun with friends – we've got your weekend covered.",
+    title: SEO_DEFAULTS.ogTitle,
+    description: SEO_DEFAULTS.ogDescription,
     type: 'website',
-    url: 'https://happeningsbangalore.com',
-    images: [{ url: 'https://happeningsbangalore.com/assets/og-image.jpg' }],
-    locale: 'en_IN',
-    siteName: 'Happenin Bangalore',
+    url: SEO_DEFAULTS.url,
+    images: [{ url: SEO_DEFAULTS.ogImage }],
+    locale: SEO_DEFAULTS.locale,
+    siteName: SEO_DEFAULTS.siteName,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Happenin Bangalore | Discover Curated Experiences',
-    description:
-      'Plan your next day out in Bangalore with handpicked activities, events, and packages.',
-    images: ['https://happeningsbangalore.com/assets/og-image.jpg'],
+    title: SEO_DEFAULTS.ogTitle,
+    description: SEO_DEFAULTS.twitterDescription,
+    images: [SEO_DEFAULTS.ogImage],
   },
   verification: {
-    google: 'SoqryeoxVNXgE9ehNMjuOGD3NqQfHYvVUEEovZcLcfY',
+    google: SEO_DEFAULTS.googleVerification,
   },
   manifest: '/manifest.json',
   icons: {
     icon: '/lovable-uploads/6dacec0d-a286-4f09-ae43-9cb52365856b.png',
   },
   other: {
-    'theme-color': '#234E52',
+    'theme-color': SEO_DEFAULTS.themeColor,
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'black-translucent',
-    'apple-mobile-web-app-title': 'Happenin',
+    'apple-mobile-web-app-title': SEO_DEFAULTS.appTitle,
   },
 }
 

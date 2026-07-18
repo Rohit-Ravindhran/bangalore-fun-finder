@@ -28,13 +28,20 @@ import {
 import { listTrending } from '@/services/trendingService';
 import { useAllSections, useCategories, activityKeys } from '@/hooks/useActivities';
 import { useToast } from '@/components/ui/use-toast';
-import { Dice6, Share2, Search, Loader2, Clock, Heart, Users, Utensils, Car, Briefcase, Compass, MapPin as MapPinIcon, Flame } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Flame } from 'lucide-react';
+import { EmptyState, LoadingSpinner, Pill, SectionHeading } from '@/ui-kit';
 import { Activity } from '@/components/ActivityCard';
 import { Category } from '@/components/CategoryFilter';
-import { Separator } from '@/components/ui/separator';
-import { cn, activitySlug } from '@/lib/utils';
+import { activitySlug } from '@/lib/utils';
+import {
+  ROUTES,
+  TOASTS,
+  EMPTY_STATES,
+  COMMON,
+  QUICK_FILTERS,
+  HOME_TABS,
+  HOME_STRINGS,
+} from '@/constants';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -301,21 +308,6 @@ const Index = ({
     lastUpdated: '',
   }));
 
-  // Time-based filters
-  const timeFilters = [
-    { id: 'today', label: 'Today', icon: '📅' },
-    { id: 'weekend', label: 'This Weekend', icon: '🗓️' },
-    { id: 'week', label: 'This Week', icon: '📆' },
-    { id: 'anytime', label: 'Anytime', icon: '✨' },
-  ];
-
-  // Custom filters for the weekend
-  const customQuickFilters = [
-    { id: 'free', label: 'Free' },
-    { id: 'today', label: 'Today' },
-    { id: 'weekend', label: 'This Weekend' }
-  ];
-
   // Helper function to apply all filters to an activity list
   const applyFilters = useCallback((activities: Activity[]): Activity[] => {
     let filtered = [...activities];
@@ -468,11 +460,7 @@ const Index = ({
       setCurrentActivityIndex(currentActivityIndex + 1);
     } else {
       setCurrentActivityIndex(0);
-      toast({
-        title: "You've seen all activities",
-        description: 'Circling back to the beginning',
-        duration: 2000,
-      });
+      toast({ ...TOASTS.seenAllActivities, duration: 2000 });
     }
   };
 
@@ -491,14 +479,10 @@ const Index = ({
       const newLiked = new Set(prevLiked);
       if (newLiked.has(id)) {
         newLiked.delete(id);
-        toast({ title: 'Removed from favorites', duration: 1500 });
+        toast({ ...TOASTS.removedFromFavorites, duration: 1500 });
       } else {
         newLiked.add(id);
-        toast({
-          title: 'Added to favorites',
-          description: 'You can find this in your saved collection',
-          duration: 1500,
-        });
+        toast({ ...TOASTS.addedToFavorites, duration: 1500 });
       }
       return newLiked;
     });
@@ -519,21 +503,21 @@ const Index = ({
       if (!activityData) return;
 
       const shareData = {
-        title: `Check out ${activityData.title || 'this activity'} on What2Do Bangalore`,
-        text: activityData.description || 'Discover fun activities in Bangalore',
-        url: window.location.origin + `/activity/${activityData.slug ?? id}`,
+        title: HOME_STRINGS.shareTitle(activityData.title),
+        text: activityData.description || HOME_STRINGS.shareTextFallback,
+        url: window.location.origin + ROUTES.activity(activityData.slug ?? id),
       };
 
       if (navigator.share && navigator.canShare(shareData)) {
         await navigator.share(shareData);
-        toast({ title: 'Shared successfully!', duration: 1500 });
+        toast({ ...TOASTS.shareSuccess, duration: 1500 });
       } else {
         navigator.clipboard.writeText(shareData.url);
-        toast({ title: 'Link copied!', description: 'Share it with your friends', duration: 1500 });
+        toast({ ...TOASTS.linkCopied, duration: 1500 });
       }
     } catch (error) {
       console.error('Error sharing:', error);
-      toast({ title: 'Sharing failed', description: 'Please try again later', variant: 'destructive', duration: 1500 });
+      toast({ ...TOASTS.shareFailed, variant: 'destructive', duration: 1500 });
     }
   };
 
@@ -556,7 +540,7 @@ const Index = ({
       setCurrentActivityIndex(randomIndex);
     }
     
-    toast({ title: 'Shuffled activities', description: 'Finding something random for you', duration: 1500 });
+    toast({ ...TOASTS.shuffled, duration: 1500 });
   };
   
   const handleSortChange = (option: string) => {
@@ -595,21 +579,16 @@ const Index = ({
 
   const renderTabContent = (activities: Activity[], sectionType: string) => {
     if (isLoading) {
-      return (
-        <div className="flex justify-center items-center py-20">
-          <Loader2 className="h-10 w-10 animate-spin text-w2d-teal" />
-        </div>
-      );
+      return <LoadingSpinner />;
     }
 
     if (activities.length === 0) {
       return (
-        <div className="glass-floating scale-in p-8 text-center mx-4 relative overflow-hidden">
-          <div className="relative z-10">
-            <h3 className="text-2xl font-semibold mb-3 text-gray-800">No activities found</h3>
-            <p className="text-gray-600 font-medium">Try a different filter</p>
-          </div>
-        </div>
+        <EmptyState
+          title={EMPTY_STATES.noActivities.title}
+          description={EMPTY_STATES.noActivities.description}
+          className="mx-4"
+        />
       );
     }
 
@@ -636,19 +615,11 @@ const Index = ({
     );
   };
 
-  // Define sort options
-  const sortOptions = [
-    { id: 'popular', label: '🔥 Popular' },
-    { id: 'price_low_high', label: '💸 Budget low to high' },
-    { id: 'price_high_low', label: '💸 Budget high to low' },
-    { id: 'newest', label: '🆕 New' }
-  ];
-
   // Prepare tab configuration with removed emojis
   const tabs = [
     {
       id: 'all',
-      title: 'All',
+      title: HOME_TABS.all,
       content: renderTabContent(displayedAllActivities, 'All'),
       count: {
         loaded: displayedAllActivities.length,
@@ -659,7 +630,7 @@ const Index = ({
     },
     {
       id: 'unique-experiences',
-      title: 'Unique Experiences',
+      title: HOME_TABS.uniqueExperiences,
       content: renderTabContent(displayedUniqueExperiences, 'Unique Experiences'),
       count: {
         loaded: displayedUniqueExperiences.length,
@@ -670,16 +641,14 @@ const Index = ({
     },
     {
       id: 'date-ideas',
-      title: 'Date Ideas',
-      content: displayedDateIdeas.length > 0 
+      title: HOME_TABS.dateIdeas,
+      content: displayedDateIdeas.length > 0
         ? renderTabContent(displayedDateIdeas, 'Date Ideas')
         : (
-          <div className="glass-floating scale-in p-8 text-center border-dashed border-2 border-white/20 relative overflow-hidden">
-            <div className="relative z-10">
-              <h3 className="text-xl font-semibold mb-2 text-gray-800">Coming Soon</h3>
-              <p className="text-gray-600">Sign up to get updates!</p>
-            </div>
-          </div>
+          <EmptyState
+            title={EMPTY_STATES.comingSoon.title}
+            description={EMPTY_STATES.comingSoon.description}
+          />
         ),
       count: displayedDateIdeas.length > 0 ? {
         loaded: displayedDateIdeas.length,
@@ -739,39 +708,29 @@ const Index = ({
             <div className="flex items-center justify-between">
               <div className="flex gap-2 overflow-x-auto pb-2 flex-1" style={{ scrollbarWidth: 'none' }}>
                 {/* Time/Quick Filters */}
-                {customQuickFilters.map((filter) => (
-                  <button
+                {QUICK_FILTERS.map((filter) => (
+                  <Pill
                     key={filter.id}
+                    active={selectedQuickFilters.has(filter.id)}
                     onClick={() => handleQuickFilterSelect(filter.id)}
-                    className={cn(
-                      "flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition-all border",
-                      selectedQuickFilters.has(filter.id)
-                        ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white"
-                        : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-300"
-                    )}
                   >
                     {filter.label}
-                  </button>
+                  </Pill>
                 ))}
-                
+
                 {/* Divider */}
                 <div className="flex-shrink-0 w-px h-6 bg-gray-200 dark:bg-gray-700 self-center mx-1" />
-                
+
                 {/* Category Filters */}
                 {categories.map((category) => (
-                  <button
+                  <Pill
                     key={category.id}
+                    active={selectedCategories.has(category.id)}
                     onClick={() => handleCategorySelect(category.id)}
-                    className={cn(
-                      "flex-shrink-0 rounded-full px-3 py-1.5 text-sm font-medium flex items-center gap-1.5 transition-all border",
-                      selectedCategories.has(category.id)
-                        ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white"
-                        : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-300"
-                    )}
                   >
                     <span>{category.emoji}</span>
                     <span>{category.name}</span>
-                  </button>
+                  </Pill>
                 ))}
               </div>
             </div>
@@ -781,37 +740,32 @@ const Index = ({
         {/* Activities listing */}
         <div className="mb-8 mt-4 min-h-[60vh]">
           {/* Section Header */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Flame className="h-5 w-5 text-orange-500" />
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Events & Activities</h2>
-              <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">({allActivities.length})</span>
-            </div>
-            <ViewToggle
-              selectedMode={viewMode}
-              onSelect={setViewMode}
-            />
-          </div>
-          
+          <SectionHeading
+            title={HOME_STRINGS.sectionTitle}
+            icon={<Flame className="h-5 w-5 text-orange-500" />}
+            count={allActivities.length}
+            action={<ViewToggle selectedMode={viewMode} onSelect={setViewMode} />}
+          />
+
           {isLoading ? (
-            <div className="flex justify-center items-center py-20">
-              <Loader2 className="h-10 w-10 animate-spin text-orange-500" />
-            </div>
+            <LoadingSpinner />
           ) : allActivities.length === 0 ? (
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center border border-gray-100 dark:border-gray-700">
-              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">No activities found</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Try a different filter or location</p>
-              <button 
-                onClick={() => {
-                  setSelectedQuickFilters(new Set());
-                  setSelectedLocation(null);
-                  setSelectedCategories(new Set());
-                }}
-                className="text-orange-500 text-sm font-medium hover:underline"
-              >
-                Clear all filters
-              </button>
-            </div>
+            <EmptyState
+              title={EMPTY_STATES.noActivitiesLocation.title}
+              description={EMPTY_STATES.noActivitiesLocation.description}
+              action={
+                <button
+                  onClick={() => {
+                    setSelectedQuickFilters(new Set());
+                    setSelectedLocation(null);
+                    setSelectedCategories(new Set());
+                  }}
+                  className="text-orange-500 text-sm font-medium hover:underline"
+                >
+                  {COMMON.clearAllFilters}
+                </button>
+              }
+            />
           ) : viewMode === 'map' ? (
             <ActivityMapView activities={allActivities} userLocation={userLocation} />
           ) : viewMode === 'card' ? (
