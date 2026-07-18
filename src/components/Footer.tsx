@@ -3,12 +3,13 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui-kit';
 import { ExternalLink } from 'lucide-react';
+import { BRAND, EXTERNAL_URLS, FOOTER_LINKS, FOOTER_STRINGS } from '@/constants';
 
 const Footer: React.FC = () => {
   const handleSuggestionClick = () => {
-    window.open("https://docs.google.com/forms/d/e/1FAIpQLSfwejAJIbXP5oC3UdZUOoYM0AQLf4ZqjuPm4nRBKAsB_FdcBg/viewform?usp=header", "_blank");
+    window.open(EXTERNAL_URLS.suggestionForm, '_blank');
   };
 
   return (
@@ -19,46 +20,50 @@ const Footer: React.FC = () => {
           <div className="glass-floating p-4 mb-8 border border-white/20">
             <div className="flex items-center justify-center gap-2 mb-3">
               <span className="text-2xl">📅</span>
-              <p className="text-sm font-semibold text-gray-700">Weekend plans every Friday</p>
+              <p className="text-sm font-semibold text-gray-700">{FOOTER_STRINGS.newsletterHeading}</p>
             </div>
             <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="Email or phone"
+                placeholder={FOOTER_STRINGS.newsletterPlaceholder}
                 className="flex-1 px-3 py-2 rounded-xl bg-white/50 backdrop-blur-sm border border-white/30 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400/40"
               />
               <Button className="glass-pill bg-gradient-to-r from-orange-500 to-pink-500 text-white px-6 hover:shadow-lg">
-                Subscribe
+                {FOOTER_STRINGS.subscribe}
               </Button>
             </div>
           </div>
 
           <p className="text-gray-700 dark:text-gray-400 mb-6 text-[15px] font-medium leading-relaxed">
-            Happenin Bangalore is your personal city guide to hidden and trending things to do – curated just for you.
+            {BRAND.tagline}
           </p>
-          
+
           <div className="mb-8 px-4 flex flex-col items-center">
             <p className="mb-4 text-sm font-medium text-gray-600">
-              Have something to add to the list?
+              {FOOTER_STRINGS.suggestPrompt}
             </p>
-            
-            <Button 
+
+            <Button
               onClick={handleSuggestionClick}
               className="glass-pill text-sm w-auto flex items-center px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:from-orange-600 hover:to-pink-600 smooth-hover shadow-lg hover:shadow-xl border-0"
             >
-              Submit an Activity <ExternalLink className="ml-2 h-4 w-4" />
+              {FOOTER_STRINGS.submitActivity} <ExternalLink className="ml-2 h-4 w-4" />
             </Button>
           </div>
-          
+
           <div className="flex justify-center space-x-6 text-sm text-gray-600">
-            <Link href="/about" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">About</Link>
-            <Link href="/contact" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">Contact</Link>
-            <Link href="/privacy" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">Privacy</Link>
-            <Link href="/terms" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">Terms</Link>
-            <Link href="/favorites" className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600">Favorites</Link>
+            {FOOTER_LINKS.map((link) => (
+              <Link
+                key={link.path}
+                href={link.path}
+                className="glass-pill px-3 py-2 smooth-hover hover:text-orange-600"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
           <p className="text-xs text-gray-500 mt-5 font-medium">
-            © {new Date().getFullYear()} Happenin Bangalore
+            {BRAND.copyright()}
           </p>
         </div>
       </div>

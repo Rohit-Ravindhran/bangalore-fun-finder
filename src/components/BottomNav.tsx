@@ -2,26 +2,30 @@
 
 import React from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Compass, Users, Utensils, BookOpen, Heart } from 'lucide-react';
+import { Compass, Users, Utensils, BookOpen, Heart, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { BOTTOM_NAV, ROUTES } from '@/constants';
+
+/** Maps bottom-nav item ids to their icon (icons stay in the component). */
+const NAV_ICONS: Record<string, LucideIcon> = {
+  blog: BookOpen,
+  'date-ideas': Heart,
+  food: Utensils,
+  meetups: Users,
+};
+
+type NavItem = { id: string; label: string; path: string };
 
 const BottomNav: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const leftItems = [
-    { id: 'blog', label: 'Guide', icon: BookOpen, path: '/blog', comingSoon: false },
-    { id: 'date-ideas', label: 'Date Ideas', icon: Heart, path: '/date-ideas', comingSoon: false },
-  ];
+  const leftItems: readonly NavItem[] = BOTTOM_NAV.left;
+  const rightItems: readonly NavItem[] = BOTTOM_NAV.right;
 
-  const rightItems = [
-    { id: 'food', label: 'Food Spots', icon: Utensils, path: '/food', comingSoon: false },
-    { id: 'meetups', label: 'Meetups', icon: Users, path: '/meetups', comingSoon: false },
-  ];
-
-  const NavButton = ({ item }: { item: typeof leftItems[0] }) => {
+  const NavButton = ({ item }: { item: NavItem }) => {
     const isActive = pathname === item.path;
-    const Icon = item.icon;
+    const Icon = NAV_ICONS[item.id];
 
     return (
       <button
@@ -42,7 +46,7 @@ const BottomNav: React.FC = () => {
     );
   };
 
-  const isExploreActive = pathname === '/';
+  const isExploreActive = pathname === ROUTES.home;
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-[#0D0D0F] border-t border-gray-200 dark:border-white/[0.06] z-50 pb-safe">
@@ -55,7 +59,7 @@ const BottomNav: React.FC = () => {
         {/* Center floating Explore button */}
         <div className="flex-1 flex items-center justify-center">
           <button
-            onClick={() => router.push('/')}
+            onClick={() => router.push(BOTTOM_NAV.center.path)}
             className="absolute -top-6 flex flex-col items-center"
           >
             <div className={cn(
@@ -73,7 +77,7 @@ const BottomNav: React.FC = () => {
               "text-[10px] mt-1.5 font-semibold",
               isExploreActive ? "text-[#FFD60A]" : "text-gray-500 dark:text-gray-500"
             )}>
-              Explore
+              {BOTTOM_NAV.center.label}
             </span>
           </button>
         </div>
